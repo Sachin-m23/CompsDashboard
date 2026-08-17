@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparable Company Analysis</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E9EBEC; --surface:#FFFFFF; --ink:#0D1117; --ink70:#3A434D;
+    --muted:#68727D; --rule:#D2D7DB; --rule-soft:#E2E6E9;
+    --s1:#0B6E5F; --s2:#3F9C8B; --s3:#8A9199; --s4:#D08A2C; --s5:#A83250;
+    --display:Archivo,'Helvetica Neue',Arial,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'IBM Plex Mono','SF Mono',Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);min-height:100vh}
+  button{font:inherit;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .card{background:var(--surface);border:1px solid var(--rule);padding:18px}
+
+  header{border-bottom:1px solid var(--rule);background:var(--surface);padding:16px 22px;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .masthead h1{font-family:var(--display);font-weight:800;font-size:25px;letter-spacing:-.03em;line-height:1}
+  .masthead p{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+  nav.tabs{display:flex;border:1px solid var(--ink)}
+  nav.tabs button{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:9px 18px;border:none;background:transparent;color:var(--ink)}
+  nav.tabs button.on{background:var(--ink);color:#fff}
+
+  .layout{display:flex;align-items:stretch;flex-wrap:wrap}
+  aside{width:236px;flex-shrink:0;border-right:1px solid var(--rule);background:var(--surface);padding:18px 0;min-width:200px}
+  aside .eyebrow{padding:0 18px 10px}
+  .sector-btn{width:100%;text-align:left;border:none;border-left:3px solid transparent;background:transparent;
+    padding:10px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .sector-btn span.nm{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:-.01em;color:var(--ink)}
+  .sector-btn span.ct{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .sector-btn.on{background:#F1F3F4;border-left-color:var(--ink)}
+  .sector-btn.on span.nm{font-weight:700}
+  .rail-note{padding:18px 18px 0;margin-top:10px;border-top:1px solid var(--rule-soft)}
+  .rail-note .big{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.02em;margin-top:8px}
+  .rail-note .also{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px}
+  .rail-note p{font-size:12px;color:var(--ink70);line-height:1.5;margin-top:10px}
+
+  main{flex:1;min-width:320px;padding:20px 22px 40px}
+  .headrow{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+  .headrow h2{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.02em}
+  .headrow .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+  .boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:22px}
+  .sbox{background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--ink);
+    padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+  .sbox .val{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.05;letter-spacing:-.02em;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sbox .sub{font-family:var(--mono);font-size:12px;color:var(--ink70)}
+  .sbox .foot{font-size:11.5px;color:var(--muted);line-height:1.4}
+
+  .chart-card{margin-bottom:18px}
+  .chart-card .cap{margin-bottom:12px}
+  .chart-wrap{position:relative;width:100%}
+  .legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--ink70)}
+  .legend i{width:10px;height:10px;display:inline-block}
+
+  .tbl-card{padding:0;overflow:hidden}
+  .tbl-card .cap{padding:16px 18px 12px;border-bottom:1px solid var(--rule-soft)}
+  .tbl-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:820px}
+  th{text-align:right;padding:10px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap;cursor:pointer;user-select:none;
+    border-bottom:1px solid var(--rule)}
+  th.l{text-align:left} th:hover{color:var(--ink)} th.on{color:var(--ink)}
+  td{padding:9px 12px;border-bottom:1px solid var(--rule-soft);font-size:12.5px;text-align:right}
+  td.l{text-align:left}
+  td.tk{font-family:var(--mono);font-size:12px;font-weight:600}
+  td.co{color:var(--ink70);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  td.mn{font-family:var(--mono);font-size:12px;color:var(--ink70)}
+  td.pv{font-family:var(--mono);font-size:12.5px;font-weight:600}
+  tr:hover td{background:#F5F7F8}
+  .scorebar{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end}
+  .scorebar .trk{width:44px;height:5px;background:var(--rule-soft);display:inline-block}
+  .scorebar .fil{height:100%;display:block}
+  .scorebar b{font-family:var(--mono);font-size:12px;min-width:20px;text-align:right}
+
+  .footer-note{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:16px;line-height:1.7}
+  .linkbtns{display:flex;gap:14px;margin-top:10px}
+  .linkbtn{background:none;border:none;padding:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink70);text-decoration:underline}
+
+  .diag{margin-top:14px;border-top:1px solid var(--rule-soft);padding-top:14px}
+  .diag-row{display:flex;gap:10px;align-items:baseline;font-family:var(--mono);font-size:11px;line-height:1.5;
+    padding:6px 8px;margin-top:6px;border-left:2px solid var(--s5);background:rgba(168,50,80,.06)}
+  .diag-row.ok{border-left-color:var(--s1);background:rgba(11,110,95,.06)}
+  .diag-row .st{min-width:34px;font-weight:600;color:var(--s5)} .diag-row.ok .st{color:var(--s1)}
+  .diag-row .lb{min-width:150px;color:var(--ink)}
+  .diag-row .ms{color:var(--muted);word-break:break-word;flex:1}
+
+  .prog{height:4px;background:var(--rule-soft);margin-top:14px}
+  .prog i{display:block;height:100%;background:var(--ink);width:0}
+  .bignum{font-family:var(--display);font-size:30px;font-weight:700;margin-top:8px}
+
+  .err-card{border-left:3px solid var(--s5)}
+  .err-card .eyebrow{color:var(--s5)}
+  .err-card p{font-size:14px;margin-top:8px;line-height:1.55}
+  .retry{margin-top:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:8px 16px;background:var(--ink);color:#fff;border:none}
+
+  /* methodology */
+  .method{padding:26px 22px 48px;max-width:1080px;margin:0 auto}
+  .method h2{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-.025em}
+  .method .lede{font-size:14px;color:var(--ink70);line-height:1.6;margin-top:8px;max-width:720px}
+  .mtable th{cursor:default;border-bottom:1px solid var(--ink)}
+  .mtable td{vertical-align:top;text-align:left;padding:16px}
+  .mtable .sec{font-family:var(--display);font-weight:700;font-size:14px;white-space:nowrap}
+  .mtable .peers{font-family:var(--mono);font-size:10.5px;color:var(--muted);font-weight:400;margin-top:4px}
+  .chip{font-family:var(--mono);font-size:12px;font-weight:600;color:#fff;background:var(--ink);padding:4px 8px;white-space:nowrap}
+  .mtable .secm{font-family:var(--mono);font-size:12px;color:var(--ink70)}
+  .mtable .why{font-size:13px;color:var(--ink70);line-height:1.55;max-width:340px}
+  .mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:26px 0}
+  .mgrid ol{padding-left:18px;font-size:13px;line-height:1.7;color:var(--ink70)}
+  .mgrid p{font-size:13px;color:var(--ink70);line-height:1.6}
+  .scale{display:flex;height:10px;margin-bottom:10px}.scale i{flex:1}
+  .scale-lab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .defs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 26px}
+  .defs .k{font-family:var(--mono);font-size:12px;font-weight:600;margin-bottom:4px}
+  .defs .v{font-size:12.5px;color:var(--ink70);line-height:1.55}
+
+  .hidden{display:none}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="masthead">
+    <h1>Comparable company analysis</h1>
+    <p>Trailing twelve months &middot; sector-appropriate multiples &middot; peer-relative</p>
+  </div>
+  <nav class="tabs">
+    <button id="tab-comps" class="on">Comps</button>
+    <button id="tab-method">Methodology</button>
+  </nav>
+</header>
+
+<div id="view-comps" class="layout">
+  <aside>
+    <div class="eyebrow">Choose a sector</div>
+    <div id="sector-list"></div>
+    <div class="rail-note">
+      <div class="eyebrow">Multiple in use</div>
+      <div class="big" id="rail-primary"></div>
+      <div class="also" id="rail-secondary"></div>
+      <p id="rail-why"></p>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<div id="view-method" class="method hidden"></div>
+
+<script>
+"use strict";
+
+/* ============================ CONFIG ============================ */
+
+const API_KEY = "3URryNYomrF4STDsjWcuROvHcpZp4vEE";
+const BASE = "https://financialmodelingprep.com";
+const ALIASES = { SQ: "XYZ" };
+
+const C = {
+  ink:"#0D1117", ink70:"#3A434D", muted:"#68727D", rule:"#D2D7DB", ruleSoft:"#E2E6E9",
+  s1:"#0B6E5F", s2:"#3F9C8B", s3:"#8A9199", s4:"#D08A2C", s5:"#A83250"
+};
+const MONO = "'IBM Plex Mono','SF Mono',Menlo,monospace";
+
+const METRICS = {
+  evEbitda:{label:"EV/EBITDA",unit:"x",better:"low",max:200},
+  evSales:{label:"EV/Sales",unit:"x",better:"low",max:100},
+  evFcf:{label:"EV/FCF",unit:"x",better:"low",max:300},
+  evOcf:{label:"EV/OCF",unit:"x",better:"low",max:300},
+  evEbit:{label:"EV/EBIT",unit:"x",better:"low",max:250},
+  pe:{label:"P/E",unit:"x",better:"low",max:250},
+  pb:{label:"P/B",unit:"x",better:"low",max:60},
+  roe:{label:"ROE",unit:"%",better:"high",max:5}
+};
+
+const SECTORS = [
+  {id:"tech",name:"Technology",primary:"evEbitda",secondary:["evSales","evFcf"],
+   why:"Generally asset-light, strong margins; EBITDA/FCF capture operating economics well.",
+   tickers:["AAPL","MSFT","NVDA","GOOGL","META","INTC","CSCO","AMD","TSM","ADBE","PLTR","DOCU","ZM","NOK","SHOP","SQ","PYPL","BABA","BIDU"]},
+  {id:"cd",name:"Consumer Discretionary",primary:"evEbitda",secondary:["evFcf"],
+   why:"Useful for mature businesses with established earnings.",
+   tickers:["TSLA","AMZN","NFLX","DIS","NKE","TGT","SBUX","ETSY","RBLX","UBER","CCL","GM","F","LCID","RIVN","MGM","ROKU","PINS","FUBO","NIO"]},
+  {id:"comm",name:"Communication Services",primary:"evEbitda",secondary:["evFcf","evSales"],
+   why:"EBITDA works well for mature telecom/media; Sales useful for earlier-stage companies.",
+   tickers:["T","VZ","SIRI","SNAP","BILI"]},
+  {id:"fins",name:"Financials",label:"Financials / Banks",primary:"pb",secondary:["pe","roe"],
+   why:"Debt is part of the operating model, making EV-based multiples less meaningful.",
+   tickers:["JPM","BAC","V","SOFI","HOOD","COIN","C","GS","WFC","RKT"]},
+  {id:"hc",name:"Healthcare",label:"Healthcare / Pharma",primary:"evEbitda",secondary:["evFcf","evSales"],
+   why:"EBITDA useful for established companies; Sales useful for biotech/low-profit businesses.",
+   tickers:["PFE","JNJ","ABBV","MRNA","UNH","HCA","CPRX"]},
+  {id:"staples",name:"Consumer Staples",primary:"evEbitda",secondary:["evFcf"],
+   why:"Mature, predictable cash flows and relatively stable margins.",
+   tickers:["COST","KO","PEP","WMT","WBA"]},
+  {id:"inds",name:"Industrials",primary:"evEbit",secondary:["evEbitda","evFcf"],
+   why:"Asset intensive; EBIT accounts for depreciation of PP&E.",
+   tickers:["BA","GE","LMT","FDX","DAL","UAL","AAL","CARR"]},
+  {id:"energy",name:"Energy",primary:"evEbitda",secondary:["evFcf","evOcf"],
+   why:"Highly cyclical; EBITDA/OCF avoid some distortion from capital structure.",
+   tickers:["XOM","CVX","ET"]}
+];
+
+/* ============================ HELPERS ============================ */
+
+function pick(obj, names){
+  if(!obj) return null;
+  const lower = {};
+  Object.keys(obj).forEach(k => lower[k.toLowerCase()] = obj[k]);
+  for(const n of names){
+    const v = lower[n.toLowerCase()];
+    if(v !== undefined && v !== null && v !== ""){
+      const num = typeof v === "number" ? v : parseFloat(v);
+      if(!Number.isNaN(num)) return num;
+    }
+  }
+  return null;
+}
+function pickStr(obj, names){
+  if(!obj) return null;
+  const lower = {};
+  Object.keys(obj).forEach(k => lower[k.toLowerCase()] = obj[k]);
+  for(const n of names){
+    const v = lower[n.toLowerCase()];
+    if(typeof v === "string" && v.trim()) return v.trim();
+  }
+  return null;
+}
+function clean(v, key){
+  if(v === null || v === undefined || !isFinite(v)) return null;
+  const m = METRICS[key];
+  if(!m) return v;
+  if(m.better === "low" && v <= 0) return null;
+  if(Math.abs(v) > m.max) return null;
+  return v;
+}
+const median = a => {
+  const s = a.filter(v => v !== null && isFinite(v)).sort((x,y)=>x-y);
+  if(!s.length) return null;
+  const m = Math.floor(s.length/2);
+  return s.length % 2 ? s[m] : (s[m-1]+s[m])/2;
+};
+function pctRank(value, values){
+  const a = values.filter(v => v !== null && isFinite(v)).sort((x,y)=>x-y);
+  if(!a.length) return null;
+  const below = a.filter(v=>v<value).length, equal = a.filter(v=>v===value).length;
+  return (below + equal/2) / a.length;
+}
+function relColor(rel, better){
+  let r = better === "high" ? -rel : rel;
+  if(r === null || !isFinite(r)) return C.s3;
+  const stops = [[-0.5,[11,110,95]],[-0.2,[63,156,139]],[0,[138,145,153]],[0.3,[208,138,44]],[0.8,[168,50,80]]];
+  if(r <= stops[0][0]) return `rgb(${stops[0][1]})`;
+  if(r >= stops[4][0]) return `rgb(${stops[4][1]})`;
+  for(let i=0;i<4;i++){
+    const [a,ca]=stops[i],[b,cb]=stops[i+1];
+    if(r>=a && r<=b){
+      const t=(r-a)/(b-a);
+      return `rgb(${ca.map((v,j)=>Math.round(v+(cb[j]-v)*t))})`;
+    }
+  }
+  return C.s3;
+}
+
+const nm = "n.m.";
+const fx = v => (v===null||!isFinite(v)) ? nm : v.toFixed(1)+"x";
+const fpct = (v,d=1) => (v===null||!isFinite(v)) ? nm : (v*100).toFixed(d)+"%";
+const fsigned = v => (v===null||!isFinite(v)) ? nm : (v>0?"+":"")+(v*100).toFixed(0)+"%";
+const fcap = v => {
+  if(!v||!isFinite(v)) return "\u2014";
+  if(v>=1e12) return "$"+(v/1e12).toFixed(2)+"T";
+  if(v>=1e9) return "$"+(v/1e9).toFixed(1)+"B";
+  if(v>=1e6) return "$"+(v/1e6).toFixed(0)+"M";
+  return "$"+v.toFixed(0);
+};
+const fmtM = (v,key) => METRICS[key].unit==="%" ? fpct(v) : fx(v);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ============================ DATA LAYER ============================ */
+
+const URLS = {
+  profile:(b,t)=> b==="v3" ? `${BASE}/api/v3/profile/${t}?apikey=${API_KEY}`
+                           : `${BASE}/stable/profile?symbol=${t}&apikey=${API_KEY}`,
+  quote:(b,t)=> b==="v3" ? `${BASE}/api/v3/quote/${t}?apikey=${API_KEY}`
+                         : `${BASE}/stable/quote?symbol=${t}&apikey=${API_KEY}`,
+  km:(b,t)=> b==="v3" ? `${BASE}/api/v3/key-metrics-ttm/${t}?apikey=${API_KEY}`
+                      : `${BASE}/stable/key-metrics-ttm?symbol=${t}&apikey=${API_KEY}`,
+  ratios:(b,t)=> b==="v3" ? `${BASE}/api/v3/ratios-ttm/${t}?apikey=${API_KEY}`
+                          : `${BASE}/stable/ratios-ttm?symbol=${t}&apikey=${API_KEY}`,
+  income:(b,t)=> b==="v3" ? `${BASE}/api/v3/income-statement/${t}?period=quarter&limit=4&apikey=${API_KEY}`
+                          : `${BASE}/stable/income-statement?symbol=${t}&period=quarter&limit=4&apikey=${API_KEY}`,
+  balance:(b,t)=> b==="v3" ? `${BASE}/api/v3/balance-sheet-statement/${t}?period=quarter&limit=1&apikey=${API_KEY}`
+                           : `${BASE}/stable/balance-sheet-statement?symbol=${t}&period=quarter&limit=1&apikey=${API_KEY}`,
+  cash:(b,t)=> b==="v3" ? `${BASE}/api/v3/cash-flow-statement/${t}?period=quarter&limit=4&apikey=${API_KEY}`
+                        : `${BASE}/stable/cash-flow-statement?symbol=${t}&period=quarter&limit=4&apikey=${API_KEY}`
+};
+const redact = u => u.replace(API_KEY, "\u2026"+API_KEY.slice(-4));
+
+async function getArr(url){
+  const res = await fetch(url);
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  const j = await res.json();
+  if(j && !Array.isArray(j) && (j["Error Message"]||j.message)) throw new Error(j["Error Message"]||j.message);
+  return Array.isArray(j) ? j : (j && typeof j==="object" ? [j] : []);
+}
+async function safeArr(url){ try{ const a = await getArr(url); return a; }catch(e){ return []; } }
+
+async function probeURL(label, url){
+  const t0 = Date.now();
+  try{
+    const res = await fetch(url);
+    const text = await res.text();
+    let json = null; try{ json = JSON.parse(text); }catch(e){}
+    const arr = Array.isArray(json) ? json : (json && typeof json==="object" ? [json] : []);
+    const apiMsg = json && !Array.isArray(json) ? (json["Error Message"]||json.message||json.error||null) : null;
+    return {label, url:redact(url), status:res.status, count:apiMsg?0:arr.length,
+      ok:res.ok && !apiMsg && arr.length>0,
+      msg:apiMsg || (res.ok ? (arr.length?null:"empty array") : text.slice(0,160)),
+      ms:Date.now()-t0};
+  }catch(e){
+    return {label, url:redact(url), status:0, count:0, ok:false,
+      msg:e.name+": "+e.message+" \u2014 request never completed (network block or CORS)", ms:Date.now()-t0};
+  }
+}
+
+const diag = { probed:false, plan:null, log:[] };
+
+async function runProbe(){
+  const S = "AAPL";
+  diag.log = [];
+  let base = "stable";
+  let p = await probeURL("stable \u00b7 profile", URLS.profile("stable",S)); diag.log.push(p);
+  if(!p.ok){
+    const v3 = await probeURL("v3 \u00b7 profile", URLS.profile("v3",S)); diag.log.push(v3);
+    if(v3.ok){ base="v3"; p=v3; }
+  }
+  let q = {ok:false};
+  if(!p.ok){ q = await probeURL(base+" \u00b7 quote", URLS.quote(base,S)); diag.log.push(q); }
+  const km = await probeURL(base+" \u00b7 key-metrics-ttm", URLS.km(base,S)); diag.log.push(km);
+  const ra = await probeURL(base+" \u00b7 ratios-ttm", URLS.ratios(base,S)); diag.log.push(ra);
+  const inc = await probeURL(base+" \u00b7 income-statement", URLS.income(base,S)); diag.log.push(inc);
+
+  const plan = {base, hasProfile:p.ok, hasQuote:q.ok, hasKM:km.ok, hasRatios:ra.ok, hasStatements:inc.ok};
+  plan.mode = plan.hasKM ? (plan.hasRatios ? "metrics" : "metrics+computed")
+            : (plan.hasStatements ? "computed" : "none");
+  plan.reachable = plan.hasProfile || plan.hasQuote || plan.hasKM || plan.hasStatements;
+  diag.plan = plan; diag.probed = true;
+  return plan;
+}
+
+const sumQ = (rows,names) => rows.reduce((s,r)=>{const v=pick(r,names); return v===null?s:s+v;},0);
+
+async function computeFromStatements(t, base, marketCap){
+  const [inc, bal, cf] = await Promise.all([
+    safeArr(URLS.income(base,t)), safeArr(URLS.balance(base,t)), safeArr(URLS.cash(base,t))
+  ]);
+  if(!inc.length) return null;
+  const q = inc.slice(0,4);
+  const revenue = sumQ(q,["revenue","totalRevenue"]);
+  const ebitda = sumQ(q,["ebitda","EBITDA"]);
+  const ebit = sumQ(q,["operatingIncome","ebit"]);
+  const netIncome = sumQ(q,["netIncome","bottomLineNetIncome"]);
+  const b0 = bal[0]||{};
+  const totalDebt = pick(b0,["totalDebt"]) ??
+    ((pick(b0,["shortTermDebt","shortTermBorrowings"])||0)+(pick(b0,["longTermDebt"])||0));
+  const cashBs = pick(b0,["cashAndShortTermInvestments","cashAndCashEquivalents"])||0;
+  const equity = pick(b0,["totalStockholdersEquity","totalEquity"]);
+  const cq = cf.slice(0,4);
+  const ocf = cq.length ? sumQ(cq,["operatingCashFlow","netCashProvidedByOperatingActivities"]) : null;
+  const fcfDirect = cq.length ? sumQ(cq,["freeCashFlow"]) : null;
+  const capex = cq.length ? sumQ(cq,["capitalExpenditure"]) : null;
+  const fcf = fcfDirect || (ocf!==null && capex!==null ? ocf+capex : null);
+  const ev = (marketCap && isFinite(marketCap)) ? marketCap+(totalDebt||0)-cashBs : null;
+  const div = (a,b)=> (a&&b&&isFinite(a)&&isFinite(b)) ? a/b : null;
+  return {
+    ev, evEbitda:div(ev,ebitda), evSales:div(ev,revenue), evEbit:div(ev,ebit),
+    evFcf:div(ev,fcf), evOcf:div(ev,ocf), pe:div(marketCap,netIncome),
+    pb:div(marketCap,equity), roe:div(netIncome,equity),
+    ebitdaMargin:div(ebitda,revenue), netMargin:div(netIncome,revenue)
+  };
+}
+
+async function fetchTicker(ticker, needEbit, plan, isRetry){
+  const b = plan.base;
+  const sym = isRetry ? ALIASES[ticker] : ticker;
+
+  const [pArr, kmArr, raArr] = await Promise.all([
+    plan.hasProfile ? safeArr(URLS.profile(b,sym)) : safeArr(URLS.quote(b,sym)),
+    plan.hasKM ? safeArr(URLS.km(b,sym)) : Promise.resolve([]),
+    plan.hasRatios ? safeArr(URLS.ratios(b,sym)) : Promise.resolve([])
+  ]);
+  const p = pArr[0]||{}, km = kmArr[0]||{}, ra = raArr[0]||{};
+  const marketCap = pick(p,["marketCap","mktCap"]);
+
+  const out = {
+    ev: pick(km,["enterpriseValueTTM","enterpriseValue","evTTM"]),
+    evEbitda: pick(km,["evToEBITDATTM","enterpriseValueOverEBITDATTM","evToEbitdaTTM","enterpriseValueMultipleTTM","evToEBITDA"]),
+    evSales: pick(km,["evToSalesTTM","evToSales","enterpriseValueOverRevenueTTM"]),
+    evFcf: pick(km,["evToFreeCashFlowTTM","evToFreeCashFlow"]),
+    evOcf: pick(km,["evToOperatingCashFlowTTM","evToOperatingCashFlow"]),
+    evEbit: pick(km,["evToEBITTTM","evToEbitTTM","enterpriseValueOverEBITTTM"]),
+    pe: pick(ra,["priceToEarningsRatioTTM","peRatioTTM","priceEarningsRatioTTM"]),
+    pb: pick(ra,["priceToBookRatioTTM","pbRatioTTM","priceToBookRatio"]),
+    roe: pick(km,["returnOnEquityTTM","returnOnEquity"]) ?? pick(ra,["returnOnEquityTTM","returnOnEquity"]),
+    ebitdaMargin: pick(ra,["ebitdaMarginTTM","ebitdaratioTTM","ebitdaMargin"]),
+    netMargin: pick(ra,["netProfitMarginTTM","netIncomeMarginTTM","netProfitMargin"])
+  };
+  let source = (kmArr.length||raArr.length) ? "api" : null;
+
+  const missing = out.evEbitda===null || out.pe===null || out.pb===null ||
+                  out.ebitdaMargin===null || (needEbit && out.evEbit===null);
+  if(plan.hasStatements && missing){
+    const c = await computeFromStatements(sym, b, marketCap);
+    if(c){
+      Object.keys(c).forEach(k=>{
+        if(out[k]===null || out[k]===undefined || !isFinite(out[k])) out[k]=c[k];
+      });
+      source = source==="api" ? "api+computed" : "computed";
+    }
+  }
+
+  const anyValue = Object.values(out).some(v=>v!==null && isFinite(v));
+  if(!anyValue && !isRetry && ALIASES[ticker]){
+    const retry = await fetchTicker(ticker, needEbit, plan, true);
+    if(retry && retry.hasData) return Object.assign({}, retry, {ticker, renamedTo:ALIASES[ticker]});
+  }
+
+  return {
+    ticker,
+    name: pickStr(p,["companyName","name"]) || ticker,
+    price: pick(p,["price"]),
+    marketCap, source,
+    ev: out.ev,
+    evEbitda: clean(out.evEbitda,"evEbitda"),
+    evSales: clean(out.evSales,"evSales"),
+    evFcf: clean(out.evFcf,"evFcf"),
+    evOcf: clean(out.evOcf,"evOcf"),
+    evEbit: clean(out.evEbit,"evEbit"),
+    pe: clean(out.pe,"pe"),
+    pb: clean(out.pb,"pb"),
+    roe: out.roe===null ? null : clean(out.roe,"roe"),
+    ebitdaMargin: out.ebitdaMargin,
+    netMargin: out.netMargin,
+    hasData: anyValue
+  };
+}
+
+async function mapLimit(items, limit, fn, onTick){
+  const out = new Array(items.length);
+  let i = 0, done = 0;
+  async function worker(){
+    while(i < items.length){
+      const idx = i++;
+      try{ out[idx] = await fn(items[idx], idx); }
+      catch(e){ out[idx] = {ticker:items[idx], error:e.message||"failed", hasData:false}; }
+      done++; if(onTick) onTick(done);
+    }
+  }
+  await Promise.all(Array.from({length:Math.min(limit,items.length)}, worker));
+  return out;
+}
+
+/* ============================ STATE ============================ */
+
+let sectorId = "tech";
+let tab = "comps";
+let sort = {col:"score", dir:"desc"};
+let showDiag = false;
+const cacheRows = {};
+let currentAnalysis = null;
+let charts = [];
+let loadToken = 0;
+
+const $ = id => document.getElementById(id);
+const sectorOf = id => SECTORS.find(s=>s.id===id);
+
+/* ============================ ANALYSIS ============================ */
+
+function analyse(rows, sector){
+  const good = rows.filter(r=>r && !r.error);
+  if(!good.length) return null;
+  const pKey = sector.primary;
+  const keys = [sector.primary, ...sector.secondary];
+  const meds = {};
+  keys.forEach(m => meds[m] = median(good.map(r=>r[m])));
+
+  const enriched = good.map(r=>{
+    const parts = [];
+    keys.forEach(m=>{
+      const v = r[m];
+      if(v===null) return;
+      const pr = pctRank(v, good.map(x=>x[m]));
+      if(pr===null) return;
+      parts.push(METRICS[m].better==="low" ? 1-pr : pr);
+    });
+    const score = parts.length ? (parts.reduce((a,b)=>a+b,0)/parts.length)*100 : null;
+    const rel = (r[pKey]!==null && meds[pKey]) ? r[pKey]/meds[pKey]-1 : null;
+    return Object.assign({}, r, {score, rel});
+  });
+
+  const valid = enriched.filter(r=>r[pKey]!==null);
+  const byP = valid.slice().sort((a,b)=>a[pKey]-b[pKey]);
+  const scored = enriched.filter(r=>r.score!==null).sort((a,b)=>b.score-a.score);
+  const vals = valid.map(r=>r[pKey]).sort((a,b)=>a-b);
+
+  return {
+    rows: enriched, meds, keys,
+    cheapest: byP[0]||null,
+    richest: byP[byP.length-1]||null,
+    bestBlend: scored[0]||null,
+    worstBlend: scored[scored.length-1]||null,
+    med: meds[pKey],
+    q1: vals.length ? vals[Math.floor(vals.length*0.25)] : null,
+    q3: vals.length ? vals[Math.floor(vals.length*0.75)] : null,
+    nValid: valid.length, nTotal: good.length
+  };
+}
+
+/* ============================ RENDER: SHELL ============================ */
+
+function renderSectorList(){
+  $("sector-list").innerHTML = SECTORS.map(s=>`
+    <button class="sector-btn ${s.id===sectorId?'on':''}" data-sec="${s.id}">
+      <span class="nm">${esc(s.name)}</span><span class="ct">${s.tickers.length}</span>
+    </button>`).join("");
+  document.querySelectorAll(".sector-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{ sectorId = b.dataset.sec; renderSectorList(); startLoad(false); });
+  });
+  const s = sectorOf(sectorId);
+  $("rail-primary").textContent = METRICS[s.primary].label;
+  $("rail-secondary").textContent = "also " + s.secondary.map(m=>METRICS[m].label).join(", ");
+  $("rail-why").textContent = s.why;
+}
+
+function setTab(t){
+  tab = t;
+  $("tab-comps").classList.toggle("on", t==="comps");
+  $("tab-method").classList.toggle("on", t==="method");
+  $("view-comps").classList.toggle("hidden", t!=="comps");
+  $("view-method").classList.toggle("hidden", t!=="method");
+  if(t==="method" && !$("view-method").innerHTML) renderMethod();
+  if(t==="comps") startLoad(false);
+}
+$("tab-comps").addEventListener("click", ()=>setTab("comps"));
+$("tab-method").addEventListener("click", ()=>setTab("method"));
+
+function destroyCharts(){ charts.forEach(c=>{ try{c.destroy();}catch(e){} }); charts = []; }
+
+/* ============================ RENDER: DIAGNOSTICS ============================ */
+
+function diagHTML(){
+  if(!diag.log.length) return "";
+  const modeLabel = {
+    metrics:"Reading ratios straight from FMP",
+    "metrics+computed":"Key metrics from FMP, the rest computed from statements",
+    computed:"Ratio endpoints unavailable \u2014 computing every multiple from raw statements",
+    none:"No usable endpoint found"
+  };
+  const head = diag.plan ? `<div style="font-family:${MONO};font-size:11.5px;color:${C.ink70};margin-bottom:10px">
+      Base: <strong>${diag.plan.base==="v3"?"/api/v3":"/stable"}</strong> \u00b7 Mode: <strong>${modeLabel[diag.plan.mode]}</strong></div>` : "";
+  return `<div class="diag"><div class="eyebrow" style="margin-bottom:8px">Endpoint check \u00b7 AAPL</div>${head}
+    ${diag.log.map(l=>`
+      <div class="diag-row ${l.ok?'ok':''}">
+        <span class="st">${l.status||"ERR"}</span>
+        <span class="lb">${esc(l.label)}</span>
+        <span class="ms">${l.ok ? l.count+" record"+(l.count===1?"":"s")+" \u00b7 "+l.ms+"ms" : esc(l.msg||"")}</span>
+      </div>`).join("")}
+  </div>`;
+}
+
+/* ============================ LOAD ============================ */
+
+async function startLoad(force){
+  const sec = sectorOf(sectorId);
+  const token = ++loadToken;
+  destroyCharts();
+
+  if(!force && cacheRows[sec.id]){
+    currentAnalysis = analyse(cacheRows[sec.id], sec);
+    renderResults(sec);
+    return;
+  }
+  if(force){ diag.probed = false; diag.plan = null; diag.log = []; }
+
+  $("main").innerHTML = `<div class="card">
+    <div class="eyebrow" id="load-cap">Checking which FMP endpoints this key can reach</div>
+    <div class="bignum" id="load-num">\u2026</div>
+    <div class="prog"><i id="load-bar"></i></div>
+  </div>`;
+
+  try{
+    let plan = diag.plan;
+    if(!diag.probed) plan = await runProbe();
+    if(token !== loadToken) return;
+
+    if(!plan.reachable){
+      const cors = diag.log.some(l=>l.status===0);
+      renderError(cors
+        ? "The requests never reached Financial Modeling Prep. That is a network or CORS block in the browser, not a data problem \u2014 the diagnostics below show the exact failure."
+        : "Financial Modeling Prep answered, but rejected every endpoint. The message it returned is in the diagnostics below \u2014 usually an invalid key, an exhausted daily limit, or endpoints the plan does not include.");
+      return;
+    }
+
+    $("load-cap").textContent = "Pulling "+sec.name.toLowerCase()+" peers";
+    const needEbit = sec.primary==="evEbit" || sec.secondary.includes("evEbit");
+    const raw = await mapLimit(sec.tickers, 4,
+      t => fetchTicker(t, needEbit, plan, false),
+      done => {
+        if(token !== loadToken) return;
+        const n = $("load-num"), bar = $("load-bar");
+        if(n) n.textContent = done+" / "+sec.tickers.length;
+        if(bar) bar.style.width = (done/sec.tickers.length*100)+"%";
+      });
+    if(token !== loadToken) return;
+
+    const rows = raw.filter(Boolean);
+    if(!rows.some(r=>r && r.hasData)){
+      renderError("The endpoints responded during the probe but returned nothing usable for these tickers. See the diagnostics below.");
+      return;
+    }
+    cacheRows[sec.id] = rows;
+    currentAnalysis = analyse(rows, sec);
+    renderResults(sec);
+  }catch(e){
+    if(token === loadToken) renderError(e.message || "Request failed");
+  }
+}
+
+function renderError(msg){
+  $("main").innerHTML = `<div class="card err-card">
+    <div class="eyebrow">Data request failed</div>
+    <p>${esc(msg)}</p>
+    <button class="retry" id="retry-btn">Try again</button>
+    ${diagHTML()}
+  </div>`;
+  $("retry-btn").addEventListener("click", ()=>startLoad(true));
+}
+
+/* ============================ RENDER: RESULTS ============================ */
+
+function sboxHTML(eyebrow, value, sub, accent, foot){
+  return `<div class="sbox" style="border-top-color:${accent}">
+    <div class="eyebrow">${esc(eyebrow)}</div>
+    <div class="val">${esc(value)}</div>
+    <div class="sub" style="color:${accent}">${esc(sub)}</div>
+    ${foot ? `<div class="foot">${esc(foot)}</div>` : ""}
+  </div>`;
+}
+
+function renderResults(sec){
+  const A = currentAnalysis;
+  if(!A){ renderError("No analysable rows."); return; }
+  const P = sec.primary;
+  const qualKey = P==="pb" ? "roe" : "ebitdaMargin";
+  const qualLabel = P==="pb" ? "ROE" : "EBITDA mgn";
+
+  const cols = [
+    ["ticker","Ticker","l"], ["name","Company","l"], ["marketCap","Mkt cap",""],
+    [P, METRICS[P].label, ""], ["rel","vs med",""],
+    ...sec.secondary.map(m=>[m, METRICS[m].label, ""]),
+    [qualKey, qualLabel, ""], ["score","Score",""]
+  ];
+
+  $("main").innerHTML = `
+    <div class="headrow">
+      <h2>${esc(sec.label||sec.name)}</h2>
+      <div class="meta">${A.nValid} of ${A.nTotal} peers priced on ${METRICS[P].label}${A.nValid<A.nTotal ? " \u00b7 rest shown as n.m." : ""}</div>
+    </div>
+
+    <div class="boxes">
+      ${sboxHTML("Cheapest \u00b7 "+METRICS[P].label,
+        A.cheapest ? A.cheapest.ticker : "\u2014",
+        A.cheapest ? fmtM(A.cheapest[P],P)+"  "+fsigned(A.cheapest.rel)+" vs median" : nm,
+        C.s1, A.cheapest ? A.cheapest.name : "")}
+      ${sboxHTML("Most expensive \u00b7 "+METRICS[P].label,
+        A.richest ? A.richest.ticker : "\u2014",
+        A.richest ? fmtM(A.richest[P],P)+"  "+fsigned(A.richest.rel)+" vs median" : nm,
+        C.s5, A.richest ? A.richest.name : "")}
+      ${sboxHTML("Peer median", fmtM(A.med,P),
+        "Q1 "+fmtM(A.q1,P)+" \u2014 Q3 "+fmtM(A.q3,P),
+        C.ink, "The benchmark every peer is measured against.")}
+      ${sboxHTML("Best on blended score",
+        A.bestBlend ? A.bestBlend.ticker : "\u2014",
+        A.bestBlend ? "Score "+Math.round(A.bestBlend.score)+" / 100" : nm,
+        C.s2, "Ranks "+A.keys.map(m=>METRICS[m].label).join(" + ")+" together.")}
+      ${sboxHTML("Weakest on blended score",
+        A.worstBlend ? A.worstBlend.ticker : "\u2014",
+        A.worstBlend ? "Score "+Math.round(A.worstBlend.score)+" / 100" : nm,
+        C.s4, "Priciest once secondary multiples are included.")}
+    </div>
+
+    <div class="card chart-card">
+      <div class="eyebrow cap">${METRICS[P].label} by company \u00b7 dashed line is the peer median</div>
+      <div class="chart-wrap" style="height:${Math.max(280, A.rows.filter(r=>r[P]!==null).length*26)}px">
+        <canvas id="chart-primary"></canvas>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="eyebrow cap">Cheap or just low quality?</div>
+      <p style="font-size:12.5px;color:${C.ink70};margin:-6px 0 12px;max-width:640px;line-height:1.5">
+        ${METRICS[P].label} against ${P==="pb"?"return on equity":"EBITDA margin"}.
+        Bottom-right is the interesting corner: strong economics on a below-median multiple.</p>
+      <div class="chart-wrap" style="height:340px"><canvas id="chart-scatter"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="eyebrow cap">Cross-check \u00b7 ${sec.secondary.map(m=>METRICS[m].label).join(" and ")}</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="chart-secondary"></canvas></div>
+      <div class="legend">${sec.secondary.map((m,i)=>`<span><i style="background:${[C.ink,C.s2,C.s4][i%3]}"></i>${METRICS[m].label}</span>`).join("")}</div>
+    </div>
+
+    <div class="card tbl-card">
+      <div class="eyebrow cap">Full comparables table \u00b7 click a heading to sort</div>
+      <div class="tbl-scroll">
+        <table id="comps-table">
+          <thead><tr>
+            ${cols.map(([c,l,al])=>`<th class="${al} ${sort.col===c?'on':''}" data-col="${c}">${esc(l)}${sort.col===c?(sort.dir==="asc"?" \u25b2":" \u25bc"):""}</th>`).join("")}
+          </tr></thead>
+          <tbody id="comps-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      TTM data from Financial Modeling Prep, refreshed on sector switch. Negative or extreme multiples are
+      shown as n.m. and excluded from medians and scores. Screening output only \u2014 not investment advice.
+      <div class="linkbtns">
+        <button class="linkbtn" id="diag-toggle">${showDiag?"Hide":"Show"} data source</button>
+        <button class="linkbtn" id="refresh-btn">Refresh sector</button>
+      </div>
+      <div id="diag-slot">${showDiag ? diagHTML() : ""}</div>
+    </div>`;
+
+  renderTableBody(sec);
+  document.querySelectorAll("#comps-table th").forEach(th=>{
+    th.addEventListener("click", ()=>{
+      const col = th.dataset.col;
+      sort = sort.col===col ? {col, dir:sort.dir==="asc"?"desc":"asc"}
+                            : {col, dir:(col==="ticker"||col==="name")?"asc":"asc"};
+      renderResults(sec);
+    });
+  });
+  $("diag-toggle").addEventListener("click", ()=>{
+    showDiag = !showDiag;
+    $("diag-toggle").textContent = (showDiag?"Hide":"Show")+" data source";
+    $("diag-slot").innerHTML = showDiag ? diagHTML() : "";
+  });
+  $("refresh-btn").addEventListener("click", ()=>startLoad(true));
+
+  buildCharts(sec);
+}
+
+function renderTableBody(sec){
+  const A = currentAnalysis;
+  const P = sec.primary;
+  const qualKey = P==="pb" ? "roe" : "ebitdaMargin";
+  const {col, dir} = sort;
+  const rows = A.rows.slice().sort((a,b)=>{
+    const av=a[col], bv=b[col];
+    const an = av===null||av===undefined||(typeof av==="number"&&!isFinite(av));
+    const bn = bv===null||bv===undefined||(typeof bv==="number"&&!isFinite(bv));
+    if(an&&bn) return a.ticker.localeCompare(b.ticker);
+    if(an) return 1; if(bn) return -1;
+    if(typeof av==="string") return dir==="asc" ? av.localeCompare(bv) : bv.localeCompare(av);
+    return dir==="asc" ? av-bv : bv-av;
+  });
+
+  $("comps-body").innerHTML = rows.map(r=>{
+    const pv = r[P];
+    const pvColor = pv===null ? C.muted : relColor(r.rel, METRICS[P].better);
+    const q = r[qualKey];
+    const scoreCell = r.score===null
+      ? `<span style="font-family:${MONO};font-size:12px;color:${C.muted}">${nm}</span>`
+      : `<span class="scorebar"><span class="trk"><span class="fil" style="width:${r.score}%;background:${relColor(-(r.score-50)/60,"low")}"></span></span><b>${Math.round(r.score)}</b></span>`;
+    return `<tr>
+      <td class="l tk">${esc(r.ticker)}</td>
+      <td class="l co">${esc(r.name)}</td>
+      <td class="mn">${fcap(r.marketCap)}</td>
+      <td class="pv" style="color:${pvColor}">${fmtM(pv,P)}</td>
+      <td class="mn" style="font-size:11.5px;color:${C.muted}">${fsigned(r.rel)}</td>
+      ${sec.secondary.map(m=>`<td class="mn">${fmtM(r[m],m)}</td>`).join("")}
+      <td class="mn">${(q===null||q===undefined||!isFinite(q)) ? nm : fpct(q,0)}</td>
+      <td>${scoreCell}</td>
+    </tr>`;
+  }).join("");
+}
+
+/* ============================ CHARTS ============================ */
+
+const fontMono = {family:"IBM Plex Mono", size:10};
+
+function buildCharts(sec){
+  const A = currentAnalysis;
+  const P = sec.primary;
+  destroyCharts();
+
+  const medianLine = {
+    id:"medianLine",
+    afterDatasetsDraw(chart, args, opts){
+      const {ctx, scales} = chart;
+      const axis = opts.axis==="y" ? scales.y : scales.x;
+      if(!axis || opts.value===null) return;
+      const px = axis.getPixelForValue(opts.value);
+      ctx.save();
+      ctx.strokeStyle = C.ink; ctx.setLineDash([4,3]); ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      if(opts.axis==="y"){ ctx.moveTo(chart.chartArea.left,px); ctx.lineTo(chart.chartArea.right,px); }
+      else { ctx.moveTo(px,chart.chartArea.top); ctx.lineTo(px,chart.chartArea.bottom); }
+      ctx.stroke(); ctx.restore();
+    }
+  };
+
+  /* primary horizontal bar */
+  const prim = A.rows.filter(r=>r[P]!==null).sort((a,b)=>a[P]-b[P]);
+  charts.push(new Chart($("chart-primary"), {
+    type:"bar",
+    plugins:[medianLine],
+    data:{
+      labels: prim.map(r=>r.ticker),
+      datasets:[{
+        data: prim.map(r=>r[P]),
+        backgroundColor: prim.map(r=>relColor(r.rel, METRICS[P].better)),
+        borderWidth:0
+      }]
+    },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{
+        legend:{display:false},
+        medianLine:{axis:"x", value:A.med},
+        tooltip:{
+          backgroundColor:C.ink, titleFont:{family:"IBM Plex Mono",size:11,weight:"600"},
+          bodyFont:{family:"IBM Plex Mono",size:11}, displayColors:false, cornerRadius:0,
+          callbacks:{
+            title: items => { const r = prim[items[0].dataIndex]; return r.ticker+" \u00b7 "+r.name; },
+            label: item => {
+              const r = prim[item.dataIndex];
+              return [METRICS[P].label+": "+fmtM(r[P],P), "vs median: "+fsigned(r.rel),
+                      "Value score: "+(r.score===null?nm:Math.round(r.score))];
+            }
+          }
+        }
+      },
+      scales:{
+        x:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted}},
+        y:{grid:{display:false}, ticks:{font:{family:"IBM Plex Mono",size:11}, color:C.ink70}}
+      }
+    }
+  }));
+
+  /* value vs quality scatter */
+  const qKey = P==="pb" ? "roe" : "ebitdaMargin";
+  const sc = A.rows.filter(r=>r[P]!==null && r[qKey]!==null && isFinite(r[qKey]));
+  const tickerLabels = {
+    id:"tickerLabels",
+    afterDatasetsDraw(chart){
+      const {ctx} = chart;
+      ctx.save();
+      ctx.font = "9.5px 'IBM Plex Mono'"; ctx.fillStyle = C.ink70; ctx.textAlign = "center";
+      chart.getDatasetMeta(0).data.forEach((pt,i)=>{ ctx.fillText(sc[i].ticker, pt.x, pt.y-9); });
+      ctx.restore();
+    }
+  };
+  charts.push(new Chart($("chart-scatter"), {
+    type:"scatter",
+    plugins:[medianLine, tickerLabels],
+    data:{datasets:[{
+      data: sc.map(r=>({x:r[P], y:r[qKey]*100})),
+      backgroundColor: sc.map(r=>relColor(r.rel, METRICS[P].better)),
+      pointRadius:5, pointHoverRadius:7
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{
+        legend:{display:false},
+        medianLine:{axis:"x", value:A.med},
+        tooltip:{
+          backgroundColor:C.ink, bodyFont:{family:"IBM Plex Mono",size:11},
+          titleFont:{family:"IBM Plex Mono",size:11,weight:"600"}, displayColors:false, cornerRadius:0,
+          callbacks:{
+            title: items => { const r = sc[items[0].dataIndex]; return r.ticker+" \u00b7 "+r.name; },
+            label: item => {
+              const r = sc[item.dataIndex];
+              return [METRICS[P].label+": "+fmtM(r[P],P),
+                      (P==="pb"?"ROE: ":"EBITDA margin: ")+fpct(r[qKey]),
+                      "vs median: "+fsigned(r.rel)];
+            }
+          }
+        }
+      },
+      scales:{
+        x:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted},
+           title:{display:true, text:METRICS[P].label+" \u2192 richer", font:{family:"IBM Plex Mono",size:10.5}, color:C.muted}},
+        y:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted, callback:v=>v+"%"},
+           title:{display:true, text:P==="pb"?"ROE":"EBITDA margin", font:{family:"IBM Plex Mono",size:10.5}, color:C.muted}}
+      }
+    }
+  }));
+
+  /* secondary multiples grouped bar */
+  charts.push(new Chart($("chart-secondary"), {
+    type:"bar",
+    data:{
+      labels: A.rows.map(r=>r.ticker),
+      datasets: sec.secondary.map((m,i)=>({
+        label: METRICS[m].label,
+        data: A.rows.map(r=>r[m]),
+        backgroundColor: [C.ink,C.s2,C.s4][i%3],
+        borderWidth:0
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:C.ink, bodyFont:{family:"IBM Plex Mono",size:11},
+          titleFont:{family:"IBM Plex Mono",size:11,weight:"600"}, cornerRadius:0,
+          callbacks:{ label: item => {
+            const m = sec.secondary[item.datasetIndex];
+            return METRICS[m].label+": "+fmtM(item.raw, m);
+          }}
+        }
+      },
+      scales:{
+        x:{grid:{display:false}, ticks:{font:fontMono, color:C.ink70, maxRotation:55, minRotation:55}},
+        y:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted}}
+      }
+    }
+  }));
+}
+
+/* ============================ METHODOLOGY TAB ============================ */
+
+function renderMethod(){
+  const defs = [
+    ["EV/EBITDA","Enterprise value over trailing EBITDA. Capital-structure neutral, so it compares companies with different debt loads."],
+    ["EV/EBIT","Enterprise value over operating profit. Charges each company for the depreciation of its asset base."],
+    ["EV/Sales","Enterprise value over revenue. The fallback when profits are negative or artificially depressed."],
+    ["EV/FCF","Enterprise value over free cash flow. What the whole business actually converts into cash after capex."],
+    ["EV/OCF","Enterprise value over operating cash flow. Useful where capex is lumpy, as in energy."],
+    ["P/E","Price over trailing earnings per share. Equity-level, so it already reflects leverage."],
+    ["P/B","Price over book value. The core bank multiple, since the balance sheet is the business."],
+    ["ROE","Return on equity. Paired with P/B to see whether a low multiple is cheap or deserved."]
+  ];
+  $("view-method").innerHTML = `
+    <div style="margin-bottom:22px">
+      <h2>Which multiple, and why</h2>
+      <p class="lede">Each sector is valued on the multiple that best reflects how its companies actually make money.
+      The primary multiple drives the ranking; the secondary multiples act as a cross-check.</p>
+    </div>
+
+    <div class="card tbl-card" style="margin-bottom:26px">
+      <div class="tbl-scroll">
+        <table class="mtable" style="min-width:760px">
+          <thead><tr>
+            <th class="l">Sector</th><th class="l">Primary multiple</th>
+            <th class="l">Secondary multiple</th><th class="l">Why</th>
+          </tr></thead>
+          <tbody>
+            ${SECTORS.map(s=>`<tr>
+              <td><div class="sec">${esc(s.label||s.name)}</div><div class="peers">${s.tickers.length} peers</div></td>
+              <td><span class="chip">${METRICS[s.primary].label}</span></td>
+              <td class="secm">${s.secondary.map(m=>METRICS[m].label).join(", ")}</td>
+              <td class="why">${esc(s.why)}</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mgrid">
+      <div class="card">
+        <div class="eyebrow" style="margin-bottom:10px">How the ranking works</div>
+        <ol>
+          <li>Pull TTM figures for every peer in the sector.</li>
+          <li>Drop negative and extreme multiples \u2014 they carry no signal.</li>
+          <li>Rank each company within the peer set on every multiple.</li>
+          <li>Average those ranks into a 0\u2013100 score, where 100 is the cheapest.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="eyebrow" style="margin-bottom:10px">Reading the colour</div>
+        <div class="scale">${[C.s1,C.s2,C.s3,C.s4,C.s5].map(c=>`<i style="background:${c}"></i>`).join("")}</div>
+        <div class="scale-lab"><span>\u221250% vs median</span><span>median</span><span>+80%</span></div>
+        <p style="margin-top:12px">Colour always means the same thing: distance from the peer median.
+        Green is a discount, red is a premium. Nothing else on the page is coloured.</p>
+      </div>
+      <div class="card">
+        <div class="eyebrow" style="margin-bottom:10px">What n.m. means</div>
+        <p>Not meaningful. A company with negative EBITDA, negative free cash flow or no earnings cannot be
+        ranked on that multiple, so it sits out of the median and the score rather than distorting them.
+        Loss-makers show up on EV/Sales instead.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:12px">Metric definitions</div>
+      <div class="defs">
+        ${defs.map(([k,v])=>`<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join("")}
+      </div>
+    </div>
+
+    <p class="footer-note" style="margin-top:20px">Screening output only \u2014 not investment advice.</p>`;
+}
+
+/* ============================ INIT ============================ */
+
+renderSectorList();
+startLoad(false);
+</script>
+</body>
+</html>
