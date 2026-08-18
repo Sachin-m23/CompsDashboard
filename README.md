@@ -1,4 +1,5 @@
 Comparable Company Analysis Dashboard
+
 Developed a sector-aware comps screener using HTML, CSS and JavaScript, integrating with the Financial Modelling Prep (FMP) API via asynchronous calls to retrieve enterprise value, key metrics, ratios and financial statement data across a peer universe of 100+ equities spanning eight GICS-style sectors.
 
 Comparable company analysis values a business by benchmarking it against similar peers on a common valuation multiple, on the assumption that businesses with similar risk, growth and margin profiles should trade at broadly similar multiples. It's a relative valuation approach rather than an intrinsic one, used to flag which names in a peer group look cheap or expensive versus the group, and why.
