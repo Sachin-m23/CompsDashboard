@@ -59,6 +59,37 @@
   .sbox .sub{font-family:var(--mono);font-size:12px;color:var(--ink70)}
   .sbox .foot{font-size:11.5px;color:var(--muted);line-height:1.4}
 
+  /* implied valuation card */
+  .val-card{margin-bottom:18px}
+  .val-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:14px}
+  .val-lede{font-size:12.5px;color:var(--ink70);line-height:1.5;max-width:560px;margin-top:6px}
+  .val-pick{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+  .val-pick label{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .val-pick select,.val-pick input{font:500 13px var(--mono);padding:8px 10px;border:1px solid var(--ink);
+    background:var(--surface);color:var(--ink);letter-spacing:0;text-transform:none;border-radius:0}
+  .val-pick select{min-width:190px}
+  .val-pick input{width:110px;text-transform:uppercase}
+  .val-inp{display:flex}
+  .val-inp button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    padding:8px 12px;border:1px solid var(--ink);border-left:none;background:var(--ink);color:#fff}
+  .val-empty{font-size:13px;color:var(--ink70);line-height:1.5;padding:6px 0 2px}
+  .val-facts{display:flex;gap:26px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft);margin-bottom:14px}
+  .val-facts .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .val-facts .v{font-family:var(--mono);font-size:12.5px;font-weight:600;margin-top:3px}
+  .val-facts .v small{font-weight:400;color:var(--muted);font-size:10.5px;margin-left:4px}
+  .val-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .val-m{border:1px solid var(--rule);border-top:3px solid var(--ink);padding:14px 16px;min-width:0}
+  .val-m .px{font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:-.02em;line-height:1.05;margin-top:6px}
+  .val-m .up{font-family:var(--mono);font-size:11.5px;margin-top:4px;line-height:1.4}
+  .val-bridge{margin-top:12px;border-top:1px solid var(--rule-soft);padding-top:8px}
+  .val-bridge div{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:3px 0}
+  .val-bridge div span:first-child{color:var(--ink70)}
+  .val-bridge div span:last-child{font-family:var(--mono);white-space:nowrap}
+  .val-bridge div.tot span{font-weight:600;color:var(--ink)}
+  .val-note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:12px}
+
   .chart-card{margin-bottom:18px}
   .chart-card .cap{margin-bottom:12px}
   .chart-wrap{position:relative;width:100%}
@@ -281,12 +312,15 @@ const fx = v => (v===null||!isFinite(v)) ? nm : v.toFixed(1)+"x";
 const fpct = (v,d=1) => (v===null||!isFinite(v)) ? nm : (v*100).toFixed(d)+"%";
 const fsigned = v => (v===null||!isFinite(v)) ? nm : (v>0?"+":"")+(v*100).toFixed(0)+"%";
 const fcap = v => {
-  if(!v||!isFinite(v)) return "\u2014";
+  if(!v||!isFinite(v)) return "—";
   if(v>=1e12) return "$"+(v/1e12).toFixed(2)+"T";
   if(v>=1e9) return "$"+(v/1e9).toFixed(1)+"B";
   if(v>=1e6) return "$"+(v/1e6).toFixed(0)+"M";
   return "$"+v.toFixed(0);
 };
+const fmoney = v => (v===null||v===undefined||!isFinite(v)) ? "—" : v===0 ? "$0" : (v<0?"−":"")+fcap(Math.abs(v));
+const fshares = v => (!v||!isFinite(v)) ? "—" : v>=1e9 ? (v/1e9).toFixed(2)+"B" : (v/1e6).toFixed(1)+"M";
+const fprice = v => (v===null||v===undefined||!isFinite(v)) ? nm : "$"+v.toFixed(2);
 const fmtM = (v,key) => METRICS[key].unit==="%" ? fpct(v) : fx(v);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
@@ -303,12 +337,15 @@ const URLS = {
                           : `${BASE}/stable/ratios-ttm?symbol=${t}&apikey=${API_KEY}`,
   income:(b,t)=> b==="v3" ? `${BASE}/api/v3/income-statement/${t}?period=quarter&limit=4&apikey=${API_KEY}`
                           : `${BASE}/stable/income-statement?symbol=${t}&period=quarter&limit=4&apikey=${API_KEY}`,
+  /* full fiscal years, most recent first — used by the implied valuation card */
+  incomeFY:(b,t)=> b==="v3" ? `${BASE}/api/v3/income-statement/${t}?period=annual&limit=2&apikey=${API_KEY}`
+                            : `${BASE}/stable/income-statement?symbol=${t}&period=annual&limit=2&apikey=${API_KEY}`,
   balance:(b,t)=> b==="v3" ? `${BASE}/api/v3/balance-sheet-statement/${t}?period=quarter&limit=1&apikey=${API_KEY}`
                            : `${BASE}/stable/balance-sheet-statement?symbol=${t}&period=quarter&limit=1&apikey=${API_KEY}`,
   cash:(b,t)=> b==="v3" ? `${BASE}/api/v3/cash-flow-statement/${t}?period=quarter&limit=4&apikey=${API_KEY}`
                         : `${BASE}/stable/cash-flow-statement?symbol=${t}&period=quarter&limit=4&apikey=${API_KEY}`
 };
-const redact = u => u.replace(API_KEY, "\u2026"+API_KEY.slice(-4));
+const redact = u => u.replace(API_KEY, "…"+API_KEY.slice(-4));
 
 async function getArr(url){
   const res = await fetch(url);
@@ -333,7 +370,7 @@ async function probeURL(label, url){
       ms:Date.now()-t0};
   }catch(e){
     return {label, url:redact(url), status:0, count:0, ok:false,
-      msg:e.name+": "+e.message+" \u2014 request never completed (network block or CORS)", ms:Date.now()-t0};
+      msg:e.name+": "+e.message+" — request never completed (network block or CORS)", ms:Date.now()-t0};
   }
 }
 
@@ -343,16 +380,16 @@ async function runProbe(){
   const S = "AAPL";
   diag.log = [];
   let base = "stable";
-  let p = await probeURL("stable \u00b7 profile", URLS.profile("stable",S)); diag.log.push(p);
+  let p = await probeURL("stable · profile", URLS.profile("stable",S)); diag.log.push(p);
   if(!p.ok){
-    const v3 = await probeURL("v3 \u00b7 profile", URLS.profile("v3",S)); diag.log.push(v3);
+    const v3 = await probeURL("v3 · profile", URLS.profile("v3",S)); diag.log.push(v3);
     if(v3.ok){ base="v3"; p=v3; }
   }
   let q = {ok:false};
-  if(!p.ok){ q = await probeURL(base+" \u00b7 quote", URLS.quote(base,S)); diag.log.push(q); }
-  const km = await probeURL(base+" \u00b7 key-metrics-ttm", URLS.km(base,S)); diag.log.push(km);
-  const ra = await probeURL(base+" \u00b7 ratios-ttm", URLS.ratios(base,S)); diag.log.push(ra);
-  const inc = await probeURL(base+" \u00b7 income-statement", URLS.income(base,S)); diag.log.push(inc);
+  if(!p.ok){ q = await probeURL(base+" · quote", URLS.quote(base,S)); diag.log.push(q); }
+  const km = await probeURL(base+" · key-metrics-ttm", URLS.km(base,S)); diag.log.push(km);
+  const ra = await probeURL(base+" · ratios-ttm", URLS.ratios(base,S)); diag.log.push(ra);
+  const inc = await probeURL(base+" · income-statement", URLS.income(base,S)); diag.log.push(inc);
 
   const plan = {base, hasProfile:p.ok, hasQuote:q.ok, hasKM:km.ok, hasRatios:ra.ok, hasStatements:inc.ok};
   plan.mode = plan.hasKM ? (plan.hasRatios ? "metrics" : "metrics+computed")
@@ -567,17 +604,17 @@ function diagHTML(){
   const modeLabel = {
     metrics:"Reading ratios straight from FMP",
     "metrics+computed":"Key metrics from FMP, the rest computed from statements",
-    computed:"Ratio endpoints unavailable \u2014 computing every multiple from raw statements",
+    computed:"Ratio endpoints unavailable — computing every multiple from raw statements",
     none:"No usable endpoint found"
   };
   const head = diag.plan ? `<div style="font-family:${MONO};font-size:11.5px;color:${C.ink70};margin-bottom:10px">
-      Base: <strong>${diag.plan.base==="v3"?"/api/v3":"/stable"}</strong> \u00b7 Mode: <strong>${modeLabel[diag.plan.mode]}</strong></div>` : "";
-  return `<div class="diag"><div class="eyebrow" style="margin-bottom:8px">Endpoint check \u00b7 AAPL</div>${head}
+      Base: <strong>${diag.plan.base==="v3"?"/api/v3":"/stable"}</strong> · Mode: <strong>${modeLabel[diag.plan.mode]}</strong></div>` : "";
+  return `<div class="diag"><div class="eyebrow" style="margin-bottom:8px">Endpoint check · AAPL</div>${head}
     ${diag.log.map(l=>`
       <div class="diag-row ${l.ok?'ok':''}">
         <span class="st">${l.status||"ERR"}</span>
         <span class="lb">${esc(l.label)}</span>
-        <span class="ms">${l.ok ? l.count+" record"+(l.count===1?"":"s")+" \u00b7 "+l.ms+"ms" : esc(l.msg||"")}</span>
+        <span class="ms">${l.ok ? l.count+" record"+(l.count===1?"":"s")+" · "+l.ms+"ms" : esc(l.msg||"")}</span>
       </div>`).join("")}
   </div>`;
 }
@@ -594,11 +631,15 @@ async function startLoad(force){
     renderResults(sec);
     return;
   }
-  if(force){ diag.probed = false; diag.plan = null; diag.log = []; }
+  if(force){
+    diag.probed = false; diag.plan = null; diag.log = [];
+    sec.tickers.forEach(t=>delete cacheTarget[t]);
+    if(targetBySector[sec.id]) delete cacheTarget[targetBySector[sec.id]];
+  }
 
   $("main").innerHTML = `<div class="card">
     <div class="eyebrow" id="load-cap">Checking which FMP endpoints this key can reach</div>
-    <div class="bignum" id="load-num">\u2026</div>
+    <div class="bignum" id="load-num">…</div>
     <div class="prog"><i id="load-bar"></i></div>
   </div>`;
 
@@ -610,8 +651,8 @@ async function startLoad(force){
     if(!plan.reachable){
       const cors = diag.log.some(l=>l.status===0);
       renderError(cors
-        ? "The requests never reached Financial Modeling Prep. That is a network or CORS block in the browser, not a data problem \u2014 the diagnostics below show the exact failure."
-        : "Financial Modeling Prep answered, but rejected every endpoint. The message it returned is in the diagnostics below \u2014 usually an invalid key, an exhausted daily limit, or endpoints the plan does not include.");
+        ? "The requests never reached Financial Modeling Prep. That is a network or CORS block in the browser, not a data problem — the diagnostics below show the exact failure."
+        : "Financial Modeling Prep answered, but rejected every endpoint. The message it returned is in the diagnostics below — usually an invalid key, an exhausted daily limit, or endpoints the plan does not include.");
       return;
     }
 
@@ -650,6 +691,226 @@ function renderError(msg){
   $("retry-btn").addEventListener("click", ()=>startLoad(true));
 }
 
+/* ============================ IMPLIED VALUATION ============================ */
+
+/* Which multiples can be turned into an implied share price, and how. */
+const VAL_METHODS = {
+  evEbitda:{label:"EV/EBITDA", metric:"ebitda", metricLabel:"EBITDA", ev:true},
+  evEbit:{label:"EV/EBIT", metric:"ebit", metricLabel:"EBIT", ev:true},
+  pb:{label:"P/B", metric:"bookValue", metricLabel:"book value", ev:false}
+};
+const targetBySector = {};   /* sector id -> chosen target ticker */
+const cacheTarget = {};      /* ticker -> fetched target fundamentals */
+let valToken = 0;
+
+const valMethodsFor = sec => [sec.primary, ...sec.secondary].filter(m=>VAL_METHODS[m]);
+
+/* Pull the target's last full fiscal year P&L, latest balance sheet and share count. */
+async function fetchTarget(ticker){
+  if(cacheTarget[ticker]) return cacheTarget[ticker];
+  const plan = diag.plan, b = plan.base;
+  const row = (cacheRows[sectorId]||[]).find(r=>r && r.ticker===ticker) || null;
+
+  const pull = sym => Promise.all([
+    safeArr(URLS.incomeFY(b,sym)), safeArr(URLS.balance(b,sym)), safeArr(URLS.quote(b,sym))
+  ]);
+  let sym = (row && row.renamedTo) || ticker;
+  let [inc, bal, q] = await pull(sym);
+  if(!inc.length && ALIASES[ticker] && sym!==ALIASES[ticker]){
+    sym = ALIASES[ticker];
+    [inc, bal, q] = await pull(sym);
+  }
+
+  /* most recent full year first, then first year with an EBITDA or EBIT figure */
+  inc = inc.slice().sort((x,y)=>String(pickStr(y,["date"])||"").localeCompare(String(pickStr(x,["date"])||"")));
+  const fy = inc.find(r=>pick(r,["ebitda","operatingIncome"])!==null) || null;
+  const b0 = bal[0]||{}, qq = q[0]||{};
+
+  const totalDebt = pick(b0,["totalDebt"]) ??
+    ((pick(b0,["shortTermDebt","shortTermBorrowings"])||0)+(pick(b0,["longTermDebt"])||0));
+  const cash = pick(b0,["cashAndShortTermInvestments","cashAndCashEquivalents"]) || 0;
+  const assets = pick(b0,["totalAssets"]), liab = pick(b0,["totalLiabilities"]);
+  const bookValue = (assets!==null && liab!==null) ? assets-liab
+                  : pick(b0,["totalStockholdersEquity","totalEquity"]);
+
+  const price = pick(qq,["price"]) ?? (row ? row.price : null);
+  const mktCap = pick(qq,["marketCap","mktCap"]) ?? (row ? row.marketCap : null);
+  let shares = pick(qq,["sharesOutstanding"]), sharesSrc = "shares outstanding";
+  if(!shares && mktCap && price){ shares = mktCap/price; sharesSrc = "market cap ÷ price"; }
+  if(!shares && fy){ shares = pick(fy,["weightedAverageShsOutDil","weightedAverageShsOut"]); sharesSrc = "FY diluted weighted avg"; }
+
+  const yr = fy ? pick(fy,["fiscalYear","calendarYear"]) : null;
+  const T = {
+    ticker,
+    name: pickStr(qq,["name","companyName"]) || (row && row.name) || ticker,
+    ok: !!fy || bookValue!==null,
+    year: yr ? String(Math.round(yr)) : (fy ? (pickStr(fy,["date"])||"").slice(0,4) : ""),
+    ebitda: fy ? pick(fy,["ebitda","EBITDA"]) : null,
+    ebit: fy ? pick(fy,["operatingIncome","ebit"]) : null,
+    totalDebt, cash, bookValue,
+    balDate: pickStr(b0,["date"]) || "",
+    price, shares: shares || null, sharesSrc
+  };
+  if(T.ok) cacheTarget[ticker] = T;
+  return T;
+}
+
+function valuationHTML(sec){
+  const target = targetBySector[sec.id] || "";
+  const inList = sec.tickers.includes(target);
+  const labels = valMethodsFor(sec).map(m=>VAL_METHODS[m].label).join(" and ");
+  return `<div class="card val-card">
+    <div class="val-head">
+      <div>
+        <div class="eyebrow">Implied share price · ${esc(labels)}</div>
+        <p class="val-lede">Pick the company you are valuing. The peer median multiple (with the target itself left out
+        of the median) is applied to the target's own last full-year figures, bridged to equity and divided by
+        shares outstanding.</p>
+      </div>
+      <div class="val-pick">
+        <label>Target
+          <select id="val-select">
+            <option value="">Choose a peer…</option>
+            ${sec.tickers.map(t=>`<option value="${esc(t)}" ${t===target?"selected":""}>${esc(t)}</option>`).join("")}
+          </select>
+        </label>
+        <label>or any ticker
+          <span class="val-inp">
+            <input id="val-input" maxlength="10" placeholder="e.g. ORCL" value="${inList?"":esc(target)}">
+            <button id="val-go">Go</button>
+          </span>
+        </label>
+      </div>
+    </div>
+    <div id="val-body"></div>
+  </div>`;
+}
+
+function bindValuation(sec){
+  const sel = $("val-select"), inp = $("val-input");
+  sel.addEventListener("change", ()=>{
+    targetBySector[sec.id] = sel.value;
+    inp.value = "";
+    showValuation(sec);
+  });
+  const go = ()=>{
+    const t = inp.value.trim().toUpperCase();
+    if(!t) return;
+    inp.value = t;
+    targetBySector[sec.id] = t;
+    sel.value = sec.tickers.includes(t) ? t : "";
+    showValuation(sec);
+  };
+  $("val-go").addEventListener("click", go);
+  inp.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
+  showValuation(sec);
+}
+
+async function showValuation(sec){
+  const body = $("val-body");
+  if(!body) return;
+  const ticker = targetBySector[sec.id];
+  const methods = valMethodsFor(sec);
+  if(!ticker){
+    body.innerHTML = `<p class="val-empty">Choose a company above to see what the peer median
+      ${esc(methods.map(m=>VAL_METHODS[m].label).join(" and "))} implies for its share price.</p>`;
+    return;
+  }
+  if(!diag.plan || !diag.plan.hasStatements){
+    body.innerHTML = `<p class="val-empty">This key cannot reach the statement endpoints, so full-year EBITDA,
+      EBIT and book value are unavailable and no implied price can be built.</p>`;
+    return;
+  }
+  const token = ++valToken;
+  if(!cacheTarget[ticker]) body.innerHTML = `<p class="val-empty">Pulling ${esc(ticker)} statements…</p>`;
+  let T = null;
+  try{ T = await fetchTarget(ticker); }catch(e){ T = null; }
+  if(token !== valToken) return;
+  if(!T || !T.ok){
+    body.innerHTML = `<p class="val-empty" style="color:${C.s5}">No annual statements came back for ${esc(ticker)}.
+      Check the ticker, or open the data source diagnostics at the bottom of the page.</p>`;
+    return;
+  }
+  body.innerHTML = valuationResultHTML(sec, T, methods);
+}
+
+function impliedFor(m, T, peers){
+  const M = VAL_METHODS[m];
+  const med = median(peers.map(r=>r[m]));
+  const metric = T[M.metric];
+  const out = {m, M, med, metric, gross:null, equity:null, px:null, upside:null, note:null};
+  if(med===null){ out.note = "No usable peer median."; return out; }
+  if(metric===null || metric===undefined || !isFinite(metric)){ out.note = "Target "+M.metricLabel+" unavailable."; return out; }
+  if(metric<=0){ out.note = "Target "+M.metricLabel+" is negative — not meaningful."; return out; }
+  out.gross = med*metric;                                  /* EV for EV multiples, equity for P/B */
+  out.equity = M.ev ? out.gross - T.totalDebt + T.cash : out.gross;
+  if(!T.shares || T.shares<=0){ out.note = "Shares outstanding unavailable."; return out; }
+  out.px = out.equity / T.shares;
+  out.upside = T.price ? out.px/T.price-1 : null;
+  return out;
+}
+
+function valuationResultHTML(sec, T, methods){
+  const A = currentAnalysis;
+  const peers = A.rows.filter(r=>r.ticker!==T.ticker);
+  const results = methods.map(m=>impliedFor(m, T, peers));
+  const priced = results.filter(r=>r.px!==null);
+  const avg = priced.length>1 ? priced.reduce((s,r)=>s+r.px,0)/priced.length : null;
+  const upColor = u => (u===null||!isFinite(u)) ? C.muted : u>0.02 ? C.s1 : u<-0.02 ? C.s5 : C.s3;
+  const needsEV = results.some(r=>r.M.ev), needsPB = results.some(r=>!r.M.ev);
+
+  const fact = (k,v,small) => `<div><div class="k">${k}</div><div class="v">${v}${small?`<small>${esc(small)}</small>`:""}</div></div>`;
+  const facts = [
+    fact("Target", esc(T.ticker)+" · "+esc(T.name)),
+    fact("Current price", fprice(T.price)),
+    fact("Shares", fshares(T.shares), T.sharesSrc),
+    needsEV ? fact("FY"+esc(T.year)+" EBITDA", fmoney(T.ebitda)) : "",
+    needsEV ? fact("FY"+esc(T.year)+" EBIT", fmoney(T.ebit)) : "",
+    needsEV ? fact("Total debt", fmoney(T.totalDebt), T.balDate) : "",
+    needsEV ? fact("Cash & ST inv.", fmoney(T.cash)) : "",
+    needsPB ? fact("Book value", fmoney(T.bookValue), "assets − liabilities · "+T.balDate) : ""
+  ].join("");
+
+  const card = r => `
+    <div class="val-m" style="border-top-color:${r.px===null?C.s3:upColor(r.upside)}">
+      <div class="eyebrow">${esc(r.M.label)} method</div>
+      <div class="px">${r.px===null ? nm : fprice(r.px)}</div>
+      <div class="up" style="color:${upColor(r.upside)}">${
+        r.px===null ? esc(r.note||"")
+        : r.upside===null ? "current price unavailable"
+        : fsigned(r.upside)+" vs "+fprice(T.price)+" current"}</div>
+      <div class="val-bridge">
+        <div><span>Peer median ${esc(r.M.label)} (ex-${esc(T.ticker)})</span><span>${fx(r.med)}</span></div>
+        <div><span>× ${r.M.ev ? "FY"+esc(T.year)+" " : ""}${esc(r.M.metricLabel)}</span><span>${fmoney(r.metric)}</span></div>
+        <div class="tot"><span>= Implied ${r.M.ev?"enterprise":"equity"} value</span><span>${fmoney(r.gross)}</span></div>
+        ${r.M.ev ? `
+        <div><span>− Total debt</span><span>${fmoney(T.totalDebt)}</span></div>
+        <div><span>+ Cash &amp; short-term investments</span><span>${fmoney(T.cash)}</span></div>
+        <div class="tot"><span>= Implied equity value</span><span>${fmoney(r.equity)}</span></div>` : ""}
+        <div><span>÷ Shares outstanding</span><span>${fshares(T.shares)}</span></div>
+        <div class="tot"><span>= Implied share price</span><span>${r.px===null ? nm : fprice(r.px)}</span></div>
+      </div>
+    </div>`;
+
+  const avgCard = avg===null ? "" : `
+    <div class="val-m" style="border-top-color:${C.ink}">
+      <div class="eyebrow">Average of ${priced.length} methods</div>
+      <div class="px">${fprice(avg)}</div>
+      <div class="up" style="color:${upColor(T.price?avg/T.price-1:null)}">${
+        T.price ? fsigned(avg/T.price-1)+" vs "+fprice(T.price)+" current" : "current price unavailable"}</div>
+      <div class="val-bridge">
+        ${priced.map(r=>`<div><span>${esc(r.M.label)}</span><span>${fprice(r.px)}</span></div>`).join("")}
+      </div>
+    </div>`;
+
+  return `
+    <div class="val-facts">${facts}</div>
+    <div class="val-grid">${results.map(card).join("")}${avgCard}</div>
+    <p class="val-note">Peer multiples are TTM; the target's EBITDA and EBIT are its last reported full fiscal year,
+    and debt, cash and book value are from its latest balance sheet. Book value is total assets less total liabilities.
+    ${peers.length} peers in the median. Screening output only — not investment advice.</p>`;
+}
+
 /* ============================ RENDER: RESULTS ============================ */
 
 function sboxHTML(eyebrow, value, sub, accent, foot){
@@ -678,33 +939,35 @@ function renderResults(sec){
   $("main").innerHTML = `
     <div class="headrow">
       <h2>${esc(sec.label||sec.name)}</h2>
-      <div class="meta">${A.nValid} of ${A.nTotal} peers priced on ${METRICS[P].label}${A.nValid<A.nTotal ? " \u00b7 rest shown as n.m." : ""}</div>
+      <div class="meta">${A.nValid} of ${A.nTotal} peers priced on ${METRICS[P].label}${A.nValid<A.nTotal ? " · rest shown as n.m." : ""}</div>
     </div>
 
     <div class="boxes">
-      ${sboxHTML("Cheapest \u00b7 "+METRICS[P].label,
-        A.cheapest ? A.cheapest.ticker : "\u2014",
+      ${sboxHTML("Cheapest · "+METRICS[P].label,
+        A.cheapest ? A.cheapest.ticker : "—",
         A.cheapest ? fmtM(A.cheapest[P],P)+"  "+fsigned(A.cheapest.rel)+" vs median" : nm,
         C.s1, A.cheapest ? A.cheapest.name : "")}
-      ${sboxHTML("Most expensive \u00b7 "+METRICS[P].label,
-        A.richest ? A.richest.ticker : "\u2014",
+      ${sboxHTML("Most expensive · "+METRICS[P].label,
+        A.richest ? A.richest.ticker : "—",
         A.richest ? fmtM(A.richest[P],P)+"  "+fsigned(A.richest.rel)+" vs median" : nm,
         C.s5, A.richest ? A.richest.name : "")}
       ${sboxHTML("Peer median", fmtM(A.med,P),
-        "Q1 "+fmtM(A.q1,P)+" \u2014 Q3 "+fmtM(A.q3,P),
+        "Q1 "+fmtM(A.q1,P)+" — Q3 "+fmtM(A.q3,P),
         C.ink, "The benchmark every peer is measured against.")}
       ${sboxHTML("Best on blended score",
-        A.bestBlend ? A.bestBlend.ticker : "\u2014",
+        A.bestBlend ? A.bestBlend.ticker : "—",
         A.bestBlend ? "Score "+Math.round(A.bestBlend.score)+" / 100" : nm,
         C.s2, "Ranks "+A.keys.map(m=>METRICS[m].label).join(" + ")+" together.")}
       ${sboxHTML("Weakest on blended score",
-        A.worstBlend ? A.worstBlend.ticker : "\u2014",
+        A.worstBlend ? A.worstBlend.ticker : "—",
         A.worstBlend ? "Score "+Math.round(A.worstBlend.score)+" / 100" : nm,
         C.s4, "Priciest once secondary multiples are included.")}
     </div>
 
+    ${valuationHTML(sec)}
+
     <div class="card chart-card">
-      <div class="eyebrow cap">${METRICS[P].label} by company \u00b7 dashed line is the peer median</div>
+      <div class="eyebrow cap">${METRICS[P].label} by company · dashed line is the peer median</div>
       <div class="chart-wrap" style="height:${Math.max(280, A.rows.filter(r=>r[P]!==null).length*26)}px">
         <canvas id="chart-primary"></canvas>
       </div>
@@ -719,17 +982,17 @@ function renderResults(sec){
     </div>
 
     <div class="card chart-card">
-      <div class="eyebrow cap">Cross-check \u00b7 ${sec.secondary.map(m=>METRICS[m].label).join(" and ")}</div>
+      <div class="eyebrow cap">Cross-check · ${sec.secondary.map(m=>METRICS[m].label).join(" and ")}</div>
       <div class="chart-wrap" style="height:300px"><canvas id="chart-secondary"></canvas></div>
       <div class="legend">${sec.secondary.map((m,i)=>`<span><i style="background:${[C.ink,C.s2,C.s4][i%3]}"></i>${METRICS[m].label}</span>`).join("")}</div>
     </div>
 
     <div class="card tbl-card">
-      <div class="eyebrow cap">Full comparables table \u00b7 click a heading to sort</div>
+      <div class="eyebrow cap">Full comparables table · click a heading to sort</div>
       <div class="tbl-scroll">
         <table id="comps-table">
           <thead><tr>
-            ${cols.map(([c,l,al])=>`<th class="${al} ${sort.col===c?'on':''}" data-col="${c}">${esc(l)}${sort.col===c?(sort.dir==="asc"?" \u25b2":" \u25bc"):""}</th>`).join("")}
+            ${cols.map(([c,l,al])=>`<th class="${al} ${sort.col===c?'on':''}" data-col="${c}">${esc(l)}${sort.col===c?(sort.dir==="asc"?" ▲":" ▼"):""}</th>`).join("")}
           </tr></thead>
           <tbody id="comps-body"></tbody>
         </table>
@@ -738,7 +1001,7 @@ function renderResults(sec){
 
     <div class="footer-note">
       TTM data from Financial Modeling Prep, refreshed on sector switch. Negative or extreme multiples are
-      shown as n.m. and excluded from medians and scores. Screening output only \u2014 not investment advice.
+      shown as n.m. and excluded from medians and scores. Screening output only — not investment advice.
       <div class="linkbtns">
         <button class="linkbtn" id="diag-toggle">${showDiag?"Hide":"Show"} data source</button>
         <button class="linkbtn" id="refresh-btn">Refresh sector</button>
@@ -747,6 +1010,7 @@ function renderResults(sec){
     </div>`;
 
   renderTableBody(sec);
+  bindValuation(sec);
   document.querySelectorAll("#comps-table th").forEach(th=>{
     th.addEventListener("click", ()=>{
       const col = th.dataset.col;
@@ -847,7 +1111,7 @@ function buildCharts(sec){
           backgroundColor:C.ink, titleFont:{family:"IBM Plex Mono",size:11,weight:"600"},
           bodyFont:{family:"IBM Plex Mono",size:11}, displayColors:false, cornerRadius:0,
           callbacks:{
-            title: items => { const r = prim[items[0].dataIndex]; return r.ticker+" \u00b7 "+r.name; },
+            title: items => { const r = prim[items[0].dataIndex]; return r.ticker+" · "+r.name; },
             label: item => {
               const r = prim[item.dataIndex];
               return [METRICS[P].label+": "+fmtM(r[P],P), "vs median: "+fsigned(r.rel),
@@ -893,7 +1157,7 @@ function buildCharts(sec){
           backgroundColor:C.ink, bodyFont:{family:"IBM Plex Mono",size:11},
           titleFont:{family:"IBM Plex Mono",size:11,weight:"600"}, displayColors:false, cornerRadius:0,
           callbacks:{
-            title: items => { const r = sc[items[0].dataIndex]; return r.ticker+" \u00b7 "+r.name; },
+            title: items => { const r = sc[items[0].dataIndex]; return r.ticker+" · "+r.name; },
             label: item => {
               const r = sc[item.dataIndex];
               return [METRICS[P].label+": "+fmtM(r[P],P),
@@ -905,7 +1169,7 @@ function buildCharts(sec){
       },
       scales:{
         x:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted},
-           title:{display:true, text:METRICS[P].label+" \u2192 richer", font:{family:"IBM Plex Mono",size:10.5}, color:C.muted}},
+           title:{display:true, text:METRICS[P].label+" → richer", font:{family:"IBM Plex Mono",size:10.5}, color:C.muted}},
         y:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted, callback:v=>v+"%"},
            title:{display:true, text:P==="pb"?"ROE":"EBITDA margin", font:{family:"IBM Plex Mono",size:10.5}, color:C.muted}}
       }
@@ -989,15 +1253,24 @@ function renderMethod(){
         <div class="eyebrow" style="margin-bottom:10px">How the ranking works</div>
         <ol>
           <li>Pull TTM figures for every peer in the sector.</li>
-          <li>Drop negative and extreme multiples \u2014 they carry no signal.</li>
+          <li>Drop negative and extreme multiples — they carry no signal.</li>
           <li>Rank each company within the peer set on every multiple.</li>
-          <li>Average those ranks into a 0\u2013100 score, where 100 is the cheapest.</li>
+          <li>Average those ranks into a 0–100 score, where 100 is the cheapest.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="eyebrow" style="margin-bottom:10px">Implied share price</div>
+        <ol>
+          <li>Take the peer median multiple, leaving the target out of the median.</li>
+          <li>EV/EBITDA and EV/EBIT: multiply by the target's last full-year EBITDA or EBIT to get enterprise value, subtract total debt and add cash to get equity value.</li>
+          <li>P/B: multiply by book value (total assets less total liabilities) to get equity value directly.</li>
+          <li>Divide equity value by shares outstanding and compare with the current price.</li>
         </ol>
       </div>
       <div class="card">
         <div class="eyebrow" style="margin-bottom:10px">Reading the colour</div>
         <div class="scale">${[C.s1,C.s2,C.s3,C.s4,C.s5].map(c=>`<i style="background:${c}"></i>`).join("")}</div>
-        <div class="scale-lab"><span>\u221250% vs median</span><span>median</span><span>+80%</span></div>
+        <div class="scale-lab"><span>−50% vs median</span><span>median</span><span>+80%</span></div>
         <p style="margin-top:12px">Colour always means the same thing: distance from the peer median.
         Green is a discount, red is a premium. Nothing else on the page is coloured.</p>
       </div>
@@ -1016,7 +1289,7 @@ function renderMethod(){
       </div>
     </div>
 
-    <p class="footer-note" style="margin-top:20px">Screening output only \u2014 not investment advice.</p>`;
+    <p class="footer-note" style="margin-top:20px">Screening output only — not investment advice.</p>`;
 }
 
 /* ============================ INIT ============================ */
