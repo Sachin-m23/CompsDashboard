@@ -36,7 +36,7 @@
   aside{width:236px;flex-shrink:0;border-right:1px solid var(--rule);background:var(--surface);padding:18px 0;min-width:200px}
   aside .eyebrow{padding:0 18px 10px}
   .sector-btn{width:100%;text-align:left;border:none;border-left:3px solid transparent;background:transparent;
-    padding:10px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+    padding:9px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
   .sector-btn span.nm{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:-.01em;color:var(--ink)}
   .sector-btn span.ct{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
   .sector-btn.on{background:#F1F3F4;border-left-color:var(--ink)}
@@ -49,7 +49,18 @@
   main{flex:1;min-width:320px;padding:20px 22px 40px}
   .headrow{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px}
   .headrow h2{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.02em}
+  .headrow h2 small{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink70);letter-spacing:0;margin-left:10px}
   .headrow .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+  /* industry filter */
+  .ind-wrap{margin-bottom:18px}
+  .inds{display:flex;flex-wrap:wrap;gap:6px}
+  .ind{font-family:var(--mono);font-size:11px;padding:6px 10px;border:1px solid var(--rule);background:var(--surface);
+    color:var(--ink70);display:inline-flex;gap:7px;align-items:baseline}
+  .ind span{color:var(--muted);font-size:10px}
+  .ind:hover{border-color:var(--ink);color:var(--ink)}
+  .ind.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .ind.on span{color:#B9C0C7}
 
   .boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:22px}
   .sbox{background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--ink);
@@ -93,6 +104,7 @@
   .chart-card{margin-bottom:18px}
   .chart-card .cap{margin-bottom:12px}
   .chart-wrap{position:relative;width:100%}
+  .chart-scroll{overflow-x:auto}
   .legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
   .legend span{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--ink70)}
   .legend i{width:10px;height:10px;display:inline-block}
@@ -109,6 +121,7 @@
   td.l{text-align:left}
   td.tk{font-family:var(--mono);font-size:12px;font-weight:600}
   td.co{color:var(--ink70);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  td.in{font-family:var(--mono);font-size:11px;color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   td.mn{font-family:var(--mono);font-size:12px;color:var(--ink70)}
   td.pv{font-family:var(--mono);font-size:12.5px;font-weight:600}
   tr:hover td{background:#F5F7F8}
@@ -133,6 +146,7 @@
   .prog{height:4px;background:var(--rule-soft);margin-top:14px}
   .prog i{display:block;height:100%;background:var(--ink);width:0}
   .bignum{font-family:var(--display);font-size:30px;font-weight:700;margin-top:8px}
+  .load-note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6}
 
   .err-card{border-left:3px solid var(--s5)}
   .err-card .eyebrow{color:var(--s5)}
@@ -149,8 +163,10 @@
   .mtable .sec{font-family:var(--display);font-weight:700;font-size:14px;white-space:nowrap}
   .mtable .peers{font-family:var(--mono);font-size:10.5px;color:var(--muted);font-weight:400;margin-top:4px}
   .chip{font-family:var(--mono);font-size:12px;font-weight:600;color:#fff;background:var(--ink);padding:4px 8px;white-space:nowrap}
+  .tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    border:1px solid var(--ink70);color:var(--ink70);padding:2px 6px;margin-top:8px}
   .mtable .secm{font-family:var(--mono);font-size:12px;color:var(--ink70)}
-  .mtable .why{font-size:13px;color:var(--ink70);line-height:1.55;max-width:340px}
+  .mtable .why{font-size:13px;color:var(--ink70);line-height:1.55;max-width:360px}
   .mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:26px 0}
   .mgrid ol{padding-left:18px;font-size:13px;line-height:1.7;color:var(--ink70)}
   .mgrid p{font-size:13px;color:var(--ink70);line-height:1.6}
@@ -169,7 +185,7 @@
 <header>
   <div class="masthead">
     <h1>Comparable company analysis</h1>
-    <p>Trailing twelve months &middot; sector-appropriate multiples &middot; peer-relative</p>
+    <p>S&amp;P 500 &middot; 11 GICS sectors &middot; trailing twelve months &middot; sector-appropriate multiples &middot; peer-relative</p>
   </div>
   <nav class="tabs">
     <button id="tab-comps" class="on">Comps</button>
@@ -200,7 +216,17 @@
 
 const API_KEY = "3URryNYomrF4STDsjWcuROvHcpZp4vEE";
 const BASE = "https://financialmodelingprep.com";
+/* Renamed tickers. Share classes with a dot (BRK.B, BF.B) are converted to FMP's dash form automatically. */
 const ALIASES = { SQ: "XYZ" };
+const fmpSym = t => ALIASES[t] || t.replace(/\./g, "-");
+
+/* CAPM inputs for cost of equity (Financials table): CoE = risk-free + beta × equity risk premium */
+const RISK_FREE = 0.042;       /* 10Y Treasury yield — adjust as needed */
+const EQUITY_PREMIUM = 0.055;  /* equity risk premium — adjust as needed */
+
+/* Sector results are kept in this browser so revisiting a sector costs no API calls. */
+const CACHE_HOURS = 12;
+const CACHE_PREFIX = "comps:sp500:v1:";
 
 const C = {
   ink:"#0D1117", ink70:"#3A434D", muted:"#68727D", rule:"#D2D7DB", ruleSoft:"#E2E6E9",
@@ -219,32 +245,61 @@ const METRICS = {
   roe:{label:"ROE",unit:"%",better:"high",max:5}
 };
 
-const SECTORS = [
-  {id:"tech",name:"Technology",primary:"evEbitda",secondary:["evSales","evFcf"],
-   why:"Generally asset-light, strong margins; EBITDA/FCF capture operating economics well.",
-   tickers:["AAPL","MSFT","NVDA","GOOGL","META","INTC","CSCO","AMD","TSM","ADBE","PLTR","DOCU","ZM","NOK","SHOP","SQ","PYPL","BABA","BIDU"]},
-  {id:"cd",name:"Consumer Discretionary",primary:"evEbitda",secondary:["evFcf"],
-   why:"Useful for mature businesses with established earnings.",
-   tickers:["TSLA","AMZN","NFLX","DIS","NKE","TGT","SBUX","ETSY","RBLX","UBER","CCL","GM","F","LCID","RIVN","MGM","ROKU","PINS","FUBO","NIO"]},
-  {id:"comm",name:"Communication Services",primary:"evEbitda",secondary:["evFcf","evSales"],
-   why:"EBITDA works well for mature telecom/media; Sales useful for earlier-stage companies.",
-   tickers:["T","VZ","SIRI","SNAP","BILI"]},
-  {id:"fins",name:"Financials",label:"Financials / Banks",primary:"pb",secondary:["pe","roe"],
-   why:"Debt is part of the operating model, making EV-based multiples less meaningful.",
-   tickers:["JPM","BAC","V","SOFI","HOOD","COIN","C","GS","WFC","RKT"]},
-  {id:"hc",name:"Healthcare",label:"Healthcare / Pharma",primary:"evEbitda",secondary:["evFcf","evSales"],
-   why:"EBITDA useful for established companies; Sales useful for biotech/low-profit businesses.",
-   tickers:["PFE","JNJ","ABBV","MRNA","UNH","HCA","CPRX"]},
-  {id:"staples",name:"Consumer Staples",primary:"evEbitda",secondary:["evFcf"],
-   why:"Mature, predictable cash flows and relatively stable margins.",
-   tickers:["COST","KO","PEP","WMT","WBA"]},
-  {id:"inds",name:"Industrials",primary:"evEbit",secondary:["evEbitda","evFcf"],
-   why:"Asset intensive; EBIT accounts for depreciation of PP&E.",
-   tickers:["BA","GE","LMT","FDX","DAL","UAL","AAL","CARR"]},
-  {id:"energy",name:"Energy",primary:"evEbitda",secondary:["evFcf","evOcf"],
-   why:"Highly cyclical; EBITDA/OCF avoid some distortion from capital structure.",
-   tickers:["XOM","CVX","ET"]}
+/* S&P 500 constituents by GICS sector: [ticker, company, industry], in index-weight rank order. */
+const UNIVERSE = {
+ "Information Technology":[["NVDA","Nvidia Corp","Semiconductors & Semiconductor Equipment"],["AAPL","Apple Inc.","Technology Hardware, Storage & Peripherals"],["MSFT","Microsoft Corp","Software"],["AVGO","Broadcom Inc. Common Stock","Semiconductors & Semiconductor Equipment"],["MU","Micron Technology, Inc.","Semiconductors & Semiconductor Equipment"],["AMD","Advanced Micro Devices","Semiconductors & Semiconductor Equipment"],["INTC","Intel Corp","Semiconductors & Semiconductor Equipment"],["PLTR","Palantir Technologies Inc. Class A Common Stock","Software"],["CSCO","Cisco Systems, Inc. Common Stock (DE)","Communications Equipment"],["LRCX","Lam Research Corp","Semiconductors & Semiconductor Equipment"],["AMAT","Applied Materials Inc","Semiconductors & Semiconductor Equipment"],["ORCL","Oracle Corp","Software"],["DELL","Dell Technologies Inc.","Technology Hardware, Storage & Peripherals"],["PANW","Palo Alto Networks, Inc. Common Stock","Software"],["CRWD","CrowdStrike Holdings, Inc. Class A Common Stock","Software"],["SNDK","Sandisk Corporation Common Stock","Technology Hardware, Storage & Peripherals"],["KLAC","KLA Corporation Common Stock","Semiconductors & Semiconductor Equipment"],["ANET","Arista Networks","Communications Equipment"],["TXN","Texas Instruments Incorporated","Semiconductors & Semiconductor Equipment"],["MRVL","Marvell Technology, Inc. Common Stock","Semiconductors & Semiconductor Equipment"],["STX","Seagate Technology Holdings PLC Ordinary Shares (Ireland)","Technology Hardware, Storage & Peripherals"],["IBM","International Business Machines Corporation","IT Services"],["APH","Amphenol Corporation","Electronic Equipment, Instruments & Components"],["ADI","Analog Devices, Inc.","Semiconductors & Semiconductor Equipment"],["CRM","Salesforce, Inc.","Software"],["QCOM","Qualcomm Inc","Semiconductors & Semiconductor Equipment"],["WDC","Western Digital Corp.","Technology Hardware, Storage & Peripherals"],["NOW","SERVICENOW, INC.","Software"],["GLW","Corning Incorporated","Electronic Equipment, Instruments & Components"],["FTNT","Fortinet, Inc.","Software"],["ACN","Accenture PLC","IT Services"],["DDOG","Datadog, Inc. Class A Common Stock","Software"],["CDNS","Cadence Design Systems","Software"],["ADBE","Adobe Inc.","Software"],["APP","Applovin Corporation Class A Common Stock","Software"],["SNPS","Synopsys Inc","Software"],["LITE","Lumentum Holdings Inc. Common Stock","Communications Equipment"],["HPE","Hewlett Packard Enterprise Company","Technology Hardware, Storage & Peripherals"],["INTU","Intuit Inc","Software"],["MSI","Motorola Solutions, Inc. New","Communications Equipment"],["MPWR","Monolithic Power Systems, Inc.","Semiconductors & Semiconductor Equipment"],["TER","Teradyne, Inc. Common Stock","Semiconductors & Semiconductor Equipment"],["KEYS","Keysight Technologies, Inc.","Electronic Equipment, Instruments & Components"],["TEL","TE Connectivity plc","Electronic Equipment, Instruments & Components"],["COHR","Coherent Corp.","Electronic Equipment, Instruments & Components"],["NXPI","NXP Semiconductors N.V.","Semiconductors & Semiconductor Equipment"],["CIEN","Ciena Corporation","Communications Equipment"],["WDAY","Workday, Inc. Class A Common Stock","Software"],["P","Everpure, Inc.","Technology Hardware, Storage & Peripherals"],["ADSK","Autodesk Inc","Software"],["MCHP","Microchip Technology Inc","Semiconductors & Semiconductor Equipment"],["NTAP","NetApp, Inc","Technology Hardware, Storage & Peripherals"],["FLEX","Flex Ltd. Ordinary Shares","Electronic Equipment, Instruments & Components"],["ROP","Roper Technologies, Inc. Common Stock","Software"],["JBL","Jabil Inc.","Electronic Equipment, Instruments & Components"],["ON","ON Semiconductor Corp","Semiconductors & Semiconductor Equipment"],["HPQ","HP Inc.","Technology Hardware, Storage & Peripherals"],["TDY","Teledyne Technologies Incorporated","Electronic Equipment, Instruments & Components"],["SMCI","Super Micro Computer, Inc. Common Stock","Technology Hardware, Storage & Peripherals"],["CTSH","Cognizant Technology Solutions","IT Services"],["Q","Qnity Electronics, Inc.","Semiconductors & Semiconductor Equipment"],["VRSN","VeriSign Inc","IT Services"],["FFIV","F5, Inc. Common Stock","Communications Equipment"],["FSLR","First Solar, Inc.","Semiconductors & Semiconductor Equipment"],["BR","Broadridge Financial Solutions Inc","IT Services"],["ZBRA","Zebra Technologies Corporation","Electronic Equipment, Instruments & Components"],["CDW","CDW Corporation","Electronic Equipment, Instruments & Components"],["PTC","PTC, INC","Software"],["AKAM","Akamai Technologies Inc","IT Services"],["FICO","Fair Isaac Corporation","Software"],["TYL","Tyler Technologies, Inc.","Software"],["TRMB","Trimble Inc. Common Stock","Electronic Equipment, Instruments & Components"],["GEN","Gen Digital Inc. Common Stock","Software"],["SWKS","Skyworks Solutions Inc","Semiconductors & Semiconductor Equipment"],["GDDY","GoDaddy Inc","IT Services"],["IT","Gartner, Inc.","IT Services"]],
+ "Consumer Discretionary":[["AMZN","Amazon.Com Inc","Broadline Retail"],["TSLA","Tesla, Inc. Common Stock","Automobiles"],["HD","Home Depot, Inc.","Specialty Retail"],["MCD","McDonald's Corporation","Hotels, Restaurants & Leisure"],["TJX","TJX Companies, Inc. (The)","Specialty Retail"],["BKNG","Booking Holdings Inc. Common Stock","Hotels, Restaurants & Leisure"],["SBUX","Starbucks Corp","Hotels, Restaurants & Leisure"],["LOW","Lowe's Companies Inc.","Specialty Retail"],["ABNB","Airbnb, Inc. Class A Common Stock","Hotels, Restaurants & Leisure"],["MAR","Marriott International Class A Common Stock","Hotels, Restaurants & Leisure"],["DASH","DoorDash, Inc. Class A Common Stock","Hotels, Restaurants & Leisure"],["ROST","Ross Stores Inc","Specialty Retail"],["RCL","Royal Caribbean Group","Hotels, Restaurants & Leisure"],["HLT","Hilton Worldwide Holdings Inc.","Hotels, Restaurants & Leisure"],["GM","General Motors Company","Automobiles"],["ORLY","O'Reilly Automotive, Inc.","Specialty Retail"],["GRMN","Garmin Ltd","Household Durables"],["NKE","Nike, Inc.","Textiles, Apparel & Luxury Goods"],["F","Ford Motor Company","Automobiles"],["EBAY","eBay Inc","Broadline Retail"],["AZO","AutoZone, Inc.","Specialty Retail"],["CVNA","Carvana Co.","Specialty Retail"],["CMG","Chipotle Mexican Grill, Inc.","Hotels, Restaurants & Leisure"],["DHI","D.R. Horton Inc.","Household Durables"],["YUM","Yum! Brands, Inc.","Hotels, Restaurants & Leisure"],["CCL","Carnival Corporation Ltd.","Hotels, Restaurants & Leisure"],["EXPE","Expedia Group, Inc. Common Stock","Hotels, Restaurants & Leisure"],["WSM","Williams-Sonoma, Inc.","Specialty Retail"],["TPR","Tapestry, Inc. Common Stock","Textiles, Apparel & Luxury Goods"],["LVS","Las Vegas Sands Corp.","Hotels, Restaurants & Leisure"],["ULTA","Ulta Beauty, Inc. Common Stock","Specialty Retail"],["DRI","Darden Restaurants, Inc.","Hotels, Restaurants & Leisure"],["PHM","Pultegroup, Inc.","Household Durables"],["RL","Ralph Lauren Corporation","Textiles, Apparel & Luxury Goods"],["LEN","Lennar Corporation Class A","Household Durables"],["BBY","Best Buy Company, Inc.","Specialty Retail"],["GPC","Genuine Parts Company","Distributors"],["TSCO","Tractor Supply Co","Specialty Retail"],["NVR","NVR, Inc.","Household Durables"],["HAS","Hasbro, Inc.","Leisure Products"],["DECK","Deckers Outdoor Corp","Textiles, Apparel & Luxury Goods"],["LULU","lululemon athletica inc.","Textiles, Apparel & Luxury Goods"],["DPZ","Domino's Pizza Inc.","Hotels, Restaurants & Leisure"],["APTV","Aptiv PLC","Automobile Components"],["WYNN","Wynn Resorts Ltd","Hotels, Restaurants & Leisure"],["MGM","MGM RESORTS INTERNATIONAL","Hotels, Restaurants & Leisure"],["NCLH","Norwegian Cruise Line Holdings Ltd. Ordinary Shares","Hotels, Restaurants & Leisure"]],
+ "Communication Services":[["GOOGL","Alphabet Inc. Class A Common Stock","Interactive Media & Services"],["GOOG","Alphabet Inc. Class C Capital Stock","Interactive Media & Services"],["META","Meta Platforms, Inc. Class A Common Stock","Interactive Media & Services"],["NFLX","NetFlix Inc","Entertainment"],["VZ","Verizon Communications","Diversified Telecommunication Services"],["DIS","The Walt Disney Company","Entertainment"],["TMUS","T-Mobile US, Inc.","Wireless Telecommunication Services"],["T","AT&T Inc.","Diversified Telecommunication Services"],["WBD","Warner Bros. Discovery, Inc. Series A Common Stock","Entertainment"],["CMCSA","Comcast Corp","Media"],["LYV","Live Nation Entertainment Inc.","Entertainment"],["TTWO","Take-Two Interactive Software Inc","Entertainment"],["RDDT","Reddit, Inc.","Interactive Media & Services"],["ECHO","EchoStar Corporation","Media"],["OMC","Omnicom Group Inc.","Media"],["TKO","TKO Group Holdings, Inc.","Entertainment"],["CHTR","Charter Comm Inc Del CL A New","Media"],["FOXA","Fox Corporation Class A Common Stock","Media"],["FOX","Fox Corporation Class B Common Stock","Media"],["PSKY","Paramount Skydance Corporation Class B Common Stock","Media"],["NWSA","News Corporation Class A Common Stock","Media"],["NWS","News Corporation Class B Common Stock","Media"]],
+ "Financials":[["BRK.B","BERKSHIRE HATHAWAY Class B","Financial Services"],["JPM","JPMorgan Chase & Co.","Banks"],["V","VISA Inc.","Financial Services"],["MA","Mastercard Incorporated","Financial Services"],["BAC","Bank of America Corporation","Banks"],["MS","Morgan Stanley","Capital Markets"],["GS","Goldman Sachs Group Inc.","Capital Markets"],["WFC","Wells Fargo & Co.","Banks"],["C","Citigroup Inc.","Banks"],["AXP","American Express Company","Consumer Finance"],["SCHW","The Charles Schwab Corporation","Capital Markets"],["BLK","Blackrock, Inc.","Capital Markets"],["CB","Chubb Limited","Insurance"],["PGR","Progressive Corporation","Insurance"],["COF","Capital One Financial","Consumer Finance"],["SPGI","S&P Global Inc.","Capital Markets"],["HOOD","Robinhood Markets, Inc. Class A Common Stock","Capital Markets"],["BNY","Bank of New York Mellon Corporation","Banks"],["CME","CME Group Inc.","Capital Markets"],["USB","U.S. Bancorp","Banks"],["PNC","PNC Financial Services Group","Banks"],["ICE","Intercontinental Exchange Inc.","Capital Markets"],["BX","Blackstone Inc.","Capital Markets"],["MRSH","Marsh","Insurance"],["KKR","KKR & Co. Inc.","Capital Markets"],["MCO","Moody's Corporation","Capital Markets"],["TRV","The Travelers Companies, Inc.","Insurance"],["APO","Apollo Global Management, Inc.","Financial Services"],["MET","MetLife, Inc.","Insurance"],["AJG","Arthur J. Gallagher & Co.","Insurance"],["AON","Aon plc Class A","Insurance"],["ALL","The Allstate Corporation","Insurance"],["TFC","Truist Financial Corporation","Banks"],["AFL","Aflac Inc.","Insurance"],["NDAQ","Nasdaq, Inc. Common Stock","Capital Markets"],["COIN","Coinbase Global, Inc. Class A Common Stock","Capital Markets"],["STT","State Street Corporation","Capital Markets"],["FITB","Fifth Third Bancorp","Banks"],["PYPL","PayPal Holdings, Inc. Common Stock","Financial Services"],["XYZ","Block, Inc.","Financial Services"],["AMP","Ameriprise Financial, Inc.","Capital Markets"],["MSCI","MSCI, Inc.","Capital Markets"],["AIG","American International Group, Inc.","Insurance"],["PRU","Prudential Financial, Inc.","Insurance"],["IBKR","Interactive Brokers Group, Inc. Class A Common Stock","Capital Markets"],["HIG","The Hartford Insurance Group, Inc.","Insurance"],["ACGL","Arch Capital Group Ltd","Insurance"],["MTB","M&T Bank Corp.","Banks"],["NTRS","Northern Trust Corp","Capital Markets"],["RJF","Raymond James Financial, Inc.","Capital Markets"],["HBAN","Huntington Bancshares Inc","Banks"],["CBOE","Cboe Global Markets, Inc.","Capital Markets"],["WTW","Willis Towers Watson Public Limited Company Ordinary Shares","Insurance"],["CFG","Citizens Financial Group, Inc.","Banks"],["ARES","Ares Management Corporation Class A Common Stock","Capital Markets"],["CPAY","Corpay, Inc.","Financial Services"],["WRB","W.R. Berkley Corporation","Insurance"],["CINF","Cincinnati Financial Corp","Insurance"],["FISV","Fiserv, Inc. Common Stock","Financial Services"],["PFG","Principal Financial Group, Inc.","Insurance"],["SYF","SYNCHRONY FINANCIAL","Consumer Finance"],["RF","Regions Financial Corp.","Banks"],["TROW","T Rowe Price Group Inc","Capital Markets"],["L","Loews Corporation","Insurance"],["KEY","KeyCorp","Banks"],["GPN","Global Payments, Inc.","Financial Services"],["BRO","Brown & Brown, Inc.","Insurance"],["FIS","Fidelity National Information Services, Inc.","Financial Services"],["BEN","Franklin Templeton, Inc.","Capital Markets"],["EG","Everest Group, Ltd.","Insurance"],["IVZ","Invesco LTD","Capital Markets"],["AIZ","Assurant, Inc.","Insurance"],["GL","Globe Life Inc.","Insurance"],["ERIE","Erie Indemnity Co","Insurance"],["JKHY","Henry (Jack) & Associates","Financial Services"],["FDS","Factset Research Systems","Capital Markets"]],
+ "Health Care":[["LLY","Eli Lilly & Co.","Pharmaceuticals"],["JNJ","Johnson & Johnson","Pharmaceuticals"],["ABBV","ABBVIE INC.","Biotechnology"],["MRK","Merck & Co., Inc.","Pharmaceuticals"],["UNH","UNITEDHEALTH GROUP INCORPORATED (Delaware)","Health Care Providers & Services"],["TMO","Thermo Fisher Scientific, Inc.","Life Sciences Tools & Services"],["AMGN","Amgen Inc","Biotechnology"],["GILD","Gilead Sciences Inc","Biotechnology"],["ABT","Abbott Laboratories","Health Care Equipment & Supplies"],["PFE","Pfizer Inc.","Pharmaceuticals"],["DHR","Danaher Corporation","Life Sciences Tools & Services"],["ISRG","Intuitive Surgical Inc.","Health Care Equipment & Supplies"],["VRTX","Vertex Pharmaceuticals Inc","Biotechnology"],["BMY","Bristol-Myers Squibb Co.","Pharmaceuticals"],["MDT","Medtronic plc","Health Care Equipment & Supplies"],["CVS","CVS HEALTH CORPORATION","Health Care Providers & Services"],["MCK","McKesson Corporation","Health Care Providers & Services"],["SYK","Stryker Corporation","Health Care Equipment & Supplies"],["HCA","HCA Healthcare, Inc.","Health Care Providers & Services"],["ELV","Elevance Health, Inc.","Health Care Providers & Services"],["REGN","Regeneron Pharmaceuticals Inc","Biotechnology"],["MRNA","Moderna, Inc. Common Stock","Biotechnology"],["CI","The Cigna Group","Health Care Providers & Services"],["BSX","Boston Scientific Corp.","Health Care Equipment & Supplies"],["COR","Cencora, Inc.","Health Care Providers & Services"],["CAH","Cardinal Health, Inc.","Health Care Providers & Services"],["EW","Edwards Lifesciences Corp","Health Care Equipment & Supplies"],["BDX","Becton, Dickinson and Co.","Health Care Equipment & Supplies"],["A","Agilent Technologies Inc.","Life Sciences Tools & Services"],["VEEV","Veeva Systems Inc.","Health Care Technology"],["HUM","Humana Inc.","Health Care Providers & Services"],["IQV","IQVIA Holdings Inc.","Life Sciences Tools & Services"],["WAT","Waters Corp","Life Sciences Tools & Services"],["IDXX","Idexx Laboratories Inc","Health Care Equipment & Supplies"],["ILMN","Illumina Inc","Life Sciences Tools & Services"],["BIIB","Biogen Inc. Common Stock","Biotechnology"],["DXCM","DexCom, Inc.","Health Care Equipment & Supplies"],["RMD","ResMed Inc.","Health Care Equipment & Supplies"],["CNC","Centene Corporation","Health Care Providers & Services"],["MTD","Mettler-Toledo International","Life Sciences Tools & Services"],["GEHC","GE HealthCare Technologies Inc. Common Stock","Health Care Equipment & Supplies"],["ZTS","ZOETIS INC.","Pharmaceuticals"],["WST","West Pharmaceutical Services, Inc.","Life Sciences Tools & Services"],["DGX","Quest Diagnostics Inc.","Health Care Providers & Services"],["LH","Labcorp Holdings Inc.","Health Care Providers & Services"],["INCY","Incyte Genomics Inc","Biotechnology"],["STE","STERIS plc","Health Care Equipment & Supplies"],["VTRS","Viatris Inc. Common Stock","Pharmaceuticals"],["ZBH","Zimmer Biomet Holdings, Inc.","Health Care Equipment & Supplies"],["RVTY","Revvity, Inc.","Life Sciences Tools & Services"],["SOLV","Solventum Corporation","Health Care Equipment & Supplies"],["CRL","Charles River Laboratories International, Inc.","Life Sciences Tools & Services"],["BAX","Baxter International Inc.","Health Care Equipment & Supplies"],["TECH","Bio-Techne Corp.","Life Sciences Tools & Services"],["DVA","DaVita Inc.","Health Care Providers & Services"],["COO","The Cooper Companies, Inc. Common Stock","Health Care Equipment & Supplies"],["ALGN","Align Technology Inc","Health Care Equipment & Supplies"],["UHS","Universal Health Services, Inc. Class B","Health Care Providers & Services"],["HSIC","Henry Schein Inc","Health Care Providers & Services"],["PODD","Insulet Corporation","Health Care Equipment & Supplies"]],
+ "Consumer Staples":[["WMT","Walmart Inc. Common Stock","Consumer Staples Distribution & Retail"],["COST","Costco Wholesale Corp","Consumer Staples Distribution & Retail"],["KO","Coca-Cola Company","Beverages"],["PG","Procter & Gamble Company","Household Products"],["PM","Philip Morris International Inc.","Tobacco"],["PEP","PepsiCo, Inc.","Beverages"],["MO","Altria Group, Inc.","Tobacco"],["MNST","Monster Beverage Corporation","Beverages"],["MDLZ","Mondelez International, Inc. Class A","Food Products"],["TGT","Target Corporation","Consumer Staples Distribution & Retail"],["CL","Colgate-Palmolive Company","Household Products"],["KDP","Keurig Dr Pepper Inc.","Beverages"],["ADM","Archer Daniels Midland Company","Food Products"],["SYY","Sysco Corporation","Consumer Staples Distribution & Retail"],["KR","The Kroger Co.","Consumer Staples Distribution & Retail"],["KVUE","Kenvue Inc.","Personal Care Products"],["EL","The Estee Lauder Companies Inc. Class A","Personal Care Products"],["HSY","The Hershey Company","Food Products"],["KMB","Kimberly-Clark Corp.","Household Products"],["KHC","The Kraft Heinz Company","Food Products"],["DG","Dollar General Corp.","Consumer Staples Distribution & Retail"],["CASY","Casey's General Stores Inc","Consumer Staples Distribution & Retail"],["CHD","Church & Dwight Co., Inc.","Household Products"],["DLTR","Dollar Tree Inc.","Consumer Staples Distribution & Retail"],["BG","Bunge Global SA","Food Products"],["STZ","Constellation Brands, Inc.","Beverages"],["TSN","Tyson Foods, Inc.","Food Products"],["GIS","General Mills, Inc.","Food Products"],["SJM","The J.M. Smucker Company","Food Products"],["BF.B","Brown-Forman Corporation Class B","Beverages"],["MKC","McCormick & Company, Incorporated Non-VTG CS","Food Products"],["HRL","Hormel Foods Corporation","Food Products"],["CLX","Clorox Company","Household Products"]],
+ "Energy":[["XOM","ExxonMobil Holdings Corporation","Oil, Gas & Consumable Fuels"],["CVX","Chevron Corporation","Oil, Gas & Consumable Fuels"],["COP","ConocoPhillips","Oil, Gas & Consumable Fuels"],["MPC","MARATHON PETROLEUM CORPORATION","Oil, Gas & Consumable Fuels"],["VLO","Valero Energy Corporation","Oil, Gas & Consumable Fuels"],["PSX","PHILLIPS 66","Oil, Gas & Consumable Fuels"],["WMB","Williams Companies Inc.","Oil, Gas & Consumable Fuels"],["EOG","EOG Resources, Inc.","Oil, Gas & Consumable Fuels"],["SLB","SLB Limited","Energy Equipment & Services"],["KMI","Kinder Morgan, Inc.","Oil, Gas & Consumable Fuels"],["TRGP","Targa Resources Corp.","Oil, Gas & Consumable Fuels"],["OXY","Occidental Petroleum Corporation","Oil, Gas & Consumable Fuels"],["BKR","Baker Hughes Company","Energy Equipment & Services"],["OKE","Oneok, Inc.","Oil, Gas & Consumable Fuels"],["FANG","Diamondback Energy, Inc.","Oil, Gas & Consumable Fuels"],["DVN","Devon Energy Corporation","Oil, Gas & Consumable Fuels"],["EQT","EQT CORP","Oil, Gas & Consumable Fuels"],["HAL","Halliburton Company","Energy Equipment & Services"],["TPL","Texas Pacific Land Corporation","Oil, Gas & Consumable Fuels"],["EXE","Expand Energy Corporation Common Stock","Oil, Gas & Consumable Fuels"],["APA","APA Corporation Common Stock","Oil, Gas & Consumable Fuels"]],
+ "Industrials":[["CAT","Caterpillar Inc.","Machinery"],["GE","GE Aerospace","Aerospace & Defense"],["GEV","GE Vernova Inc.","Electrical Equipment"],["RTX","RTX Corporation","Aerospace & Defense"],["DE","Deere & Company","Machinery"],["ETN","Eaton Corporation, plc Ordinary Shares","Electrical Equipment"],["UNP","Union Pacific Corp.","Ground Transportation"],["BA","Boeing Company","Aerospace & Defense"],["UBER","Uber Technologies, Inc.","Ground Transportation"],["PH","Parker-Hannifin Corporation","Machinery"],["LMT","Lockheed Martin Corp.","Aerospace & Defense"],["ADP","Automatic Data Processing","Professional Services"],["TT","Trane Technologies plc","Building Products"],["PWR","Quanta Services, Inc.","Construction & Engineering"],["VRT","Vertiv Holdings Co Class A Common Stock","Electrical Equipment"],["JCI","Johnson Controls International plc","Building Products"],["HWM","Howmet Aerospace Inc.","Aerospace & Defense"],["GD","General Dynamics Corporation","Aerospace & Defense"],["EMR","Emerson Electric Co.","Electrical Equipment"],["CSX","CSX Corporation","Ground Transportation"],["MMM","3M Company","Industrial Conglomerates"],["BE","Bloom Energy Corporation","Electrical Equipment"],["WM","Waste Management, Inc.","Commercial Services & Supplies"],["UPS","United Parcel Service, Inc. Class B","Air Freight & Logistics"],["CTAS","Cintas Corp","Commercial Services & Supplies"],["ITW","Illinois Tool Works Inc.","Machinery"],["CMI","Cummins Inc.","Machinery"],["NSC","Norfolk Southern Corp.","Ground Transportation"],["NOC","Northrop Grumman Corp.","Aerospace & Defense"],["FDX","FedEx Corporation","Air Freight & Logistics"],["HON","Honeywell International, Inc.","Industrial Conglomerates"],["URI","United Rentals, Inc.","Trading Companies & Distributors"],["RSG","Republic Services Inc.","Commercial Services & Supplies"],["TDG","TransDigm Group Incorporated","Aerospace & Defense"],["GWW","W.W. Grainger, Inc.","Trading Companies & Distributors"],["FIX","Comfort Systems USA, Inc.","Construction & Engineering"],["PCAR","Paccar Inc","Machinery"],["FAST","Fastenal Co","Trading Companies & Distributors"],["AME","Ametek, Inc.","Electrical Equipment"],["DAL","Delta Air Lines, Inc.","Passenger Airlines"],["ROK","Rockwell Automation, Inc.","Electrical Equipment"],["HONA","Honeywell Aerospace Inc. Common Stock","Aerospace & Defense"],["WAB","Wabtec Inc.","Machinery"],["CARR","Carrier Global Corporation","Building Products"],["LHX","L3Harris Technologies, Inc.","Aerospace & Defense"],["FERG","Ferguson Enterprises Inc.","Trading Companies & Distributors"],["ODFL","Old Dominion Freight Line","Ground Transportation"],["UAL","United Airlines Holdings, Inc. Common Stock","Passenger Airlines"],["PAYX","Paychex Inc","Professional Services"],["AXON","Axon Enterprise, Inc. Common Stock","Aerospace & Defense"],["EME","EMCOR Group, Inc.","Construction & Engineering"],["IR","Ingersoll Rand Inc. Common Stock","Machinery"],["DOV","Dover Corporation","Machinery"],["CPRT","Copart Inc","Commercial Services & Supplies"],["HUBB","Hubbell Incorporated","Electrical Equipment"],["OTIS","Otis Worldwide Corporation","Machinery"],["EXPD","Expeditors International of Washington, Inc.","Air Freight & Logistics"],["XYL","Xylem Inc","Machinery"],["VLTO","Veralto Corporation","Commercial Services & Supplies"],["VRSK","Verisk Analytics, Inc. Common Stock","Professional Services"],["JBHT","JB Hunt Transport Services Inc","Ground Transportation"],["LUV","Southwest Airlines Co.","Passenger Airlines"],["SNA","Snap-on Incorporated","Machinery"],["NDSN","Nordson Corp","Machinery"],["CHRW","C.H. Robinson Worldwide, Inc.","Air Freight & Logistics"],["IEX","IDEX Corporation","Machinery"],["FTV","Fortive Corporation","Machinery"],["FDXF","FedEx Freight Holding Company, Inc.","Air Freight & Logistics"],["EFX","Equifax, Incorporated","Professional Services"],["J","Jacobs Solutions Inc.","Professional Services"],["LDOS","Leidos Holdings, Inc.","Professional Services"],["ROL","Rollins, Inc.","Commercial Services & Supplies"],["SWK","Stanley Black & Decker, Inc.","Machinery"],["MAS","Masco Corporation","Building Products"],["TXT","Textron, Inc.","Aerospace & Defense"],["ALLE","Allegion Public Limited Company","Building Products"],["LII","Lennox International Inc.","Building Products"],["GNRC","GENERAC HOLDINGS INC","Electrical Equipment"],["HII","Huntington Ingalls Industries, Inc.","Aerospace & Defense"],["PNR","Pentair plc","Machinery"],["AOS","A.O. Smith Corporation","Building Products"]],
+ "Materials":[["LIN","Linde plc Ordinary Share","Chemicals"],["NEM","Newmont Corporation","Metals & Mining"],["FCX","Freeport-McMoran Inc.","Metals & Mining"],["SHW","The Sherwin-Williams Company","Chemicals"],["ECL","Ecolab, Inc.","Chemicals"],["APD","Air Products & Chemicals, Inc.","Chemicals"],["CRH","CRH Public Limited Company","Construction Materials"],["NUE","Nucor Corporation","Metals & Mining"],["MLM","Martin Marietta Materials","Construction Materials"],["STLD","Steel Dynamics Inc","Metals & Mining"],["VMC","Vulcan Materials Company(Holding Company)","Construction Materials"],["PPG","PPG Industries, Inc.","Chemicals"],["SW","Smurfit Westrock plc","Containers & Packaging"],["IFF","International Flavors & Fragrances Inc.","Chemicals"],["PKG","Packaging Corp of America","Containers & Packaging"],["DOW","Dow Inc.","Chemicals"],["AMCR","Amcor plc Ordinary Shares","Containers & Packaging"],["LYB","LyondellBasell Industries N.V. Class A","Chemicals"],["DD","DuPont de Nemours, Inc. Common Stock","Chemicals"],["CF","CF Industries Holding, Inc.","Chemicals"],["IP","International Paper Co.","Containers & Packaging"],["BALL","Ball Corporation","Containers & Packaging"],["AVY","Avery Dennison Corp.","Containers & Packaging"],["ALB","Albemarle Corporation","Chemicals"],["CTVA","Corteva, Inc. Common Stock","Chemicals"],["MOS","The Mosaic Company","Chemicals"]],
+ "Real Estate":[["WELL","Welltower Inc.","Diversified REITs"],["PLD","PROLOGIS, INC.","Diversified REITs"],["EQIX","Equinix, Inc. Common Stock REIT","Specialized REITs"],["AMT","American Tower Corporation","Specialized REITs"],["DLR","Digital Realty Trust, Inc.","Specialized REITs"],["SPG","Simon Property Group, Inc.","Diversified REITs"],["PSA","Public Storage","Specialized REITs"],["O","Realty Income Corporation","Diversified REITs"],["VMRK","Vivmark Residential","Residential REITs"],["VTR","Ventas, Inc.","Diversified REITs"],["CBRE","CBRE GROUP, INC.","Real Estate Management & Development"],["IRM","Iron Mountain Inc.","Specialized REITs"],["CCI","Crown Castle Inc.","Specialized REITs"],["EXR","Extra Space Storage, Inc.","Specialized REITs"],["VICI","VICI Properties Inc. Common Stock","Specialized REITs"],["ESS","Essex Property Trust, Inc","Residential REITs"],["SBAC","SBA Communications Corp","Specialized REITs"],["INVH","Invitation Homes Inc. Common Stock","Residential REITs"],["HST","Host Hotels & Resorts, Inc.","Diversified REITs"],["KIM","Kimco Realty Corp.","Diversified REITs"],["MAA","Mid-America Apartment Communities, Inc.","Residential REITs"],["DOC","Healthpeak Properties, Inc.","Diversified REITs"],["WY","Weyerhaeuser Company","Specialized REITs"],["REG","Regency Centers Corporation","Diversified REITs"],["CSGP","CoStar Group Inc","Real Estate Management & Development"],["CPT","Camden Property Trust","Residential REITs"],["UDR","UDR, Inc.","Residential REITs"],["BXP","BXP, Inc.","Diversified REITs"],["FRT","Federal Realty Investment Trust","Diversified REITs"],["ARE","Alexandria Real Estate Equities, Inc.","Diversified REITs"]],
+ "Utilities":[["NEE","NextEra Energy, Inc.","Electric Utilities"],["SO","The Southern Company","Electric Utilities"],["CEG","Constellation Energy Corporation Common Stock","Electric Utilities"],["DUK","Duke Energy Corporation","Electric Utilities"],["AEP","American Electric Power Company, Inc.","Electric Utilities"],["D","Dominion Energy, Inc Common Stock","Multi-Utilities"],["SRE","Sempra","Multi-Utilities"],["ETR","Entergy Corporation","Electric Utilities"],["VST","Vistra Corp.","Independent Power and Renewable Electricity Producers"],["XEL","Xcel Energy, Inc.","Electric Utilities"],["EXC","Exelon Corporation","Electric Utilities"],["ED","Consolidated Edison, Inc.","Multi-Utilities"],["PCG","PG&E Corporation","Electric Utilities"],["PEG","Public Service Enterprise Group Incorporated","Multi-Utilities"],["WEC","WEC Energy Group, Inc.","Multi-Utilities"],["AEE","Ameren Corporation","Multi-Utilities"],["ATO","Atmos Energy Corporation","Gas Utilities"],["DTE","DTE Energy Company","Multi-Utilities"],["AWK","American Water Works Company, Inc","Water Utilities"],["FE","FirstEnergy Corp.","Electric Utilities"],["PPL","PPL Corporation","Electric Utilities"],["CNP","CenterPoint Energy, Inc.","Multi-Utilities"],["ES","Eversource Energy","Electric Utilities"],["EIX","Edison International","Electric Utilities"],["NRG","NRG Energy, Inc.","Electric Utilities"],["CMS","CMS Energy Corporation","Multi-Utilities"],["NI","NiSource Inc.","Multi-Utilities"],["EVRG","Evergy, Inc.","Electric Utilities"],["LNT","Alliant Energy Corporation Common Stock","Electric Utilities"],["PNW","Pinnacle West Capital Corporation","Electric Utilities"],["AES","AES Corporation","Independent Power and Renewable Electricity Producers"]]
+};
+
+/* Valuation approach per sector. Asset-heavy sectors are priced on EV/EBIT.
+   P/E is in every sector's secondary list, so it appears in the table, the cross-check chart and the blended score. */
+const SECTOR_CFG = [
+  {id:"tech", src:"Information Technology", primary:"evEbitda", secondary:["evSales","evFcf","pe"],
+   why:"Generally asset-light with strong margins; EBITDA and FCF capture operating economics well, Sales covers the unprofitable."},
+  {id:"comm", src:"Communication Services", primary:"evEbitda", secondary:["evFcf","evSales","pe"],
+   why:"EBITDA works well for mature telecom and media; Sales useful for earlier-stage platforms."},
+  {id:"cd", src:"Consumer Discretionary", primary:"evEbitda", secondary:["evFcf","pe"],
+   why:"Useful for mature businesses with established earnings."},
+  {id:"staples", src:"Consumer Staples", primary:"evEbitda", secondary:["evFcf","pe"],
+   why:"Mature, predictable cash flows and relatively stable margins."},
+  {id:"hc", src:"Health Care", label:"Health Care / Pharma", primary:"evEbitda", secondary:["evFcf","evSales","pe"],
+   why:"EBITDA useful for established companies; Sales useful for biotech and low-profit businesses."},
+  {id:"fins", src:"Financials", label:"Financials / Banks & Insurers", primary:"pb", secondary:["pe","roe"],
+   why:"Debt is part of the operating model, making EV-based multiples less meaningful."},
+  {id:"inds", src:"Industrials", primary:"evEbit", secondary:["evEbitda","evFcf","pe"], asset:true,
+   why:"Asset intensive; EBIT charges depreciation, the real cost of keeping plant, fleets and equipment running."},
+  {id:"mats", src:"Materials", primary:"evEbit", secondary:["evEbitda","evFcf","pe"], asset:true,
+   why:"Plants, mines and mills wear out; EBIT captures that cost where EBITDA flatters heavy-capex producers."},
+  {id:"energy", src:"Energy", primary:"evEbit", secondary:["evEbitda","evOcf","pe"], asset:true,
+   why:"Capital heavy and cyclical; EBIT reflects depletion and depreciation of reserves and rigs, OCF cross-checks through the cycle."},
+  {id:"utils", src:"Utilities", primary:"evEbit", secondary:["evEbitda","pe"], asset:true,
+   why:"Regulated asset bases where depreciation is a real, recovered cost, so EBIT is the fair operating measure. FCF is usually negative from heavy capex, so P/E is the cross-check."},
+  {id:"re", src:"Real Estate", primary:"evEbitda", secondary:["pb","evOcf","pe"],
+   why:"Asset heavy, but property depreciation is an accounting charge that understates value, so EBITDA (the closest proxy to FFO) is used rather than EBIT. P/B tracks NAV; OCF approximates AFFO."}
 ];
+
+/* ticker -> {name, industry, sector} from the constituent list */
+const INFO = {};
+const SECTORS = SECTOR_CFG.map(c=>{
+  const list = UNIVERSE[c.src] || [];
+  const byInd = {};
+  list.forEach(([t,name,ind])=>{
+    INFO[t] = {name, industry:ind, sector:c.id};
+    (byInd[ind] = byInd[ind] || []).push(t);
+  });
+  const industries = Object.keys(byInd).map(n=>({name:n, tickers:byInd[n]}))
+    .sort((a,b)=>b.tickers.length-a.tickers.length || a.name.localeCompare(b.name));
+  return Object.assign({name:c.src}, c, {tickers:list.map(r=>r[0]), industries});
+});
 
 /* ============================ HELPERS ============================ */
 
@@ -280,13 +335,13 @@ function clean(v, key){
   return v;
 }
 const median = a => {
-  const s = a.filter(v => v !== null && isFinite(v)).sort((x,y)=>x-y);
+  const s = a.filter(v => v !== null && v !== undefined && isFinite(v)).sort((x,y)=>x-y);
   if(!s.length) return null;
   const m = Math.floor(s.length/2);
   return s.length % 2 ? s[m] : (s[m-1]+s[m])/2;
 };
 function pctRank(value, values){
-  const a = values.filter(v => v !== null && isFinite(v)).sort((x,y)=>x-y);
+  const a = values.filter(v => v !== null && v !== undefined && isFinite(v)).sort((x,y)=>x-y);
   if(!a.length) return null;
   const below = a.filter(v=>v<value).length, equal = a.filter(v=>v===value).length;
   return (below + equal/2) / a.length;
@@ -308,9 +363,9 @@ function relColor(rel, better){
 }
 
 const nm = "n.m.";
-const fx = v => (v===null||!isFinite(v)) ? nm : v.toFixed(1)+"x";
-const fpct = (v,d=1) => (v===null||!isFinite(v)) ? nm : (v*100).toFixed(d)+"%";
-const fsigned = v => (v===null||!isFinite(v)) ? nm : (v>0?"+":"")+(v*100).toFixed(0)+"%";
+const fx = v => (v===null||v===undefined||!isFinite(v)) ? nm : v.toFixed(1)+"x";
+const fpct = (v,d=1) => (v===null||v===undefined||!isFinite(v)) ? nm : (v*100).toFixed(d)+"%";
+const fsigned = v => (v===null||v===undefined||!isFinite(v)) ? nm : (v>0?"+":"")+(v*100).toFixed(0)+"%";
 const fcap = v => {
   if(!v||!isFinite(v)) return "—";
   if(v>=1e12) return "$"+(v/1e12).toFixed(2)+"T";
@@ -322,7 +377,25 @@ const fmoney = v => (v===null||v===undefined||!isFinite(v)) ? "—" : v===0 ? "$
 const fshares = v => (!v||!isFinite(v)) ? "—" : v>=1e9 ? (v/1e9).toFixed(2)+"B" : (v/1e6).toFixed(1)+"M";
 const fprice = v => (v===null||v===undefined||!isFinite(v)) ? nm : "$"+v.toFixed(2);
 const fmtM = (v,key) => METRICS[key].unit==="%" ? fpct(v) : fx(v);
+const fage = ts => { const m = Math.round((Date.now()-ts)/60000); return m<1 ? "just now" : m<60 ? m+"m ago" : Math.round(m/60)+"h ago"; };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+/* ============================ BROWSER CACHE ============================ */
+
+function storeGet(id){
+  try{
+    const raw = localStorage.getItem(CACHE_PREFIX+id);
+    if(!raw) return null;
+    const s = JSON.parse(raw);
+    if(!s || !Array.isArray(s.rows) || Date.now()-s.ts > CACHE_HOURS*3600e3) return null;
+    return s;
+  }catch(e){ return null; }
+}
+function storeSet(id, rows, plan){
+  try{ localStorage.setItem(CACHE_PREFIX+id, JSON.stringify({ts:Date.now(), rows, plan})); }catch(e){}
+}
+function storeDel(id){ try{ localStorage.removeItem(CACHE_PREFIX+id); }catch(e){} }
 
 /* ============================ DATA LAYER ============================ */
 
@@ -347,8 +420,10 @@ const URLS = {
 };
 const redact = u => u.replace(API_KEY, "…"+API_KEY.slice(-4));
 
-async function getArr(url){
+/* With ~80 companies per sector, back off and retry when FMP rate-limits (HTTP 429). */
+async function getArr(url, tries=3){
   const res = await fetch(url);
+  if(res.status===429 && tries>0){ await sleep(1200*(4-tries)); return getArr(url, tries-1); }
   if(!res.ok) throw new Error("HTTP "+res.status);
   const j = await res.json();
   if(j && !Array.isArray(j) && (j["Error Message"]||j.message)) throw new Error(j["Error Message"]||j.message);
@@ -431,9 +506,16 @@ async function computeFromStatements(t, base, marketCap){
   };
 }
 
-async function fetchTicker(ticker, needEbit, plan, isRetry){
+/* Keys a sector actually needs — only these trigger the (3-call) statement fallback. */
+const needKeys = sec => {
+  const k = [sec.primary, ...sec.secondary];
+  if(sec.primary!=="pb") k.push("ebitdaMargin");
+  return Array.from(new Set(k));
+};
+
+async function fetchTicker(ticker, need, plan){
   const b = plan.base;
-  const sym = isRetry ? ALIASES[ticker] : ticker;
+  const sym = fmpSym(ticker);
 
   const [pArr, kmArr, raArr] = await Promise.all([
     plan.hasProfile ? safeArr(URLS.profile(b,sym)) : safeArr(URLS.quote(b,sym)),
@@ -458,8 +540,20 @@ async function fetchTicker(ticker, needEbit, plan, isRetry){
   };
   let source = (kmArr.length||raArr.length) ? "api" : null;
 
-  const missing = out.evEbitda===null || out.pe===null || out.pb===null ||
-                  out.ebitdaMargin===null || (needEbit && out.evEbit===null);
+  /* EV/EBIT is not in key-metrics-ttm, so derive it without extra calls:
+     EV/EBIT = (EV/Sales) ÷ (EBIT/Sales). Same for EV/EBITDA if it is missing. */
+  const opMargin = pick(ra,["operatingProfitMarginTTM","operatingProfitMargin"]);
+  const knownNM = new Set();
+  if(out.evEbit===null && out.evSales!==null && opMargin!==null){
+    if(opMargin>0) out.evEbit = out.evSales/opMargin; else knownNM.add("evEbit");
+  }
+  if(out.evEbitda===null && out.evSales!==null && out.ebitdaMargin!==null){
+    if(out.ebitdaMargin>0) out.evEbitda = out.evSales/out.ebitdaMargin; else knownNM.add("evEbitda");
+  }
+  /* a loss-maker has no meaningful P/E — no need to spend statement calls looking for one */
+  if(out.pe===null && out.netMargin!==null && out.netMargin<=0) knownNM.add("pe");
+
+  const missing = need.some(k => (out[k]===null || out[k]===undefined || !isFinite(out[k])) && !knownNM.has(k));
   if(plan.hasStatements && missing){
     const c = await computeFromStatements(sym, b, marketCap);
     if(c){
@@ -470,15 +564,16 @@ async function fetchTicker(ticker, needEbit, plan, isRetry){
     }
   }
 
-  const anyValue = Object.values(out).some(v=>v!==null && isFinite(v));
-  if(!anyValue && !isRetry && ALIASES[ticker]){
-    const retry = await fetchTicker(ticker, needEbit, plan, true);
-    if(retry && retry.hasData) return Object.assign({}, retry, {ticker, renamedTo:ALIASES[ticker]});
-  }
+  const anyValue = Object.values(out).some(v=>v!==null && v!==undefined && isFinite(v));
+
+  /* CAPM cost of equity from the profile beta */
+  const beta = pick(p,["beta"]);
+  const coe = (beta!==null && isFinite(beta)) ? RISK_FREE + beta*EQUITY_PREMIUM : null;
 
   return {
-    ticker,
-    name: pickStr(p,["companyName","name"]) || ticker,
+    ticker, sym,
+    name: pickStr(p,["companyName","name"]) || (INFO[ticker] && INFO[ticker].name) || ticker,
+    industry: INFO[ticker] ? INFO[ticker].industry : "",
     price: pick(p,["price"]),
     marketCap, source,
     ev: out.ev,
@@ -492,6 +587,7 @@ async function fetchTicker(ticker, needEbit, plan, isRetry){
     roe: out.roe===null ? null : clean(out.roe,"roe"),
     ebitdaMargin: out.ebitdaMargin,
     netMargin: out.netMargin,
+    beta, coe,
     hasData: anyValue
   };
 }
@@ -518,17 +614,36 @@ let tab = "comps";
 let sort = {col:"score", dir:"desc"};
 let showDiag = false;
 const cacheRows = {};
+const cacheMeta = {};          /* sector id -> {ts, fromStore, missing} */
+const industryBySector = {};   /* sector id -> selected industry ("all" by default) */
 let currentAnalysis = null;
 let charts = [];
 let loadToken = 0;
 
 const $ = id => document.getElementById(id);
 const sectorOf = id => SECTORS.find(s=>s.id===id);
+const industryOf = sid => industryBySector[sid] || "all";
+
+/* Rows and tickers for the current industry selection */
+function viewRows(sec){
+  const ind = industryOf(sec.id), rows = cacheRows[sec.id] || [];
+  return ind==="all" ? rows : rows.filter(r=>r && INFO[r.ticker] && INFO[r.ticker].industry===ind);
+}
+function viewTickers(sec){
+  const ind = industryOf(sec.id);
+  if(ind==="all") return sec.tickers;
+  const g = sec.industries.find(i=>i.name===ind);
+  return g ? g.tickers : sec.tickers;
+}
+
+/* Column shown next to the score in the full table: cost of equity for P/B sectors, EBITDA margin otherwise */
+const tableQual = P => P==="pb" ? {key:"coe", label:"Cost of equity", dp:1} : {key:"ebitdaMargin", label:"EBITDA mgn", dp:0};
 
 /* ============================ ANALYSIS ============================ */
 
 function analyse(rows, sector){
-  const good = rows.filter(r=>r && !r.error);
+  const good = rows.filter(r=>r && !r.error)
+    .map(r=>Object.assign({}, r, {industry: INFO[r.ticker] ? INFO[r.ticker].industry : (r.industry||"")}));
   if(!good.length) return null;
   const pKey = sector.primary;
   const keys = [sector.primary, ...sector.secondary];
@@ -539,17 +654,17 @@ function analyse(rows, sector){
     const parts = [];
     keys.forEach(m=>{
       const v = r[m];
-      if(v===null) return;
+      if(v===null || v===undefined) return;
       const pr = pctRank(v, good.map(x=>x[m]));
       if(pr===null) return;
       parts.push(METRICS[m].better==="low" ? 1-pr : pr);
     });
     const score = parts.length ? (parts.reduce((a,b)=>a+b,0)/parts.length)*100 : null;
-    const rel = (r[pKey]!==null && meds[pKey]) ? r[pKey]/meds[pKey]-1 : null;
+    const rel = (r[pKey]!==null && r[pKey]!==undefined && meds[pKey]) ? r[pKey]/meds[pKey]-1 : null;
     return Object.assign({}, r, {score, rel});
   });
 
-  const valid = enriched.filter(r=>r[pKey]!==null);
+  const valid = enriched.filter(r=>r[pKey]!==null && r[pKey]!==undefined);
   const byP = valid.slice().sort((a,b)=>a[pKey]-b[pKey]);
   const scored = enriched.filter(r=>r.score!==null).sort((a,b)=>b.score-a.score);
   const vals = valid.map(r=>r[pKey]).sort((a,b)=>a-b);
@@ -600,7 +715,8 @@ function destroyCharts(){ charts.forEach(c=>{ try{c.destroy();}catch(e){} }); ch
 /* ============================ RENDER: DIAGNOSTICS ============================ */
 
 function diagHTML(){
-  if(!diag.log.length) return "";
+  if(!diag.log.length) return diag.plan
+    ? `<div class="diag"><div class="eyebrow">Loaded from this browser's cache · refresh the sector to re-run the endpoint check</div></div>` : "";
   const modeLabel = {
     metrics:"Reading ratios straight from FMP",
     "metrics+computed":"Key metrics from FMP, the rest computed from statements",
@@ -621,26 +737,41 @@ function diagHTML(){
 
 /* ============================ LOAD ============================ */
 
+function showSector(sec){
+  destroyCharts();
+  currentAnalysis = analyse(viewRows(sec), sec);
+  renderResults(sec);
+}
+
 async function startLoad(force){
   const sec = sectorOf(sectorId);
   const token = ++loadToken;
   destroyCharts();
 
-  if(!force && cacheRows[sec.id]){
-    currentAnalysis = analyse(cacheRows[sec.id], sec);
-    renderResults(sec);
-    return;
-  }
   if(force){
     diag.probed = false; diag.plan = null; diag.log = [];
+    delete cacheRows[sec.id]; delete cacheMeta[sec.id]; storeDel(sec.id);
     sec.tickers.forEach(t=>delete cacheTarget[t]);
     if(targetBySector[sec.id]) delete cacheTarget[targetBySector[sec.id]];
   }
+
+  /* reuse this session's rows, then this browser's cache, before touching the API */
+  if(!cacheRows[sec.id]){
+    const s = storeGet(sec.id);
+    if(s){
+      cacheRows[sec.id] = s.rows;
+      cacheMeta[sec.id] = {ts:s.ts, fromStore:true};
+      if(!diag.plan && s.plan) diag.plan = s.plan;
+    }
+  }
+  if(cacheRows[sec.id]){ showSector(sec); return; }
 
   $("main").innerHTML = `<div class="card">
     <div class="eyebrow" id="load-cap">Checking which FMP endpoints this key can reach</div>
     <div class="bignum" id="load-num">…</div>
     <div class="prog"><i id="load-bar"></i></div>
+    <div class="load-note">${sec.tickers.length} companies · roughly 3 FMP requests each.
+      Results are cached in this browser for ${CACHE_HOURS} hours, so revisiting a sector is free.</div>
   </div>`;
 
   try{
@@ -657,9 +788,9 @@ async function startLoad(force){
     }
 
     $("load-cap").textContent = "Pulling "+sec.name.toLowerCase()+" peers";
-    const needEbit = sec.primary==="evEbit" || sec.secondary.includes("evEbit");
+    const need = needKeys(sec);
     const raw = await mapLimit(sec.tickers, 4,
-      t => fetchTicker(t, needEbit, plan, false),
+      t => fetchTicker(t, need, plan),
       done => {
         if(token !== loadToken) return;
         const n = $("load-num"), bar = $("load-bar");
@@ -669,13 +800,16 @@ async function startLoad(force){
     if(token !== loadToken) return;
 
     const rows = raw.filter(Boolean);
-    if(!rows.some(r=>r && r.hasData)){
+    const withData = rows.filter(r=>r && r.hasData).length;
+    if(!withData){
       renderError("The endpoints responded during the probe but returned nothing usable for these tickers. See the diagnostics below.");
       return;
     }
     cacheRows[sec.id] = rows;
-    currentAnalysis = analyse(rows, sec);
-    renderResults(sec);
+    cacheMeta[sec.id] = {ts:Date.now(), fromStore:false, missing:rows.length-withData};
+    /* only keep a sector in the browser cache if the pull was mostly complete (e.g. not cut off by a daily limit) */
+    if(withData/rows.length >= 0.8) storeSet(sec.id, rows, plan);
+    showSector(sec);
   }catch(e){
     if(token === loadToken) renderError(e.message || "Request failed");
   }
@@ -714,12 +848,8 @@ async function fetchTarget(ticker){
   const pull = sym => Promise.all([
     safeArr(URLS.incomeFY(b,sym)), safeArr(URLS.balance(b,sym)), safeArr(URLS.quote(b,sym))
   ]);
-  let sym = (row && row.renamedTo) || ticker;
+  const sym = (row && row.sym) || fmpSym(ticker);
   let [inc, bal, q] = await pull(sym);
-  if(!inc.length && ALIASES[ticker] && sym!==ALIASES[ticker]){
-    sym = ALIASES[ticker];
-    [inc, bal, q] = await pull(sym);
-  }
 
   /* most recent full year first, then first year with an EBITDA or EBIT figure */
   inc = inc.slice().sort((x,y)=>String(pickStr(y,["date"])||"").localeCompare(String(pickStr(x,["date"])||"")));
@@ -742,7 +872,7 @@ async function fetchTarget(ticker){
   const yr = fy ? pick(fy,["fiscalYear","calendarYear"]) : null;
   const T = {
     ticker,
-    name: pickStr(qq,["name","companyName"]) || (row && row.name) || ticker,
+    name: pickStr(qq,["name","companyName"]) || (row && row.name) || (INFO[ticker] && INFO[ticker].name) || ticker,
     ok: !!fy || bookValue!==null,
     year: yr ? String(Math.round(yr)) : (fy ? (pickStr(fy,["date"])||"").slice(0,4) : ""),
     ebitda: fy ? pick(fy,["ebitda","EBITDA"]) : null,
@@ -757,13 +887,16 @@ async function fetchTarget(ticker){
 
 function valuationHTML(sec){
   const target = targetBySector[sec.id] || "";
-  const inList = sec.tickers.includes(target);
+  const opts = viewTickers(sec);
+  const inList = opts.includes(target);
   const labels = valMethodsFor(sec).map(m=>VAL_METHODS[m].label).join(" and ");
+  const ind = industryOf(sec.id);
   return `<div class="card val-card">
     <div class="val-head">
       <div>
         <div class="eyebrow">Implied share price · ${esc(labels)}</div>
-        <p class="val-lede">Pick the company you are valuing. The peer median multiple (with the target itself left out
+        <p class="val-lede">Pick the company you are valuing. The peer median multiple
+        ${ind==="all" ? "across the whole sector" : "within <strong>"+esc(ind)+"</strong>"} (with the target itself left out
         of the median) is applied to the target's own last full-year figures, bridged to equity and divided by
         shares outstanding.</p>
       </div>
@@ -771,7 +904,7 @@ function valuationHTML(sec){
         <label>Target
           <select id="val-select">
             <option value="">Choose a peer…</option>
-            ${sec.tickers.map(t=>`<option value="${esc(t)}" ${t===target?"selected":""}>${esc(t)}</option>`).join("")}
+            ${opts.map(t=>`<option value="${esc(t)}" ${t===target?"selected":""}>${esc(t)} · ${esc((INFO[t]&&INFO[t].name)||"").slice(0,28)}</option>`).join("")}
           </select>
         </label>
         <label>or any ticker
@@ -798,7 +931,7 @@ function bindValuation(sec){
     if(!t) return;
     inp.value = t;
     targetBySector[sec.id] = t;
-    sel.value = sec.tickers.includes(t) ? t : "";
+    sel.value = viewTickers(sec).includes(t) ? t : "";
     showValuation(sec);
   };
   $("val-go").addEventListener("click", go);
@@ -853,6 +986,7 @@ function impliedFor(m, T, peers){
 function valuationResultHTML(sec, T, methods){
   const A = currentAnalysis;
   const peers = A.rows.filter(r=>r.ticker!==T.ticker);
+  const ind = industryOf(sec.id);
   const results = methods.map(m=>impliedFor(m, T, peers));
   const priced = results.filter(r=>r.px!==null);
   const avg = priced.length>1 ? priced.reduce((s,r)=>s+r.px,0)/priced.length : null;
@@ -908,7 +1042,8 @@ function valuationResultHTML(sec, T, methods){
     <div class="val-grid">${results.map(card).join("")}${avgCard}</div>
     <p class="val-note">Peer multiples are TTM; the target's EBITDA and EBIT are its last reported full fiscal year,
     and debt, cash and book value are from its latest balance sheet. Book value is total assets less total liabilities.
-    ${peers.length} peers in the median. Screening output only — not investment advice.</p>`;
+    ${peers.length} ${ind==="all" ? esc(sec.name)+" sector" : esc(ind)} peers in the median.
+    Screening output only — not investment advice.</p>`;
 }
 
 /* ============================ RENDER: RESULTS ============================ */
@@ -922,25 +1057,51 @@ function sboxHTML(eyebrow, value, sub, accent, foot){
   </div>`;
 }
 
+function industryHTML(sec){
+  const ind = industryOf(sec.id);
+  const chip = (val,label,n)=>`<button class="ind ${val===ind?'on':''}" data-ind="${esc(val)}">${esc(label)}<span>${n}</span></button>`;
+  return `<div class="ind-wrap">
+    <div class="eyebrow" style="margin-bottom:8px">Industry · narrow the peer set for a like-for-like comparison</div>
+    <div class="inds">
+      ${chip("all","All industries",sec.tickers.length)}
+      ${sec.industries.map(i=>chip(i.name,i.name,i.tickers.length)).join("")}
+    </div>
+  </div>`;
+}
+
 function renderResults(sec){
   const A = currentAnalysis;
-  if(!A){ renderError("No analysable rows."); return; }
   const P = sec.primary;
-  const qualKey = P==="pb" ? "roe" : "ebitdaMargin";
-  const qualLabel = P==="pb" ? "ROE" : "EBITDA mgn";
+  const TQ = tableQual(P);
+  const ind = industryOf(sec.id);
+  const meta = cacheMeta[sec.id] || {};
+
+  if(!A){
+    $("main").innerHTML = `<div class="headrow"><h2>${esc(sec.label||sec.name)}</h2></div>${industryHTML(sec)}
+      <div class="card"><p class="val-empty">No data came back for the companies in this industry.</p></div>`;
+    bindIndustry(sec);
+    return;
+  }
 
   const cols = [
-    ["ticker","Ticker","l"], ["name","Company","l"], ["marketCap","Mkt cap",""],
+    ["ticker","Ticker","l"], ["name","Company","l"],
+    ...(ind==="all" ? [["industry","Industry","l"]] : []),
+    ["marketCap","Mkt cap",""],
     [P, METRICS[P].label, ""], ["rel","vs med",""],
     ...sec.secondary.map(m=>[m, METRICS[m].label, ""]),
-    [qualKey, qualLabel, ""], ["score","Score",""]
+    [TQ.key, TQ.label, ""], ["score","Score",""]
   ];
+  const nPrim = A.rows.filter(r=>r[P]!==null && r[P]!==undefined).length;
+  const peerWord = ind==="all" ? "sector" : "industry";
 
   $("main").innerHTML = `
     <div class="headrow">
-      <h2>${esc(sec.label||sec.name)}</h2>
-      <div class="meta">${A.nValid} of ${A.nTotal} peers priced on ${METRICS[P].label}${A.nValid<A.nTotal ? " · rest shown as n.m." : ""}</div>
+      <h2>${esc(sec.label||sec.name)}${ind!=="all" ? `<small>${esc(ind)}</small>` : ""}</h2>
+      <div class="meta">${A.nValid} of ${A.nTotal} peers priced on ${METRICS[P].label}${A.nValid<A.nTotal ? " · rest shown as n.m." : ""}${
+        meta.ts ? " · "+(meta.fromStore ? "cached "+fage(meta.ts) : "pulled "+fage(meta.ts)) : ""}</div>
     </div>
+
+    ${industryHTML(sec)}
 
     <div class="boxes">
       ${sboxHTML("Cheapest · "+METRICS[P].label,
@@ -951,9 +1112,9 @@ function renderResults(sec){
         A.richest ? A.richest.ticker : "—",
         A.richest ? fmtM(A.richest[P],P)+"  "+fsigned(A.richest.rel)+" vs median" : nm,
         C.s5, A.richest ? A.richest.name : "")}
-      ${sboxHTML("Peer median", fmtM(A.med,P),
+      ${sboxHTML("Peer median · "+peerWord, fmtM(A.med,P),
         "Q1 "+fmtM(A.q1,P)+" — Q3 "+fmtM(A.q3,P),
-        C.ink, "The benchmark every peer is measured against.")}
+        C.ink, "The benchmark every peer in this "+peerWord+" is measured against.")}
       ${sboxHTML("Best on blended score",
         A.bestBlend ? A.bestBlend.ticker : "—",
         A.bestBlend ? "Score "+Math.round(A.bestBlend.score)+" / 100" : nm,
@@ -967,8 +1128,8 @@ function renderResults(sec){
     ${valuationHTML(sec)}
 
     <div class="card chart-card">
-      <div class="eyebrow cap">${METRICS[P].label} by company · dashed line is the peer median</div>
-      <div class="chart-wrap" style="height:${Math.max(280, A.rows.filter(r=>r[P]!==null).length*26)}px">
+      <div class="eyebrow cap">${METRICS[P].label} by company · dashed line is the ${peerWord} median</div>
+      <div class="chart-wrap" style="height:${Math.max(280, nPrim*22)}px">
         <canvas id="chart-primary"></canvas>
       </div>
     </div>
@@ -978,17 +1139,19 @@ function renderResults(sec){
       <p style="font-size:12.5px;color:${C.ink70};margin:-6px 0 12px;max-width:640px;line-height:1.5">
         ${METRICS[P].label} against ${P==="pb"?"return on equity":"EBITDA margin"}.
         Bottom-right is the interesting corner: strong economics on a below-median multiple.</p>
-      <div class="chart-wrap" style="height:340px"><canvas id="chart-scatter"></canvas></div>
+      <div class="chart-wrap" style="height:360px"><canvas id="chart-scatter"></canvas></div>
     </div>
 
     <div class="card chart-card">
       <div class="eyebrow cap">Cross-check · ${sec.secondary.map(m=>METRICS[m].label).join(" and ")}</div>
-      <div class="chart-wrap" style="height:300px"><canvas id="chart-secondary"></canvas></div>
+      <div class="chart-scroll">
+        <div class="chart-wrap" style="height:300px;min-width:${Math.max(0, A.rows.length*22)}px"><canvas id="chart-secondary"></canvas></div>
+      </div>
       <div class="legend">${sec.secondary.map((m,i)=>`<span><i style="background:${[C.ink,C.s2,C.s4][i%3]}"></i>${METRICS[m].label}</span>`).join("")}</div>
     </div>
 
     <div class="card tbl-card">
-      <div class="eyebrow cap">Full comparables table · click a heading to sort</div>
+      <div class="eyebrow cap">Full comparables table · ${A.nTotal} companies · click a heading to sort</div>
       <div class="tbl-scroll">
         <table id="comps-table">
           <thead><tr>
@@ -1000,8 +1163,12 @@ function renderResults(sec){
     </div>
 
     <div class="footer-note">
-      TTM data from Financial Modeling Prep, refreshed on sector switch. Negative or extreme multiples are
-      shown as n.m. and excluded from medians and scores. Screening output only — not investment advice.
+      TTM data from Financial Modeling Prep for S&amp;P 500 constituents, cached in this browser for ${CACHE_HOURS} hours.
+      Negative or extreme multiples are shown as n.m. and excluded from medians and scores.
+      ${needKeys(sec).includes("evEbit") ? "EV/EBIT is derived as EV/Sales ÷ operating margin (both TTM) where FMP does not supply it directly." : ""}
+      ${TQ.key==="coe" ? `Cost of equity = ${fpct(RISK_FREE)} risk-free + beta × ${fpct(EQUITY_PREMIUM)} equity risk premium (CAPM); n.m. where beta is unavailable.` : ""}
+      ${meta.missing ? meta.missing+" companies returned no data this pull (often a plan or rate limit) — refresh later to retry." : ""}
+      Screening output only — not investment advice.
       <div class="linkbtns">
         <button class="linkbtn" id="diag-toggle">${showDiag?"Hide":"Show"} data source</button>
         <button class="linkbtn" id="refresh-btn">Refresh sector</button>
@@ -1010,12 +1177,13 @@ function renderResults(sec){
     </div>`;
 
   renderTableBody(sec);
+  bindIndustry(sec);
   bindValuation(sec);
   document.querySelectorAll("#comps-table th").forEach(th=>{
     th.addEventListener("click", ()=>{
       const col = th.dataset.col;
-      sort = sort.col===col ? {col, dir:sort.dir==="asc"?"desc":"asc"}
-                            : {col, dir:(col==="ticker"||col==="name")?"asc":"asc"};
+      sort = sort.col===col ? {col, dir:sort.dir==="asc"?"desc":"asc"} : {col, dir:"asc"};
+      destroyCharts();
       renderResults(sec);
     });
   });
@@ -1029,10 +1197,20 @@ function renderResults(sec){
   buildCharts(sec);
 }
 
+function bindIndustry(sec){
+  document.querySelectorAll(".ind").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      industryBySector[sec.id] = b.dataset.ind;
+      showSector(sec);
+    });
+  });
+}
+
 function renderTableBody(sec){
   const A = currentAnalysis;
   const P = sec.primary;
-  const qualKey = P==="pb" ? "roe" : "ebitdaMargin";
+  const TQ = tableQual(P);
+  const showInd = industryOf(sec.id)==="all";
   const {col, dir} = sort;
   const rows = A.rows.slice().sort((a,b)=>{
     const av=a[col], bv=b[col];
@@ -1046,19 +1224,21 @@ function renderTableBody(sec){
 
   $("comps-body").innerHTML = rows.map(r=>{
     const pv = r[P];
-    const pvColor = pv===null ? C.muted : relColor(r.rel, METRICS[P].better);
-    const q = r[qualKey];
+    const pvColor = (pv===null||pv===undefined) ? C.muted : relColor(r.rel, METRICS[P].better);
+    const q = r[TQ.key];
     const scoreCell = r.score===null
       ? `<span style="font-family:${MONO};font-size:12px;color:${C.muted}">${nm}</span>`
       : `<span class="scorebar"><span class="trk"><span class="fil" style="width:${r.score}%;background:${relColor(-(r.score-50)/60,"low")}"></span></span><b>${Math.round(r.score)}</b></span>`;
+    const qTitle = (TQ.key==="coe" && r.beta!==null && r.beta!==undefined && isFinite(r.beta)) ? ` title="Beta ${r.beta.toFixed(2)}"` : "";
     return `<tr>
       <td class="l tk">${esc(r.ticker)}</td>
-      <td class="l co">${esc(r.name)}</td>
+      <td class="l co" title="${esc(r.name)}">${esc(r.name)}</td>
+      ${showInd ? `<td class="l in" title="${esc(r.industry)}">${esc(r.industry)}</td>` : ""}
       <td class="mn">${fcap(r.marketCap)}</td>
       <td class="pv" style="color:${pvColor}">${fmtM(pv,P)}</td>
       <td class="mn" style="font-size:11.5px;color:${C.muted}">${fsigned(r.rel)}</td>
       ${sec.secondary.map(m=>`<td class="mn">${fmtM(r[m],m)}</td>`).join("")}
-      <td class="mn">${(q===null||q===undefined||!isFinite(q)) ? nm : fpct(q,0)}</td>
+      <td class="mn"${qTitle}>${(q===null||q===undefined||!isFinite(q)) ? nm : fpct(q,TQ.dp)}</td>
       <td>${scoreCell}</td>
     </tr>`;
   }).join("");
@@ -1078,7 +1258,7 @@ function buildCharts(sec){
     afterDatasetsDraw(chart, args, opts){
       const {ctx, scales} = chart;
       const axis = opts.axis==="y" ? scales.y : scales.x;
-      if(!axis || opts.value===null) return;
+      if(!axis || opts.value===null || opts.value===undefined) return;
       const px = axis.getPixelForValue(opts.value);
       ctx.save();
       ctx.strokeStyle = C.ink; ctx.setLineDash([4,3]); ctx.lineWidth = 1.2;
@@ -1090,7 +1270,7 @@ function buildCharts(sec){
   };
 
   /* primary horizontal bar */
-  const prim = A.rows.filter(r=>r[P]!==null).sort((a,b)=>a[P]-b[P]);
+  const prim = A.rows.filter(r=>r[P]!==null && r[P]!==undefined).sort((a,b)=>a[P]-b[P]);
   charts.push(new Chart($("chart-primary"), {
     type:"bar",
     plugins:[medianLine],
@@ -1114,7 +1294,7 @@ function buildCharts(sec){
             title: items => { const r = prim[items[0].dataIndex]; return r.ticker+" · "+r.name; },
             label: item => {
               const r = prim[item.dataIndex];
-              return [METRICS[P].label+": "+fmtM(r[P],P), "vs median: "+fsigned(r.rel),
+              return [r.industry, METRICS[P].label+": "+fmtM(r[P],P), "vs median: "+fsigned(r.rel),
                       "Value score: "+(r.score===null?nm:Math.round(r.score))];
             }
           }
@@ -1122,14 +1302,14 @@ function buildCharts(sec){
       },
       scales:{
         x:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted}},
-        y:{grid:{display:false}, ticks:{font:{family:"IBM Plex Mono",size:11}, color:C.ink70}}
+        y:{grid:{display:false}, ticks:{font:{family:"IBM Plex Mono",size:10.5}, color:C.ink70, autoSkip:false}}
       }
     }
   }));
 
   /* value vs quality scatter */
   const qKey = P==="pb" ? "roe" : "ebitdaMargin";
-  const sc = A.rows.filter(r=>r[P]!==null && r[qKey]!==null && isFinite(r[qKey]));
+  const sc = A.rows.filter(r=>r[P]!==null && r[P]!==undefined && r[qKey]!==null && r[qKey]!==undefined && isFinite(r[qKey]));
   const tickerLabels = {
     id:"tickerLabels",
     afterDatasetsDraw(chart){
@@ -1160,7 +1340,7 @@ function buildCharts(sec){
             title: items => { const r = sc[items[0].dataIndex]; return r.ticker+" · "+r.name; },
             label: item => {
               const r = sc[item.dataIndex];
-              return [METRICS[P].label+": "+fmtM(r[P],P),
+              return [r.industry, METRICS[P].label+": "+fmtM(r[P],P),
                       (P==="pb"?"ROE: ":"EBITDA margin: ")+fpct(r[qKey]),
                       "vs median: "+fsigned(r.rel)];
             }
@@ -1202,7 +1382,7 @@ function buildCharts(sec){
         }
       },
       scales:{
-        x:{grid:{display:false}, ticks:{font:fontMono, color:C.ink70, maxRotation:55, minRotation:55}},
+        x:{grid:{display:false}, ticks:{font:fontMono, color:C.ink70, maxRotation:60, minRotation:60, autoSkip:false}},
         y:{grid:{color:C.ruleSoft}, ticks:{font:fontMono, color:C.muted}}
       }
     }
@@ -1214,19 +1394,23 @@ function buildCharts(sec){
 function renderMethod(){
   const defs = [
     ["EV/EBITDA","Enterprise value over trailing EBITDA. Capital-structure neutral, so it compares companies with different debt loads."],
-    ["EV/EBIT","Enterprise value over operating profit. Charges each company for the depreciation of its asset base."],
+    ["EV/EBIT","Enterprise value over operating profit. Charges each company for the depreciation of its asset base — the primary multiple for asset-heavy sectors."],
     ["EV/Sales","Enterprise value over revenue. The fallback when profits are negative or artificially depressed."],
     ["EV/FCF","Enterprise value over free cash flow. What the whole business actually converts into cash after capex."],
-    ["EV/OCF","Enterprise value over operating cash flow. Useful where capex is lumpy, as in energy."],
+    ["EV/OCF","Enterprise value over operating cash flow. Useful where capex is lumpy, as in energy and real estate."],
     ["P/E","Price over trailing earnings per share. Equity-level, so it already reflects leverage."],
     ["P/B","Price over book value. The core bank multiple, since the balance sheet is the business."],
-    ["ROE","Return on equity. Paired with P/B to see whether a low multiple is cheap or deserved."]
+    ["ROE","Return on equity. Paired with P/B to see whether a low multiple is cheap or deserved."],
+    ["Cost of equity","CAPM: risk-free rate plus beta times the equity risk premium. Compare with ROE — a bank earning above its cost of equity should trade above book."]
   ];
+  const total = SECTORS.reduce((s,x)=>s+x.tickers.length,0);
+  const nInd = SECTORS.reduce((s,x)=>s+x.industries.length,0);
   $("view-method").innerHTML = `
     <div style="margin-bottom:22px">
       <h2>Which multiple, and why</h2>
-      <p class="lede">Each sector is valued on the multiple that best reflects how its companies actually make money.
-      The primary multiple drives the ranking; the secondary multiples act as a cross-check.</p>
+      <p class="lede">${total} S&amp;P 500 companies across 11 GICS sectors and ${nInd} industries. Each sector is valued on the
+      multiple that best reflects how its companies actually make money. The primary multiple drives the ranking;
+      the secondary multiples act as a cross-check. Within a sector, pick an industry to benchmark against its closest peers only.</p>
     </div>
 
     <div class="card tbl-card" style="margin-bottom:26px">
@@ -1238,7 +1422,9 @@ function renderMethod(){
           </tr></thead>
           <tbody>
             ${SECTORS.map(s=>`<tr>
-              <td><div class="sec">${esc(s.label||s.name)}</div><div class="peers">${s.tickers.length} peers</div></td>
+              <td><div class="sec">${esc(s.label||s.name)}</div>
+                <div class="peers">${s.tickers.length} companies · ${s.industries.length} industries</div>
+                ${s.asset ? `<span class="tag">Asset heavy</span>` : ""}</td>
               <td><span class="chip">${METRICS[s.primary].label}</span></td>
               <td class="secm">${s.secondary.map(m=>METRICS[m].label).join(", ")}</td>
               <td class="why">${esc(s.why)}</td>
@@ -1250,18 +1436,27 @@ function renderMethod(){
 
     <div class="mgrid">
       <div class="card">
+        <div class="eyebrow" style="margin-bottom:10px">Why EV/EBIT for asset-heavy sectors</div>
+        <p>Industrials, Materials, Energy and Utilities run on plant, fleets, reserves and networks that wear out and
+        must be replaced. EBITDA adds that depreciation back, which flatters the most capital-hungry companies and
+        makes them look cheaper than they are. EBIT keeps it in, so two companies with the same EBITDA but very different
+        reinvestment needs are priced differently. Real Estate is the exception: property depreciation is an accounting
+        charge that usually understates value, so it stays on EV/EBITDA.</p>
+      </div>
+      <div class="card">
         <div class="eyebrow" style="margin-bottom:10px">How the ranking works</div>
         <ol>
-          <li>Pull TTM figures for every peer in the sector.</li>
+          <li>Pull TTM figures for every company in the sector.</li>
+          <li>Optionally narrow to one industry — medians, scores and charts then use only those peers.</li>
           <li>Drop negative and extreme multiples — they carry no signal.</li>
-          <li>Rank each company within the peer set on every multiple.</li>
-          <li>Average those ranks into a 0–100 score, where 100 is the cheapest.</li>
+          <li>Rank each company within the peer set on every multiple and average into a 0–100 score, where 100 is the cheapest.</li>
+          <li>P/E is scored in every sector alongside the sector-specific multiples, as a common equity-level check. Each multiple carries equal weight.</li>
         </ol>
       </div>
       <div class="card">
         <div class="eyebrow" style="margin-bottom:10px">Implied share price</div>
         <ol>
-          <li>Take the peer median multiple, leaving the target out of the median.</li>
+          <li>Take the peer median multiple (sector or selected industry), leaving the target out of the median.</li>
           <li>EV/EBITDA and EV/EBIT: multiply by the target's last full-year EBITDA or EBIT to get enterprise value, subtract total debt and add cash to get equity value.</li>
           <li>P/B: multiply by book value (total assets less total liabilities) to get equity value directly.</li>
           <li>Divide equity value by shares outstanding and compare with the current price.</li>
