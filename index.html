@@ -41,10 +41,6 @@
   .sector-btn span.ct{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
   .sector-btn.on{background:#F1F3F4;border-left-color:var(--ink)}
   .sector-btn.on span.nm{font-weight:700}
-  .rail-note{padding:18px 18px 0;margin-top:10px;border-top:1px solid var(--rule-soft)}
-  .rail-note .big{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.02em;margin-top:8px}
-  .rail-note .also{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px}
-  .rail-note p{font-size:12px;color:var(--ink70);line-height:1.5;margin-top:10px}
 
   main{flex:1;min-width:320px;padding:20px 22px 40px}
   .headrow{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px}
@@ -52,15 +48,6 @@
   .headrow h2 small{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink70);letter-spacing:0;margin-left:10px}
   .headrow .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
 
-  /* industry filter */
-  .ind-wrap{margin-bottom:18px}
-  .inds{display:flex;flex-wrap:wrap;gap:6px}
-  .ind{font-family:var(--mono);font-size:11px;padding:6px 10px;border:1px solid var(--rule);background:var(--surface);
-    color:var(--ink70);display:inline-flex;gap:7px;align-items:baseline}
-  .ind span{color:var(--muted);font-size:10px}
-  .ind:hover{border-color:var(--ink);color:var(--ink)}
-  .ind.on{background:var(--ink);border-color:var(--ink);color:#fff}
-  .ind.on span{color:#B9C0C7}
 
   .boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:22px}
   .sbox{background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--ink);
@@ -100,6 +87,56 @@
   .val-bridge div span:last-child{font-family:var(--mono);white-space:nowrap}
   .val-bridge div.tot span{font-weight:600;color:var(--ink)}
   .val-note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:12px}
+
+
+  /* valuation: stats beside picker */
+  .val-top{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(240px,1fr);gap:22px;margin-bottom:16px}
+  @media (max-width:860px){.val-top{grid-template-columns:1fr}}
+  .val-ask{border-left:1px solid var(--rule-soft);padding-left:22px;display:flex;flex-direction:column;gap:12px}
+  @media (max-width:860px){.val-ask{border-left:none;padding-left:0;border-top:1px solid var(--rule-soft);padding-top:16px}}
+  .val-ask h3{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;line-height:1.15}
+  .val-ask .val-lede{margin-top:-4px}
+  .val-ask label{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .val-ask select,.val-ask input{font:500 13px var(--mono);padding:8px 10px;border:1px solid var(--ink);
+    background:var(--surface);color:var(--ink);letter-spacing:0;border-radius:0;width:100%}
+  .val-ask input{text-transform:uppercase}
+  .val-ask .val-inp{display:flex}
+  .val-ask .val-inp button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    padding:8px 14px;border:1px solid var(--ink);border-left:none;background:var(--ink);color:#fff}
+  .st-mult{display:flex;gap:10px;align-items:baseline;margin:10px 0 12px;font-size:12.5px;color:var(--ink70);line-height:1.5}
+  .st-mult .chip{flex-shrink:0}
+  .st-kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px 18px;
+    border-top:1px solid var(--rule-soft);padding-top:12px}
+  .st-kv .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .st-kv .v{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em;margin-top:3px}
+  .st-kv .v small{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--muted);margin-left:6px}
+  .st-warn{font-size:11.5px;color:var(--s4);margin-top:10px;line-height:1.5}
+  .st-tbl{min-width:0;margin-top:10px}
+  .st-tbl th{cursor:default;padding:6px 8px}
+  .st-tbl td{padding:6px 8px;font-family:var(--mono);font-size:11.5px;color:var(--ink70)}
+  .st-tbl tr.hit td{background:#EEF4F2}
+  .st-tbl tr.hit td:first-child{box-shadow:inset 3px 0 0 var(--s1)}
+  .st-jump{background:none;border:none;padding:0;font-family:var(--body);font-size:12.5px;color:var(--ink);text-align:left}
+  .st-jump:hover{text-decoration:underline}
+  .chip.sm{font-size:10.5px;padding:2px 6px}
+  .st-note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .val-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+  .val-bridge div.memo span{color:var(--muted);font-size:11.5px}
+  .val-empty .retry{display:block;margin-top:10px}
+  .rb{position:relative;height:46px;margin:22px 0 6px}
+  .rb-track{position:absolute;left:0;right:0;top:20px;height:4px;background:var(--rule-soft)}
+  .rb-band{position:absolute;top:16px;height:12px;background:var(--s2);opacity:.35}
+  .rb-mid{position:absolute;top:10px;width:3px;height:24px;background:var(--ink);transform:translateX(-50%)}
+  .rb-cur{position:absolute;top:6px;height:32px;border-left:2px dashed var(--s4)}
+  .rb-cur span{position:absolute;top:-18px;left:0;transform:translateX(-50%);white-space:nowrap;
+    font-family:var(--mono);font-size:10.5px;color:var(--s4)}
+  .rb-lab{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .rb-lab .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .rb-lab .v{font-family:var(--mono);font-size:13px;font-weight:600;margin-top:2px}
+  .pcs{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .pc{font-family:var(--mono);font-size:10.5px;color:var(--ink70);border:1px solid var(--rule);padding:3px 6px}
+  .pc b{color:var(--ink);font-weight:600}
 
   .chart-card{margin-bottom:18px}
   .chart-card .cap{margin-bottom:12px}
@@ -178,6 +215,155 @@
 
   .hidden{display:none}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  /* ---- cleanup pass ---- */
+  .sector-btn{flex-direction:column;align-items:flex-start;gap:2px;padding:10px 18px}
+  .sector-btn span.sub{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .sector-btn:hover{background:#F6F7F8}
+  .rail-help{padding:18px 18px 0;margin-top:10px;border-top:1px solid var(--rule-soft)}
+  .rail-help ol{margin-top:10px;padding-left:18px;font-size:12.5px;color:var(--ink70);line-height:1.8}
+
+  .ctx{margin-bottom:14px;padding:16px 20px}
+  .ctx-row{display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap}
+  .ctx-title h2{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.025em;line-height:1.1;margin-top:4px}
+  .ctx-field{display:flex;flex-direction:column;gap:6px}
+  .ctx-field select{font:500 13px var(--body);padding:8px 10px;border:1px solid var(--ink);background:var(--surface);
+    color:var(--ink);border-radius:0;min-width:260px;cursor:pointer}
+  .ctx-mult{display:flex;align-items:center;gap:10px;min-height:35px}
+  .ctx-also{font-size:12px;color:var(--muted)}
+  .ctx-foot{display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap;
+    margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft)}
+  .ctx-foot p{font-size:12.5px;color:var(--ink70);line-height:1.5;max-width:680px}
+  .ctx-meta{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:12px;align-items:baseline;white-space:nowrap}
+
+  .subnav{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:18px;border:1px solid var(--rule);background:var(--surface)}
+  .sn{border:none;border-right:1px solid var(--rule);background:transparent;text-align:left;padding:12px 18px;
+    display:flex;flex-direction:column;gap:3px;border-bottom:3px solid transparent}
+  .sn:last-child{border-right:none}
+  .sn:hover{background:#F6F7F8}
+  .sn-l{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:-.01em;color:var(--ink70)}
+  .sn-s{font-size:11.5px;color:var(--muted)}
+  .sn.on{border-bottom-color:var(--ink);background:#F6F7F8}
+  .sn.on .sn-l{color:var(--ink)}
+  @media (max-width:640px){.sn-s{display:none}}
+
+  button.sbox{text-align:left;font:inherit;color:inherit;position:relative}
+  .sbox.click:hover{border-color:var(--ink)}
+  .sbox .go{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:4px}
+  .sbox.click:hover .go{color:var(--ink)}
+
+  .ch-t{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .ch-h{font-size:12.5px;color:var(--ink70);line-height:1.5;margin:4px 0 14px;max-width:760px}
+  .tbl-head{padding:16px 18px 4px;border-bottom:1px solid var(--rule-soft)}
+  .rowgo{font-family:var(--mono);font-size:10.5px;border:1px solid var(--rule);background:var(--surface);
+    color:var(--ink70);padding:3px 8px;white-space:nowrap}
+  .rowgo:hover{border-color:var(--ink);color:var(--ink)}
+
+  .val-headline{font-family:var(--display);font-size:19px;line-height:1.4;letter-spacing:-.01em;
+    padding:14px 0 6px;border-top:1px solid var(--rule-soft);max-width:900px}
+  .val-headline strong{font-weight:800}
+
+  .about{margin-top:22px;border-top:1px solid var(--rule)}
+  .about summary{cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);padding:12px 0;list-style:none}
+  .about summary::before{content:"+ "}
+  .about[open] summary::before{content:"− "}
+  .about-body{font-size:12px;color:var(--ink70);line-height:1.6;padding-bottom:10px}
+  .about-body p{margin-bottom:10px;max-width:900px}
+
+  /* ---- clarity pass ---- */
+  .sn.cta{background:#E6F2EF;border-bottom-color:var(--s1)}
+  .sn.cta .sn-l{color:var(--s1)}
+  .sn.cta:hover{background:#D6EBE5}
+  .sn.cta.on{background:var(--s1);border-bottom-color:var(--ink)}
+  .sn.cta.on .sn-l,.sn.cta.on .sn-s{color:#fff}
+  .sn-ic{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;
+    background:var(--s1);color:#fff;font-size:12px;margin-right:8px;vertical-align:1px}
+  .sn.cta.on .sn-ic{background:#fff;color:var(--s1)}
+  .sn-arrow{font-family:var(--mono)}
+
+
+  .verdict{display:grid;grid-template-columns:auto 1fr;gap:6px 28px;align-items:center;margin:4px 0 16px;
+    padding:18px 20px;background:var(--vbg);border:1px solid var(--vc);border-left:6px solid var(--vc)}
+  .vd-left{grid-row:span 2}
+  .vd-badge{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:#fff;background:var(--vc);padding:4px 10px}
+  .vd-pct{font-family:var(--display);font-weight:800;font-size:44px;line-height:1;letter-spacing:-.03em;color:var(--vc);margin-top:8px}
+  .vd-sub{font-size:11.5px;color:var(--ink70);margin-top:4px}
+  .vd-prices{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .vd-prices .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .vd-prices .p{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.02em;margin-top:2px}
+  .vd-prices .vd-impl{color:var(--vc)}
+  .vd-arrow{font-family:var(--mono);font-size:22px;color:var(--muted);padding-top:12px}
+  .vd-text{font-size:13.5px;color:var(--ink70);line-height:1.55;max-width:820px}
+  .vd-text strong{color:var(--ink)}
+  @media (max-width:700px){.verdict{grid-template-columns:1fr}.vd-left{grid-row:auto}}
+
+  /* ---- softer finish ---- */
+  :root{--rule:#E3E7EA; --rule-soft:#EEF1F3; --r:12px; --r-sm:8px;
+    --shadow:0 1px 2px rgba(13,17,23,.04), 0 4px 14px rgba(13,17,23,.05)}
+  body{background:#F2F4F5}
+  header{border-bottom:1px solid var(--rule);box-shadow:0 1px 0 rgba(13,17,23,.02)}
+  nav.tabs{border:none;background:#EEF1F3;padding:4px;border-radius:999px;gap:2px}
+  nav.tabs button{border-radius:999px;padding:8px 18px;color:var(--ink70)}
+  nav.tabs button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(13,17,23,.12)}
+
+  aside{border-right:1px solid var(--rule);background:#FAFBFB}
+  .sector-btn{border-left:none;margin:2px 10px;width:calc(100% - 20px);border-radius:var(--r-sm);padding:9px 12px}
+  .sector-btn.on{background:var(--surface);box-shadow:var(--shadow)}
+  aside .eyebrow{padding-left:22px}
+  .rail-help{margin:14px 10px 0;padding:14px 12px 4px;border-top:1px solid var(--rule-soft)}
+
+  .card,.ctx,.tbl-card,.sbox,.val-m{border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow)}
+  .tbl-card{overflow:hidden}
+  .card.err-card{border-left:4px solid var(--s5)}
+  .ctx-foot,.val-facts,.val-bridge,.st-kv,.diag{border-color:var(--rule-soft)}
+
+  .sbox{border-top:1px solid var(--rule) !important;padding-top:16px}
+  .sbox::before,.val-m::before{content:"";display:block;width:30px;height:4px;border-radius:2px;background:var(--acc, var(--ink));margin-bottom:6px}
+  .val-m{border-top:1px solid var(--rule) !important}
+  .sbox.click:hover{border-color:#C9D0D5;box-shadow:0 2px 4px rgba(13,17,23,.05),0 8px 20px rgba(13,17,23,.07)}
+
+  .subnav{border:none;background:#E9EDEF;padding:5px;border-radius:var(--r);gap:5px}
+  .sn{border:none !important;border-radius:var(--r-sm);padding:11px 16px}
+  .sn.on{background:var(--surface);box-shadow:0 1px 3px rgba(13,17,23,.1)}
+  .sn.cta{background:#DDEEEA}
+  .sn.cta.on{background:var(--s1);box-shadow:0 2px 8px rgba(11,110,95,.25)}
+
+  .chip{border-radius:6px}
+  .ctx-field select,.val-ask select,.val-ask input,.val-pick select,.val-pick input{border:1px solid #CFD6DB;border-radius:var(--r-sm)}
+  .ctx-field select:focus,.val-ask select:focus,.val-ask input:focus{outline:none;border-color:var(--s1);box-shadow:0 0 0 3px rgba(11,110,95,.15)}
+  .val-ask .val-inp input{border-radius:var(--r-sm) 0 0 var(--r-sm)}
+  .val-ask .val-inp button{border:1px solid var(--s1);background:var(--s1);border-radius:0 var(--r-sm) var(--r-sm) 0}
+  .val-ask{border-left-color:var(--rule-soft)}
+  .retry{border-radius:var(--r-sm)}
+  .rowgo{border-radius:6px}
+  .pc{border-radius:6px;border-color:var(--rule);background:#FAFBFB}
+  th{border-bottom:1px solid var(--rule)}
+  td{border-bottom:1px solid var(--rule-soft)}
+  .mtable th{border-bottom:1px solid var(--rule)}
+  .st-tbl tr.hit td{background:#EAF4F1}
+  .rb-track{border-radius:2px}.rb-band{border-radius:6px}.rb-mid{border-radius:2px}
+  .scorebar .trk,.scorebar .fil{border-radius:3px}
+  .prog,.prog i{border-radius:2px}
+  .diag-row{border-radius:6px}
+
+  .verdict{border:none;border-radius:var(--r);box-shadow:inset 4px 0 0 var(--vc)}
+  .vd-badge{border-radius:999px;padding:4px 12px}
+
+  .method-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:2px 0 12px;
+    padding:10px 14px;background:#F6F8F9;border-radius:var(--r-sm)}
+  .ms-k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .ms-full{font-weight:600;font-size:13px}
+  .ms-how{font-size:12.5px;color:var(--ink70)}
+  .ms-how::before{content:"· "}
+  .about{border-top:1px solid var(--rule)}
+
+  .vd-sep{width:1px;align-self:stretch;background:rgba(13,17,23,.12);margin:0 4px}
+  .vd-prem{align-self:center;font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--pc);
+    background:#fff;border:1px solid var(--pc);border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .pc.me{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .pc.me b{color:#fff}
 </style>
 </head>
 <body>
@@ -185,7 +371,7 @@
 <header>
   <div class="masthead">
     <h1>Comparable company analysis</h1>
-    <p>S&amp;P 500 &middot; 11 GICS sectors &middot; trailing twelve months &middot; sector-appropriate multiples &middot; peer-relative</p>
+    <p>S&amp;P 500 &middot; how each company is priced against its peers, and what that implies for its share price</p>
   </div>
   <nav class="tabs">
     <button id="tab-comps" class="on">Comps</button>
@@ -195,13 +381,15 @@
 
 <div id="view-comps" class="layout">
   <aside>
-    <div class="eyebrow">Choose a sector</div>
+    <div class="eyebrow">Sectors</div>
     <div id="sector-list"></div>
-    <div class="rail-note">
-      <div class="eyebrow">Multiple in use</div>
-      <div class="big" id="rail-primary"></div>
-      <div class="also" id="rail-secondary"></div>
-      <p id="rail-why"></p>
+    <div class="rail-help">
+      <div class="eyebrow">How to use</div>
+      <ol>
+        <li>Pick a sector</li>
+        <li>Narrow to an industry (optional)</li>
+        <li>Value any company against its peers</li>
+      </ol>
     </div>
   </aside>
   <main id="main"></main>
@@ -226,7 +414,7 @@ const EQUITY_PREMIUM = 0.055;  /* equity risk premium — adjust as needed */
 
 /* Sector results are kept in this browser so revisiting a sector costs no API calls. */
 const CACHE_HOURS = 12;
-const CACHE_PREFIX = "comps:sp500:v1:";
+const CACHE_PREFIX = "comps:sp500:v2:";
 
 const C = {
   ink:"#0D1117", ink70:"#3A434D", muted:"#68727D", rule:"#D2D7DB", ruleSoft:"#E2E6E9",
@@ -509,6 +697,7 @@ async function computeFromStatements(t, base, marketCap){
 /* Keys a sector actually needs — only these trigger the (3-call) statement fallback. */
 const needKeys = sec => {
   const k = [sec.primary, ...sec.secondary];
+  (sec.industries||[]).forEach(i=>{ if(typeof INDUSTRY_CFG!=="undefined" && INDUSTRY_CFG[i.name]) k.push(INDUSTRY_CFG[i.name].primary); });
   if(sec.primary!=="pb") k.push("ebitdaMargin");
   return Array.from(new Set(k));
 };
@@ -687,15 +876,12 @@ function analyse(rows, sector){
 function renderSectorList(){
   $("sector-list").innerHTML = SECTORS.map(s=>`
     <button class="sector-btn ${s.id===sectorId?'on':''}" data-sec="${s.id}">
-      <span class="nm">${esc(s.name)}</span><span class="ct">${s.tickers.length}</span>
+      <span class="nm">${esc(s.name)}</span>
+      <span class="sub">${METRICS[s.primary].label} · ${s.tickers.length} cos</span>
     </button>`).join("");
   document.querySelectorAll(".sector-btn").forEach(b=>{
     b.addEventListener("click", ()=>{ sectorId = b.dataset.sec; renderSectorList(); startLoad(false); });
   });
-  const s = sectorOf(sectorId);
-  $("rail-primary").textContent = METRICS[s.primary].label;
-  $("rail-secondary").textContent = "also " + s.secondary.map(m=>METRICS[m].label).join(", ");
-  $("rail-why").textContent = s.why;
 }
 
 function setTab(t){
@@ -739,8 +925,9 @@ function diagHTML(){
 
 function showSector(sec){
   destroyCharts();
-  currentAnalysis = analyse(viewRows(sec), sec);
-  renderResults(sec);
+  const v = viewCfg(sec);
+  currentAnalysis = analyse(viewRows(sec), v);
+  renderResults(v);
 }
 
 async function startLoad(force){
@@ -825,59 +1012,212 @@ function renderError(msg){
   $("retry-btn").addEventListener("click", ()=>startLoad(true));
 }
 
-/* ============================ IMPLIED VALUATION ============================ */
+/* ============================ INDUSTRY VALUATION ============================ */
 
-/* Which multiples can be turned into an implied share price, and how. */
-const VAL_METHODS = {
-  evEbitda:{label:"EV/EBITDA", metric:"ebitda", metricLabel:"EBITDA", ev:true},
-  evEbit:{label:"EV/EBIT", metric:"ebit", metricLabel:"EBIT", ev:true},
-  pb:{label:"P/B", metric:"bookValue", metricLabel:"book value", ev:false}
+/* The multiple each GICS industry is priced on. This drives the implied share price,
+   and becomes the main multiple whenever an industry is selected. */
+const INDUSTRY_CFG = {
+  /* Information Technology */
+  "Semiconductors & Semiconductor Equipment":{primary:"evEbitda", why:"Cyclical and high-margin; EBITDA normalises the heavy depreciation of fabs and acquired intangibles."},
+  "Technology Hardware, Storage & Peripherals":{primary:"evEbitda", why:"Hardware makers carry real assets and varied leverage; EBITDA compares operating earnings across capital structures."},
+  "Software":{primary:"pe", why:"Asset-light, recurring revenue and steady profits; the market prices mature software on earnings per share."},
+  "Communications Equipment":{primary:"evEbitda", why:"Mix of hardware and software with differing debt loads; EBITDA keeps the comparison capital-structure neutral."},
+  "IT Services":{primary:"pe", why:"People-based businesses with little capex or leverage; earnings convert to cash, so P/E is the standard."},
+  "Electronic Equipment, Instruments & Components":{primary:"evEbit", why:"Manufacturing-heavy; EBIT charges the depreciation of the plant needed to keep producing."},
+  /* Communication Services */
+  "Interactive Media & Services":{primary:"pe", why:"Highly profitable, net-cash platforms; earnings per share is how the market prices them."},
+  "Entertainment":{primary:"evEbitda", why:"Content spend and leverage vary widely; EBITDA compares operating earnings before financing choices."},
+  "Media":{primary:"evEbitda", why:"Leveraged cable and broadcast assets; EV/EBITDA is the deal and trading convention."},
+  "Diversified Telecommunication Services":{primary:"evEbitda", why:"Heavily indebted network operators; EV/EBITDA captures the whole capital structure."},
+  "Wireless Telecommunication Services":{primary:"evEbitda", why:"Spectrum and tower-heavy with high leverage; EV/EBITDA is the industry standard."},
+  /* Consumer Discretionary */
+  "Broadline Retail":{primary:"evEbitda", why:"Large logistics and cloud depreciation; EBITDA compares operating economics on a like-for-like basis."},
+  "Automobiles":{primary:"pe", why:"Captive finance arms load carmakers with debt that distorts enterprise value, so equity-level P/E is cleaner."},
+  "Automobile Components":{primary:"evEbit", why:"Capital-intensive suppliers; EBIT charges the tooling and plant that must be replaced."},
+  "Specialty Retail":{primary:"evEbitda", why:"Lease-heavy store networks; EV/EBITDA compares retailers with different ownership and financing of stores."},
+  "Hotels, Restaurants & Leisure":{primary:"evEbitda", why:"Asset-light franchisors sit beside asset-heavy owners and cruise lines; EBITDA keeps them comparable."},
+  "Household Durables":{primary:"pb", why:"Homebuilders' value sits in land and housing inventory on the balance sheet; P/B is the industry standard."},
+  "Textiles, Apparel & Luxury Goods":{primary:"pe", why:"Brand-driven, low-capex businesses; the market prices them on earnings."},
+  "Distributors":{primary:"evEbitda", why:"Working-capital-heavy distribution with moderate leverage; EBITDA is the norm."},
+  "Leisure Products":{primary:"evEbitda", why:"Toy and leisure makers with varied leverage; EBITDA normalises capital structure."},
+  /* Consumer Staples */
+  "Consumer Staples Distribution & Retail":{primary:"evEbitda", why:"Store-based, lease-heavy grocers and wholesalers; EV/EBITDA compares them before financing."},
+  "Beverages":{primary:"pe", why:"Stable, branded earnings streams; the market prices them on earnings per share."},
+  "Food Products":{primary:"pe", why:"Mature, predictable branded earnings; P/E is the trading convention."},
+  "Household Products":{primary:"pe", why:"Defensive brands with steady earnings; P/E is the standard."},
+  "Personal Care Products":{primary:"pe", why:"Brand-led, low-capex businesses; earnings drive value."},
+  "Tobacco":{primary:"pe", why:"Highly predictable, cash-generative earnings; valued on P/E."},
+  /* Health Care */
+  "Pharmaceuticals":{primary:"pe", why:"Large, profitable drug makers; P/E is the standard benchmark."},
+  "Biotechnology":{primary:"pe", why:"For profitable large-cap biotechs, earnings per share drives value; loss-makers show as n.m."},
+  "Health Care Providers & Services":{primary:"evEbitda", why:"Hospitals, insurers and distributors with varied leverage; EBITDA keeps them comparable."},
+  "Health Care Equipment & Supplies":{primary:"evEbitda", why:"Device makers with acquisition-driven amortisation; EBITDA strips out deal accounting."},
+  "Life Sciences Tools & Services":{primary:"evEbitda", why:"Serial acquirers with large amortisation; EBITDA reflects underlying earnings."},
+  "Health Care Technology":{primary:"pe", why:"Asset-light software economics; valued on earnings."},
+  /* Financials */
+  "Banks":{primary:"pb", why:"The balance sheet is the business and debt is raw material; price to book is the bank standard."},
+  "Insurance":{primary:"pb", why:"Value sits in the invested float and reserves on the balance sheet; P/B paired with ROE."},
+  "Consumer Finance":{primary:"pb", why:"Lenders whose value is the loan book; P/B is the standard."},
+  "Capital Markets":{primary:"pe", why:"Exchanges, asset managers and brokers are fee businesses with light balance sheets; earnings drive value."},
+  "Financial Services":{primary:"pe", why:"Payments networks and diversified financials earn fees, not spread; P/E fits better than book."},
+  /* Industrials */
+  "Aerospace & Defense":{primary:"evEbit", why:"Capital-intensive production; EBIT charges the depreciation of plant and tooling."},
+  "Machinery":{primary:"evEbit", why:"Heavy manufacturing; EBIT reflects the real cost of maintaining productive assets."},
+  "Electrical Equipment":{primary:"evEbit", why:"Factory-based production; EBIT captures the cost of the asset base."},
+  "Building Products":{primary:"evEbit", why:"Plant-heavy manufacturing; EBIT is the fair operating measure."},
+  "Construction & Engineering":{primary:"evEbit", why:"Equipment fleets wear out; EBIT charges their depreciation."},
+  "Industrial Conglomerates":{primary:"evEbit", why:"Diversified manufacturing on large asset bases; EBIT is the cleaner measure."},
+  "Ground Transportation":{primary:"evEbit", why:"Railroads and truckers run on track, locomotives and fleets; EBIT charges their replacement cost."},
+  "Air Freight & Logistics":{primary:"evEbit", why:"Aircraft, hubs and vehicle fleets; EBIT reflects asset intensity."},
+  "Passenger Airlines":{primary:"evEbit", why:"Fleet-heavy and leveraged; EBIT charges aircraft depreciation, EV captures the debt."},
+  "Commercial Services & Supplies":{primary:"evEbit", why:"Waste and service networks with heavy equipment and landfill assets; EBIT is the fair measure."},
+  "Trading Companies & Distributors":{primary:"evEbit", why:"Rental fleets and distribution assets depreciate; EBIT accounts for that."},
+  "Professional Services":{primary:"pe", why:"People-based, asset-light payroll and data businesses; valued on earnings."},
+  /* Materials */
+  "Chemicals":{primary:"evEbit", why:"Plants and crackers wear out; EBIT charges that depreciation."},
+  "Metals & Mining":{primary:"evEbit", why:"Mines and mills deplete; EBIT reflects the cost of the asset base through the cycle."},
+  "Construction Materials":{primary:"evEbit", why:"Quarries and kilns are capital heavy; EBIT is the fair measure."},
+  "Containers & Packaging":{primary:"evEbit", why:"Mill and plant-intensive; EBIT accounts for asset replacement."},
+  /* Energy */
+  "Oil, Gas & Consumable Fuels":{primary:"evEbit", why:"Reserves and rigs deplete; EBIT reflects depletion and depreciation, EV captures leverage."},
+  "Energy Equipment & Services":{primary:"evEbit", why:"Equipment-heavy service fleets; EBIT charges their depreciation."},
+  /* Utilities */
+  "Electric Utilities":{primary:"evEbit", why:"Regulated asset bases where depreciation is a real, recovered cost; EBIT is the fair measure."},
+  "Multi-Utilities":{primary:"evEbit", why:"Regulated networks; EBIT charges depreciation of the rate base."},
+  "Gas Utilities":{primary:"evEbit", why:"Pipeline networks are capital heavy; EBIT reflects that."},
+  "Water Utilities":{primary:"evEbit", why:"Regulated pipe and treatment assets; EBIT is the fair measure."},
+  "Independent Power and Renewable Electricity Producers":{primary:"evEbit", why:"Generation fleets depreciate; EBIT captures the asset cost."},
+  /* Real Estate */
+  "Diversified REITs":{primary:"evEbitda", why:"Property depreciation understates value; EBITDA is the closest proxy to FFO."},
+  "Specialized REITs":{primary:"evEbitda", why:"Towers, data centres and storage; EBITDA approximates FFO."},
+  "Residential REITs":{primary:"evEbitda", why:"Apartment and home portfolios; EBITDA approximates FFO."},
+  "Real Estate Management & Development":{primary:"evEbitda", why:"Brokerage and data platforms with varied leverage; EBITDA normalises capital structure."}
 };
+
+const indCfg = (ind, sec) => INDUSTRY_CFG[ind] || {primary:sec.primary, why:sec.why};
+
+/* The configuration the comps page uses: the sector's when "All industries" is selected,
+   the industry's own multiple when one industry is selected. */
+function viewCfg(sec){
+  const ind = industryOf(sec.id);
+  if(ind==="all") return sec;
+  const ic = indCfg(ind, sec);
+  const secondary = Array.from(new Set([sec.primary, ...sec.secondary, "pe"]))
+    .filter(m=>m!==ic.primary).slice(0,3);
+  return Object.assign({}, sec, {primary:ic.primary, secondary, why:ic.why, industryView:ind});
+}
+
+const fin = v => v!==null && v!==undefined && typeof v==="number" && isFinite(v);
+function quantile(arr, p){
+  const s = arr.filter(fin).sort((a,b)=>a-b);
+  if(!s.length) return null;
+  const idx = (s.length-1)*p, lo = Math.floor(idx), hi = Math.ceil(idx);
+  return s[lo] + (s[hi]-s[lo])*(idx-lo);
+}
+const sumN = (rows, names) => {
+  let any = false, s = 0;
+  rows.forEach(r=>{ const v = pick(r,names); if(v!==null){ any = true; s += v; } });
+  return any ? s : null;
+};
+
+const sectorRowsAll = sec => (cacheRows[sec.id]||[]).filter(r=>r && !r.error);
+const findRow = t => { for(const k in cacheRows){ const r = (cacheRows[k]||[]).find(x=>x && x.ticker===t); if(r) return r; } return null; };
+
+/* Peer statistics for one industry on one multiple. */
+function industryStats(sec, ind, key, exclude){
+  const rows = sectorRowsAll(sec).filter(r=>INFO[r.ticker] && INFO[r.ticker].industry===ind);
+  const priced = rows.filter(r=>fin(r[key])).sort((a,b)=>a[key]-b[key]);
+  const ex = priced.filter(r=>r.ticker!==exclude);
+  const vals = priced.map(r=>r[key]), exVals = ex.map(r=>r[key]);
+  return {
+    ind, key, n:rows.length, nPriced:priced.length,
+    med:median(vals), q1:quantile(vals,.25), q3:quantile(vals,.75),
+    cheapest:priced[0]||null, richest:priced[priced.length-1]||null,
+    peers:ex, nEx:ex.length, medEx:median(exVals), q1Ex:quantile(exVals,.25), q3Ex:quantile(exVals,.75)
+  };
+}
+
+/* Peer set used to price a target: its own industry, or the sector if the industry is too thin. */
+const MIN_PEERS = 3;
+function peerBasis(sec, ind, key, exclude){
+  if(ind){
+    const s = industryStats(sec, ind, key, exclude);
+    if(s.nEx >= MIN_PEERS)
+      return {scope:"industry", label:ind, peers:s.peers, med:s.medEx, q1:s.q1Ex, q3:s.q3Ex, n:s.nEx};
+  }
+  const peers = sectorRowsAll(sec).filter(r=>r.ticker!==exclude && fin(r[key])).sort((a,b)=>a[key]-b[key]);
+  const vals = peers.map(r=>r[key]);
+  return {scope:"sector", label:sec.name, peers, med:median(vals), q1:quantile(vals,.25), q3:quantile(vals,.75),
+          n:peers.length, thinFrom: ind || null};
+}
+
+/* Work out which industry, multiple and peer set apply to the chosen ticker. */
+function resolveTarget(sec, t){
+  const info = INFO[t];
+  if(info && info.sector!==sec.id) return {kind:"other", info, sector:sectorOf(info.sector)};
+  if(info) return {kind:"member", ind:info.industry, cfg:indCfg(info.industry, sec)};
+  const vi = industryOf(sec.id);
+  if(vi!=="all") return {kind:"outside", ind:vi, cfg:indCfg(vi, sec)};
+  return {kind:"outside", ind:null, cfg:{primary:sec.primary, why:sec.why}};
+}
+
+const VAL = {
+  pe:{label:"P/E", metric:"eps", metricLabel:"EPS (diluted)", kind:"pershare"},
+  pb:{label:"P/B", metric:"equity", metricLabel:"book value", kind:"equity"},
+  evEbitda:{label:"EV/EBITDA", metric:"ebitda", metricLabel:"EBITDA", kind:"ev"},
+  evEbit:{label:"EV/EBIT", metric:"ebit", metricLabel:"EBIT", kind:"ev"},
+  evSales:{label:"EV/Sales", metric:"revenue", metricLabel:"revenue", kind:"ev"}
+};
+
 const targetBySector = {};   /* sector id -> chosen target ticker */
 const cacheTarget = {};      /* ticker -> fetched target fundamentals */
 let valToken = 0;
 
-const valMethodsFor = sec => [sec.primary, ...sec.secondary].filter(m=>VAL_METHODS[m]);
-
-/* Pull the target's last full fiscal year P&L, latest balance sheet and share count. */
+/* Target fundamentals: trailing four quarters (to match the TTM peer multiples),
+   falling back to the last full year; latest balance sheet; live quote. */
 async function fetchTarget(ticker){
   if(cacheTarget[ticker]) return cacheTarget[ticker];
-  const plan = diag.plan, b = plan.base;
-  const row = (cacheRows[sectorId]||[]).find(r=>r && r.ticker===ticker) || null;
-
-  const pull = sym => Promise.all([
-    safeArr(URLS.incomeFY(b,sym)), safeArr(URLS.balance(b,sym)), safeArr(URLS.quote(b,sym))
-  ]);
+  const b = diag.plan.base;
+  const row = findRow(ticker);
   const sym = (row && row.sym) || fmpSym(ticker);
-  let [inc, bal, q] = await pull(sym);
-
-  /* most recent full year first, then first year with an EBITDA or EBIT figure */
-  inc = inc.slice().sort((x,y)=>String(pickStr(y,["date"])||"").localeCompare(String(pickStr(x,["date"])||"")));
-  const fy = inc.find(r=>pick(r,["ebitda","operatingIncome"])!==null) || null;
+  const [qInc, fyInc, bal, q] = await Promise.all([
+    safeArr(URLS.income(b,sym)), safeArr(URLS.incomeFY(b,sym)), safeArr(URLS.balance(b,sym)), safeArr(URLS.quote(b,sym))
+  ]);
+  const byDate = a => a.slice().sort((x,y)=>String(pickStr(y,["date"])||"").localeCompare(String(pickStr(x,["date"])||"")));
+  const qs = byDate(qInc).slice(0,4), fy = byDate(fyInc)[0] || null;
+  const useTTM = qs.length===4;
+  const src = useTTM ? qs : (fy ? [fy] : []);
   const b0 = bal[0]||{}, qq = q[0]||{};
 
   const totalDebt = pick(b0,["totalDebt"]) ??
     ((pick(b0,["shortTermDebt","shortTermBorrowings"])||0)+(pick(b0,["longTermDebt"])||0));
   const cash = pick(b0,["cashAndShortTermInvestments","cashAndCashEquivalents"]) || 0;
   const assets = pick(b0,["totalAssets"]), liab = pick(b0,["totalLiabilities"]);
-  const bookValue = (assets!==null && liab!==null) ? assets-liab
-                  : pick(b0,["totalStockholdersEquity","totalEquity"]);
+  let equity = pick(b0,["totalStockholdersEquity"]) ?? pick(b0,["totalEquity"]);
+  let equitySrc = "shareholders' equity";
+  if(equity===null && assets!==null && liab!==null){ equity = assets-liab; equitySrc = "assets − liabilities"; }
 
   const price = pick(qq,["price"]) ?? (row ? row.price : null);
   const mktCap = pick(qq,["marketCap","mktCap"]) ?? (row ? row.marketCap : null);
   let shares = pick(qq,["sharesOutstanding"]), sharesSrc = "shares outstanding";
   if(!shares && mktCap && price){ shares = mktCap/price; sharesSrc = "market cap ÷ price"; }
-  if(!shares && fy){ shares = pick(fy,["weightedAverageShsOutDil","weightedAverageShsOut"]); sharesSrc = "FY diluted weighted avg"; }
+  if(!shares && src[0]){ shares = pick(src[0],["weightedAverageShsOutDil","weightedAverageShsOut"]); sharesSrc = "diluted weighted avg"; }
 
-  const yr = fy ? pick(fy,["fiscalYear","calendarYear"]) : null;
+  const netIncome = sumN(src,["netIncome","bottomLineNetIncome"]);
+  let eps = sumN(src,["epsDiluted","epsdiluted","eps"]), epsSrc = "reported diluted EPS";
+  if(eps===null && netIncome!==null && shares){ eps = netIncome/shares; epsSrc = "net income ÷ shares"; }
+
+  const fyYear = fy ? (pick(fy,["fiscalYear","calendarYear"]) || (pickStr(fy,["date"])||"").slice(0,4)) : "";
   const T = {
     ticker,
     name: pickStr(qq,["name","companyName"]) || (row && row.name) || (INFO[ticker] && INFO[ticker].name) || ticker,
-    ok: !!fy || bookValue!==null,
-    year: yr ? String(Math.round(yr)) : (fy ? (pickStr(fy,["date"])||"").slice(0,4) : ""),
-    ebitda: fy ? pick(fy,["ebitda","EBITDA"]) : null,
-    ebit: fy ? pick(fy,["operatingIncome","ebit"]) : null,
-    totalDebt, cash, bookValue,
+    ok: src.length>0 || equity!==null,
+    basis: useTTM ? "TTM to "+(pickStr(qs[0],["date"])||"") : (fy ? "FY"+String(fyYear).slice(0,4) : ""),
+    revenue: sumN(src,["revenue","totalRevenue"]),
+    ebitda: sumN(src,["ebitda","EBITDA"]),
+    ebit: sumN(src,["operatingIncome","ebit"]),
+    netIncome, eps, epsSrc,
+    totalDebt, cash, equity, equitySrc,
     balDate: pickStr(b0,["date"]) || "",
     price, shares: shares || null, sharesSrc
   };
@@ -885,32 +1225,106 @@ async function fetchTarget(ticker){
   return T;
 }
 
+/* Implied price for a given multiple, following the bridge for that multiple type. */
+function bridge(key, mult, T){
+  const M = VAL[key];
+  const x = T[M.metric];
+  const r = {M, mult, x, gross:null, equity:null, px:null, note:null};
+  if(!fin(mult)){ r.note = "No usable peer multiple."; return r; }
+  if(!fin(x)){ r.note = "Target "+M.metricLabel+" unavailable."; return r; }
+  if(x<=0){ r.note = "Target "+M.metricLabel+" is negative, so "+M.label+" is not meaningful."; return r; }
+  r.gross = mult*x;
+  if(M.kind==="pershare"){
+    r.px = r.gross;
+    r.equity = T.shares ? r.px*T.shares : null;
+    return r;
+  }
+  r.equity = M.kind==="ev" ? r.gross - (T.totalDebt||0) + (T.cash||0) : r.gross;
+  if(!T.shares){ r.note = "Shares outstanding unavailable."; return r; }
+  if(r.equity<=0){ r.note = "Net debt exceeds the implied enterprise value."; return r; }
+  r.px = r.equity/T.shares;
+  return r;
+}
+
+/* ----- the stats panel shown next to the company picker ----- */
+
+function statsHTML(sec, target){
+  const view = industryOf(sec.id);
+  const tInfo = target && INFO[target] && INFO[target].sector===sec.id ? INFO[target] : null;
+
+  if(view!=="all"){
+    const ic = indCfg(view, sec);
+    const s = industryStats(sec, view, ic.primary, null);
+    const kv = (k,v,sub) => `<div><div class="k">${k}</div><div class="v">${v}${sub?`<small>${esc(sub)}</small>`:""}</div></div>`;
+    return `
+      <div class="eyebrow">Industry stats · ${esc(view)}</div>
+      <div class="st-mult"><span class="chip">${METRICS[ic.primary].label}</span><span>${esc(ic.why)}</span></div>
+      <div class="st-kv">
+        ${kv("Median "+METRICS[ic.primary].label, fmtM(s.med, ic.primary))}
+        ${kv("Typical range", fmtM(s.q1, ic.primary)+" – "+fmtM(s.q3, ic.primary), "middle half of peers")}
+        ${kv("Priced peers", s.nPriced+" of "+s.n)}
+        ${kv("Cheapest", s.cheapest ? esc(s.cheapest.ticker) : "—", s.cheapest ? fmtM(s.cheapest[ic.primary], ic.primary) : "")}
+        ${kv("Most expensive", s.richest ? esc(s.richest.ticker) : "—", s.richest ? fmtM(s.richest[ic.primary], ic.primary) : "")}
+      </div>
+      ${s.nPriced < MIN_PEERS+1 ? `<p class="st-warn">Fewer than ${MIN_PEERS} peers once the target is excluded — valuations here fall back to the ${esc(sec.name)} sector median.</p>` : ""}`;
+  }
+
+  /* All industries: one row per industry, each on its own multiple */
+  const rows = sec.industries.map(i=>{
+    const ic = indCfg(i.name, sec);
+    const s = industryStats(sec, i.name, ic.primary, null);
+    return {name:i.name, key:ic.primary, s};
+  });
+  return `
+    <div class="eyebrow">Industry stats · each industry on its own multiple</div>
+    <table class="st-tbl">
+      <thead><tr><th class="l">Industry</th><th class="l">Multiple</th><th>Median multiple</th><th>Typical range</th><th>Peers priced</th></tr></thead>
+      <tbody>
+        ${rows.map(r=>`<tr class="${tInfo && tInfo.industry===r.name ? 'hit' : ''}">
+          <td class="l"><button class="st-jump" data-ind="${esc(r.name)}" title="Show only ${esc(r.name)}">${esc(r.name)}</button></td>
+          <td class="l"><span class="chip sm">${METRICS[r.key].label}</span></td>
+          <td>${fmtM(r.s.med, r.key)}</td>
+          <td>${fmtM(r.s.q1, r.key)} – ${fmtM(r.s.q3, r.key)}</td>
+          <td>${r.s.nPriced}/${r.s.n}</td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+    <p class="st-note">A company is always priced against its own industry's median, on that industry's multiple.
+    <strong>Typical range</strong> is where the middle half of peers trade (25th to 75th percentile).</p>`;
+}
+
+/* ----- picker + container ----- */
+
 function valuationHTML(sec){
   const target = targetBySector[sec.id] || "";
+  const view = industryOf(sec.id);
   const opts = viewTickers(sec);
   const inList = opts.includes(target);
-  const labels = valMethodsFor(sec).map(m=>VAL_METHODS[m].label).join(" and ");
-  const ind = industryOf(sec.id);
+  const label = t => esc(t)+" · "+esc(((INFO[t]&&INFO[t].name)||"").slice(0,30));
+  const options = view==="all"
+    ? sec.industries.map(i=>`<optgroup label="${esc(i.name)} · ${METRICS[indCfg(i.name,sec).primary].label}">
+        ${i.tickers.map(t=>`<option value="${esc(t)}" ${t===target?"selected":""}>${label(t)}</option>`).join("")}
+      </optgroup>`).join("")
+    : opts.map(t=>`<option value="${esc(t)}" ${t===target?"selected":""}>${label(t)}</option>`).join("");
+
   return `<div class="card val-card">
-    <div class="val-head">
-      <div>
-        <div class="eyebrow">Implied share price · ${esc(labels)}</div>
-        <p class="val-lede">Pick the company you are valuing. The peer median multiple
-        ${ind==="all" ? "across the whole sector" : "within <strong>"+esc(ind)+"</strong>"} (with the target itself left out
-        of the median) is applied to the target's own last full-year figures, bridged to equity and divided by
-        shares outstanding.</p>
-      </div>
-      <div class="val-pick">
-        <label>Target
+    <div class="val-top">
+      <div class="val-stats" id="val-stats">${statsHTML(sec, target)}</div>
+      <div class="val-ask">
+        <div class="eyebrow">Step 1</div>
+        <h3>Which company would you like to value?</h3>
+        <p class="val-lede">It is priced on its industry's peer median multiple, with the target itself
+        left out of the median.</p>
+        <label>Pick a peer
           <select id="val-select">
-            <option value="">Choose a peer…</option>
-            ${opts.map(t=>`<option value="${esc(t)}" ${t===target?"selected":""}>${esc(t)} · ${esc((INFO[t]&&INFO[t].name)||"").slice(0,28)}</option>`).join("")}
+            <option value="">Choose a company…</option>
+            ${options}
           </select>
         </label>
-        <label>or any ticker
+        <label>or type any ticker
           <span class="val-inp">
             <input id="val-input" maxlength="10" placeholder="e.g. ORCL" value="${inList?"":esc(target)}">
-            <button id="val-go">Go</button>
+            <button id="val-go">Value</button>
           </span>
         </label>
       </div>
@@ -921,287 +1335,458 @@ function valuationHTML(sec){
 
 function bindValuation(sec){
   const sel = $("val-select"), inp = $("val-input");
-  sel.addEventListener("change", ()=>{
-    targetBySector[sec.id] = sel.value;
-    inp.value = "";
+  const choose = t => {
+    targetBySector[sec.id] = t;
+    $("val-stats").innerHTML = statsHTML(sec, t);
+    bindStatsJumps(sec);
     showValuation(sec);
-  });
+  };
+  sel.addEventListener("change", ()=>{ inp.value = ""; choose(sel.value); });
   const go = ()=>{
     const t = inp.value.trim().toUpperCase();
     if(!t) return;
     inp.value = t;
-    targetBySector[sec.id] = t;
     sel.value = viewTickers(sec).includes(t) ? t : "";
-    showValuation(sec);
+    choose(t);
   };
   $("val-go").addEventListener("click", go);
   inp.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
+  bindStatsJumps(sec);
   showValuation(sec);
+}
+
+function bindStatsJumps(sec){
+  document.querySelectorAll(".st-jump").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      industryBySector[sec.id] = b.dataset.ind;
+      renderSectorList();
+      showSector(sectorOf(sec.id));
+    });
+  });
 }
 
 async function showValuation(sec){
   const body = $("val-body");
   if(!body) return;
   const ticker = targetBySector[sec.id];
-  const methods = valMethodsFor(sec);
-  if(!ticker){
-    body.innerHTML = `<p class="val-empty">Choose a company above to see what the peer median
-      ${esc(methods.map(m=>VAL_METHODS[m].label).join(" and "))} implies for its share price.</p>`;
+  if(!ticker){ body.innerHTML = ""; return; }
+
+  const R = resolveTarget(sec, ticker);
+  if(R.kind==="other"){
+    body.innerHTML = `<div class="val-empty">${esc(ticker)} sits in <strong>${esc(R.sector.name)}</strong>
+      (${esc(R.info.industry)}), so its peers are in that sector.
+      <button class="retry" id="val-jump">Value ${esc(ticker)} in ${esc(R.sector.name)} →</button></div>`;
+    $("val-jump").addEventListener("click", ()=>{
+      sectorId = R.sector.id;
+      industryBySector[R.sector.id] = R.info.industry;
+      targetBySector[R.sector.id] = ticker;
+      subview = "value";
+      renderSectorList();
+      startLoad(false);
+    });
     return;
   }
   if(!diag.plan || !diag.plan.hasStatements){
-    body.innerHTML = `<p class="val-empty">This key cannot reach the statement endpoints, so full-year EBITDA,
-      EBIT and book value are unavailable and no implied price can be built.</p>`;
+    body.innerHTML = `<p class="val-empty">This key cannot reach FMP's statement endpoints, so EPS, EBIT, EBITDA
+      and book value are unavailable and no implied price can be built.</p>`;
     return;
   }
+
   const token = ++valToken;
-  if(!cacheTarget[ticker]) body.innerHTML = `<p class="val-empty">Pulling ${esc(ticker)} statements…</p>`;
+  if(!cacheTarget[ticker]) body.innerHTML = `<p class="val-empty">Pulling ${esc(ticker)} financials…</p>`;
   let T = null;
   try{ T = await fetchTarget(ticker); }catch(e){ T = null; }
   if(token !== valToken) return;
   if(!T || !T.ok){
-    body.innerHTML = `<p class="val-empty" style="color:${C.s5}">No annual statements came back for ${esc(ticker)}.
+    body.innerHTML = `<p class="val-empty" style="color:${C.s5}">No financial statements came back for ${esc(ticker)}.
       Check the ticker, or open the data source diagnostics at the bottom of the page.</p>`;
     return;
   }
-  body.innerHTML = valuationResultHTML(sec, T, methods);
+  body.innerHTML = valuationResultHTML(sec, T, R);
 }
 
-function impliedFor(m, T, peers){
-  const M = VAL_METHODS[m];
-  const med = median(peers.map(r=>r[m]));
-  const metric = T[M.metric];
-  const out = {m, M, med, metric, gross:null, equity:null, px:null, upside:null, note:null};
-  if(med===null){ out.note = "No usable peer median."; return out; }
-  if(metric===null || metric===undefined || !isFinite(metric)){ out.note = "Target "+M.metricLabel+" unavailable."; return out; }
-  if(metric<=0){ out.note = "Target "+M.metricLabel+" is negative — not meaningful."; return out; }
-  out.gross = med*metric;                                  /* EV for EV multiples, equity for P/B */
-  out.equity = M.ev ? out.gross - T.totalDebt + T.cash : out.gross;
-  if(!T.shares || T.shares<=0){ out.note = "Shares outstanding unavailable."; return out; }
-  out.px = out.equity / T.shares;
-  out.upside = T.price ? out.px/T.price-1 : null;
-  return out;
-}
+function valuationResultHTML(sec, T, R){
+  const key = R.cfg.primary;
+  const M = VAL[key];
+  const P = peerBasis(sec, R.ind, key, T.ticker);
+  const mid = bridge(key, P.med, T), lo = bridge(key, P.q1, T), hi = bridge(key, P.q3, T);
+  const up = (fin(mid.px) && fin(T.price)) ? mid.px/T.price-1 : null;
 
-function valuationResultHTML(sec, T, methods){
-  const A = currentAnalysis;
-  const peers = A.rows.filter(r=>r.ticker!==T.ticker);
-  const ind = industryOf(sec.id);
-  const results = methods.map(m=>impliedFor(m, T, peers));
-  const priced = results.filter(r=>r.px!==null);
-  const avg = priced.length>1 ? priced.reduce((s,r)=>s+r.px,0)/priced.length : null;
-  const upColor = u => (u===null||!isFinite(u)) ? C.muted : u>0.02 ? C.s1 : u<-0.02 ? C.s5 : C.s3;
-  const needsEV = results.some(r=>r.M.ev), needsPB = results.some(r=>!r.M.ev);
+  /* The target's own multiple today, on the same figures used in the bridge */
+  let cur = null;
+  {
+    const x = T[M.metric], mc = (fin(T.price) && T.shares) ? T.price*T.shares : null;
+    if(M.kind==="pershare" && fin(T.price) && fin(x) && x>0) cur = T.price/x;
+    else if(M.kind==="equity" && fin(mc) && fin(x) && x>0) cur = mc/x;
+    else if(M.kind==="ev" && fin(mc) && fin(x) && x>0) cur = (mc + (T.totalDebt||0) - (T.cash||0))/x;
+    if(!fin(cur)){ const r0 = findRow(T.ticker); if(r0 && fin(r0[key])) cur = r0[key]; }
+  }
+  const prem = (fin(cur) && fin(P.med) && P.med>0) ? cur/P.med-1 : null;
+  const premTxt = !fin(prem) ? "" : Math.abs(prem)<0.005 ? "in line with peers"
+    : Math.round(Math.abs(prem)*100)+"% "+(prem>0 ? "premium" : "discount")+" to peers";
+  const premColor = !fin(prem) ? C.muted : prem>0.05 ? C.s5 : prem<-0.05 ? C.s1 : C.s4;
+  const upColor = u => !fin(u) ? C.muted : u>0.02 ? C.s1 : u<-0.02 ? C.s5 : C.s3;
+  const basis = M.kind==="equity" ? "balance sheet "+T.balDate : T.basis;
+
+  const scopeLine = P.scope==="industry"
+    ? `${P.n} ${esc(P.label)} peers`
+    : P.thinFrom
+      ? `${esc(P.thinFrom)} has fewer than ${MIN_PEERS} other priced peers, so the ${esc(P.label)} sector median is used (${P.n} companies)`
+      : `${esc(P.label)} sector median (${P.n} companies) — ${esc(T.ticker)} is not in the constituent list, so it has no assigned industry`;
 
   const fact = (k,v,small) => `<div><div class="k">${k}</div><div class="v">${v}${small?`<small>${esc(small)}</small>`:""}</div></div>`;
   const facts = [
     fact("Target", esc(T.ticker)+" · "+esc(T.name)),
+    fact("Industry", esc(R.ind || "Unassigned")),
+    fact(esc(T.ticker)+" "+M.label+" today", fin(cur) ? fx(cur) : nm),
+    fact("Peer median "+M.label, fx(P.med)),
     fact("Current price", fprice(T.price)),
-    fact("Shares", fshares(T.shares), T.sharesSrc),
-    needsEV ? fact("FY"+esc(T.year)+" EBITDA", fmoney(T.ebitda)) : "",
-    needsEV ? fact("FY"+esc(T.year)+" EBIT", fmoney(T.ebit)) : "",
-    needsEV ? fact("Total debt", fmoney(T.totalDebt), T.balDate) : "",
-    needsEV ? fact("Cash & ST inv.", fmoney(T.cash)) : "",
-    needsPB ? fact("Book value", fmoney(T.bookValue), "assets − liabilities · "+T.balDate) : ""
+    fact("Shares", fshares(T.shares), T.sharesSrc)
   ].join("");
 
-  const card = r => `
-    <div class="val-m" style="border-top-color:${r.px===null?C.s3:upColor(r.upside)}">
-      <div class="eyebrow">${esc(r.M.label)} method</div>
-      <div class="px">${r.px===null ? nm : fprice(r.px)}</div>
-      <div class="up" style="color:${upColor(r.upside)}">${
-        r.px===null ? esc(r.note||"")
-        : r.upside===null ? "current price unavailable"
-        : fsigned(r.upside)+" vs "+fprice(T.price)+" current"}</div>
-      <div class="val-bridge">
-        <div><span>Peer median ${esc(r.M.label)} (ex-${esc(T.ticker)})</span><span>${fx(r.med)}</span></div>
-        <div><span>× ${r.M.ev ? "FY"+esc(T.year)+" " : ""}${esc(r.M.metricLabel)}</span><span>${fmoney(r.metric)}</span></div>
-        <div class="tot"><span>= Implied ${r.M.ev?"enterprise":"equity"} value</span><span>${fmoney(r.gross)}</span></div>
-        ${r.M.ev ? `
-        <div><span>− Total debt</span><span>${fmoney(T.totalDebt)}</span></div>
-        <div><span>+ Cash &amp; short-term investments</span><span>${fmoney(T.cash)}</span></div>
-        <div class="tot"><span>= Implied equity value</span><span>${fmoney(r.equity)}</span></div>` : ""}
-        <div><span>÷ Shares outstanding</span><span>${fshares(T.shares)}</span></div>
-        <div class="tot"><span>= Implied share price</span><span>${r.px===null ? nm : fprice(r.px)}</span></div>
-      </div>
-    </div>`;
+  /* bridge rows by multiple type */
+  const line = (a,b,cls) => `<div class="${cls||""}"><span>${a}</span><span>${b}</span></div>`;
+  const ml = `Peer median ${M.label} (ex-${esc(T.ticker)})`;
+  let rows = "";
+  if(M.kind==="pershare"){
+    rows = line(ml, fx(P.med))
+      + line(`× ${esc(M.metricLabel)} · ${esc(basis)}`, fin(T.eps) ? "$"+T.eps.toFixed(2) : nm)
+      + line("= Implied share price", fin(mid.px) ? fprice(mid.px) : nm, "tot")
+      + line("Memo: implied market cap (× shares)", fmoney(mid.equity), "memo");
+  } else if(M.kind==="equity"){
+    rows = line(ml, fx(P.med))
+      + line(`× Book value (${esc(T.equitySrc)}) · ${esc(T.balDate)}`, fmoney(T.equity))
+      + line("= Implied equity value", fmoney(mid.gross), "tot")
+      + line("÷ Shares outstanding", fshares(T.shares))
+      + line("= Implied share price", fin(mid.px) ? fprice(mid.px) : nm, "tot")
+      + line("Memo: book value per share", (fin(T.equity)&&T.shares) ? fprice(T.equity/T.shares) : nm, "memo");
+  } else {
+    rows = line(ml, fx(P.med))
+      + line(`× ${esc(M.metricLabel)} · ${esc(basis)}`, fmoney(mid.x))
+      + line("= Implied enterprise value", fmoney(mid.gross), "tot")
+      + line(`− Total debt · ${esc(T.balDate)}`, fmoney(T.totalDebt))
+      + line("+ Cash &amp; short-term investments", fmoney(T.cash))
+      + line("= Implied equity value", fmoney(mid.equity), "tot")
+      + line("÷ Shares outstanding", fshares(T.shares))
+      + line("= Implied share price", fin(mid.px) ? fprice(mid.px) : nm, "tot");
+  }
+  rows += line(`Memo: ${esc(T.ticker)}'s ${M.label} today`, (fin(cur) ? fx(cur) : nm)+(premTxt ? " · "+premTxt : ""), "memo");
 
-  const avgCard = avg===null ? "" : `
-    <div class="val-m" style="border-top-color:${C.ink}">
-      <div class="eyebrow">Average of ${priced.length} methods</div>
-      <div class="px">${fprice(avg)}</div>
-      <div class="up" style="color:${upColor(T.price?avg/T.price-1:null)}">${
-        T.price ? fsigned(avg/T.price-1)+" vs "+fprice(T.price)+" current" : "current price unavailable"}</div>
-      <div class="val-bridge">
-        ${priced.map(r=>`<div><span>${esc(r.M.label)}</span><span>${fprice(r.px)}</span></div>`).join("")}
+  /* range bar: Q1 multiple → Q3 multiple, with median and current price */
+  const pts = [lo.px, mid.px, hi.px, T.price].filter(fin);
+  let rangeBar = `<p class="val-empty">Range unavailable.</p>`;
+  if(fin(lo.px) && fin(hi.px) && pts.length){
+    const min = Math.min(...pts), max = Math.max(...pts), span = (max-min)||1;
+    const pos = v => ((v-min)/span*90+5).toFixed(2)+"%";
+    rangeBar = `
+      <div class="rb">
+        <div class="rb-track"></div>
+        <div class="rb-band" style="left:${pos(lo.px)};width:calc(${pos(hi.px)} - ${pos(lo.px)})"></div>
+        ${fin(mid.px) ? `<div class="rb-mid" style="left:${pos(mid.px)}"></div>` : ""}
+        ${fin(T.price) ? `<div class="rb-cur" style="left:${pos(T.price)}"><span>today ${fprice(T.price)}${fin(cur) ? " · "+fx(cur) : ""}</span></div>` : ""}
       </div>
+      <div class="rb-lab">
+        <div><div class="k">Low end · ${fx(P.q1)}</div><div class="v">${fprice(lo.px)}</div></div>
+        <div><div class="k">Median · ${fx(P.med)}</div><div class="v">${fin(mid.px)?fprice(mid.px):nm}</div></div>
+        <div><div class="k">High end · ${fx(P.q3)}</div><div class="v">${fprice(hi.px)}</div></div>
+      </div>`;
+  }
+
+  const chipRows = P.peers.map(r=>({t:r.ticker, v:r[key], me:false}));
+  if(fin(cur)) chipRows.push({t:T.ticker, v:cur, me:true});
+  chipRows.sort((a,b)=>a.v-b.v);
+  const peerChips = chipRows.map(c=>`<span class="pc ${c.me?'me':''}" ${c.me?'title="Target — not in the median"':''}>${esc(c.t)} <b>${fx(c.v)}</b></span>`).join("");
+
+  const where = P.scope==="industry" ? esc(P.label)+" median" : esc(P.label)+" sector median";
+  const peerName = P.scope==="industry" ? esc(P.label) : esc(P.label)+" sector";
+  let verdict;
+  if(!fin(mid.px)){
+    verdict = `<div class="verdict" style="--vc:${C.s3};--vbg:#F1F3F4">
+      <div class="vd-left"><div class="vd-badge">Can't value</div></div>
+      <p class="vd-text">${esc(T.ticker)} can't be priced on ${M.label}: ${esc(mid.note||"insufficient data")}</p></div>`;
+  } else {
+    const st = !fin(up) ? {k:"na", t:"Implied value", c:C.ink, bg:"#F1F3F4", ic:"", w:""}
+      : up > 0.05 ? {k:"up", t:"Upside", c:C.s1, bg:"#E6F2EF", ic:"▲", w:"looks <strong>undervalued</strong> against its "+peerName+" peers"}
+      : up < -0.05 ? {k:"down", t:"Downside", c:C.s5, bg:"#F7E9ED", ic:"▼", w:"looks <strong>overvalued</strong> against its "+peerName+" peers"}
+      : {k:"fair", t:"Fairly valued", c:C.s4, bg:"#FBF1E3", ic:"●", w:"trades <strong>close to fair value</strong> against its "+peerName+" peers"};
+    verdict = `<div class="verdict v-${st.k}" style="--vc:${st.c};--vbg:${st.bg}">
+      <div class="vd-left">
+        <div class="vd-badge">${st.ic} ${st.t}</div>
+        <div class="vd-pct">${fin(up) ? fsigned(up) : "—"}</div>
+        <div class="vd-sub">${fin(up) ? (up>=0 ? "potential upside" : "potential downside")+" from today's price" : "current price unavailable"}</div>
+      </div>
+      <div class="vd-prices">
+        <div><div class="k">Current share price</div><div class="p">${fprice(T.price)}</div></div>
+        <div class="vd-arrow">→</div>
+        <div><div class="k">Implied share price</div><div class="p vd-impl">${fprice(mid.px)}</div></div>
+        <div class="vd-sep"></div>
+        <div><div class="k">${esc(T.ticker)} ${M.label} today</div><div class="p">${fin(cur) ? fx(cur) : nm}</div></div>
+        <div class="vd-arrow">vs</div>
+        <div><div class="k">Peer median ${M.label}</div><div class="p">${fx(P.med)}</div></div>
+        ${premTxt ? `<span class="vd-prem" style="--pc:${premColor}">${premTxt}</span>` : ""}
+      </div>
+      <p class="vd-text">At the ${where} ${M.label} of <strong>${fx(P.med)}</strong>, ${esc(T.ticker)} is worth
+        <strong>${fprice(mid.px)}</strong> a share against a current price of <strong>${fprice(T.price)}</strong>${st.w ? ", so it "+st.w : ""}.</p>
     </div>`;
+  }
+
+  const FULL = {pe:"Price ÷ Earnings per share", pb:"Price ÷ Book value per share",
+    evEbitda:"Enterprise value ÷ EBITDA", evEbit:"Enterprise value ÷ EBIT", evSales:"Enterprise value ÷ Sales"};
+  const how = M.kind==="pershare" ? `peer median ${M.label} × ${esc(T.ticker)}'s EPS`
+    : M.kind==="equity" ? `peer median ${M.label} × ${esc(T.ticker)}'s book value ÷ shares`
+    : `peer median ${M.label} × ${esc(T.ticker)}'s ${esc(M.metricLabel)} − debt + cash ÷ shares`;
+  const methodStrip = `<div class="method-strip">
+    <span class="ms-k">Main valuation method${R.ind ? " for "+esc(R.ind) : ""}</span>
+    <span class="chip">${M.label}</span>
+    <span class="ms-full">${FULL[key]||""}</span>
+    <span class="ms-how">${how}</span>
+  </div>`;
 
   return `
+    ${methodStrip}
+    ${verdict}
     <div class="val-facts">${facts}</div>
-    <div class="val-grid">${results.map(card).join("")}${avgCard}</div>
-    <p class="val-note">Peer multiples are TTM; the target's EBITDA and EBIT are its last reported full fiscal year,
-    and debt, cash and book value are from its latest balance sheet. Book value is total assets less total liabilities.
-    ${peers.length} ${ind==="all" ? esc(sec.name)+" sector" : esc(ind)} peers in the median.
-    Screening output only — not investment advice.</p>`;
+    <div class="val-grid2">
+      <div class="val-m" style="--acc:${fin(mid.px)?upColor(up):C.s3}">
+        <div class="eyebrow">${M.label} method · ${P.scope==="industry" ? esc(P.label)+" median" : "sector median"}</div>
+        <div class="px">${fin(mid.px) ? fprice(mid.px) : nm}</div>
+        <div class="up" style="color:${upColor(up)}">${
+          !fin(mid.px) ? esc(mid.note||"") : !fin(up) ? "current price unavailable"
+          : fsigned(up)+(up>=0?" upside":" downside")+" vs "+fprice(T.price)+" current"}</div>
+        <div class="val-bridge">${rows}</div>
+      </div>
+      <div class="val-m" style="--acc:${C.ink}">
+        <div class="eyebrow">Price range · if valued at the low end, median and high end of peers' ${M.label}</div>
+        ${rangeBar}
+        <div class="eyebrow" style="margin-top:16px">Peers in the median, low to high${fin(cur) ? ` · <span style="color:${premColor}">${esc(T.ticker)} highlighted</span>` : ""}</div>
+        <div class="pcs">${peerChips || `<span class="val-empty">None</span>`}</div>
+      </div>
+    </div>
+    <p class="val-note">${scopeLine}. Peer multiples are TTM; the target's ${esc(M.metricLabel)} is
+    ${M.kind==="equity" ? "from its latest balance sheet" : "the sum of its last four reported quarters where available, otherwise its last full fiscal year"}.
+    ${esc(R.cfg.why)} Screening output only — not investment advice.</p>`;
 }
 
 /* ============================ RENDER: RESULTS ============================ */
 
-function sboxHTML(eyebrow, value, sub, accent, foot){
-  return `<div class="sbox" style="border-top-color:${accent}">
+/* ----- page shell: context bar, view switcher, panes ----- */
+
+let subview = "overview";   /* overview | value | table */
+let curView = null;         /* the view config last rendered */
+
+const relPhrase = rel => !fin(rel) ? "" :
+  Math.abs(rel) < 0.005 ? "at the median" :
+  Math.round(Math.abs(rel)*100)+"% "+(rel<0 ? "below" : "above")+" median";
+
+function contextHTML(sec, A, meta){
+  const ind = industryOf(sec.id);
+  const P = sec.primary;
+  const opts = `<option value="all" ${ind==="all"?"selected":""}>All industries · ${sec.tickers.length} companies</option>`
+    + sec.industries.map(i=>`<option value="${esc(i.name)}" ${i.name===ind?"selected":""}>${esc(i.name)} · ${METRICS[indCfg(i.name,sec).primary].label} · ${i.tickers.length}</option>`).join("");
+  return `<div class="ctx card">
+    <div class="ctx-row">
+      <div class="ctx-title">
+        <div class="eyebrow">Sector</div>
+        <h2>${esc(sec.label||sec.name)}</h2>
+      </div>
+      <label class="ctx-field">
+        <span class="eyebrow">Industry</span>
+        <select id="ind-select">${opts}</select>
+      </label>
+      <div class="ctx-field">
+        <span class="eyebrow">Valued on</span>
+        <div class="ctx-mult"><span class="chip">${METRICS[P].label}</span>
+          <span class="ctx-also">cross-checked with ${sec.secondary.map(m=>METRICS[m].label).join(", ")}</span></div>
+      </div>
+    </div>
+    <div class="ctx-foot">
+      <p>${esc(sec.why)}</p>
+      <div class="ctx-meta">${A ? `${A.nValid} of ${A.nTotal} priced` : ""}${
+        meta.ts ? ` · ${meta.fromStore ? "cached" : "updated"} ${fage(meta.ts)}` : ""}
+        <button class="linkbtn" id="refresh-btn">Refresh data</button></div>
+    </div>
+  </div>`;
+}
+
+function subnavHTML(){
+  const items = [
+    ["overview","Overview","Who is cheap and who is expensive"],
+    ["value","Value a company","Get an implied share price and upside"],
+    ["table","Full table","Every peer and multiple, sortable"]
+  ];
+  return `<div class="subnav" role="tablist">${items.map(([id,l,s])=>
+    `<button class="sn ${id==="value"?"cta":""} ${subview===id?'on':''}" data-view="${id}" role="tab" aria-selected="${subview===id}">
+      <span class="sn-l">${id==="value" ? `<span class="sn-ic">$</span>` : ""}${l}${id==="value" ? ` <span class="sn-arrow">→</span>` : ""}</span>
+      <span class="sn-s">${s}</span></button>`).join("")}</div>`;
+}
+
+function footerHTML(sec, meta){
+  const TQ = tableQual(sec.primary);
+  return `<details class="about">
+    <summary>About this data</summary>
+    <div class="about-body">
+      <p>Trailing-twelve-month data from Financial Modeling Prep for S&amp;P 500 constituents, cached in this browser for ${CACHE_HOURS} hours.
+      Negative or extreme multiples show as <strong>n.m.</strong> (not meaningful) and are left out of medians and scores.
+      ${needKeys(sec).includes("evEbit") ? "EV/EBIT is derived as EV/Sales ÷ operating margin where FMP does not supply it directly." : ""}
+      ${TQ.key==="coe" ? `Cost of equity = ${fpct(RISK_FREE)} risk-free + beta × ${fpct(EQUITY_PREMIUM)} equity risk premium (CAPM).` : ""}
+      ${meta.missing ? meta.missing+" companies returned no data on the last pull (often a plan or rate limit) — refresh later to retry." : ""}
+      Screening output only — not investment advice.</p>
+      <button class="linkbtn" id="diag-toggle">${showDiag?"Hide":"Show"} API connection check</button>
+      <div id="diag-slot">${showDiag ? diagHTML() : ""}</div>
+    </div>
+  </details>`;
+}
+
+function renderResults(sec){
+  curView = sec;
+  const A = currentAnalysis;
+  const meta = cacheMeta[sec.id] || {};
+
+  $("main").innerHTML = `
+    ${contextHTML(sec, A, meta)}
+    ${A ? subnavHTML() : ""}
+    <div id="pane">${A ? "" : `<div class="card"><p class="val-empty">No data came back for the companies in this industry.</p></div>`}</div>
+    ${footerHTML(sec, meta)}`;
+
+  $("ind-select").addEventListener("change", e=>{
+    industryBySector[sec.id] = e.target.value;
+    sort = {col:"score", dir:"desc"};
+    renderSectorList();
+    showSector(sectorOf(sec.id));
+  });
+  $("refresh-btn").addEventListener("click", ()=>startLoad(true));
+  $("diag-toggle").addEventListener("click", ()=>{
+    showDiag = !showDiag;
+    $("diag-toggle").textContent = (showDiag?"Hide":"Show")+" API connection check";
+    $("diag-slot").innerHTML = showDiag ? diagHTML() : "";
+  });
+  document.querySelectorAll(".sn").forEach(b=>b.addEventListener("click", ()=>{
+    subview = b.dataset.view;
+    document.querySelectorAll(".sn").forEach(x=>{ x.classList.toggle("on", x===b); x.setAttribute("aria-selected", x===b); });
+    renderPane(sec);
+  }));
+  if(A) renderPane(sec);
+}
+
+function renderPane(sec){
+  destroyCharts();
+  if(subview==="value") renderValuePane(sec);
+  else if(subview==="table") renderTablePane(sec);
+  else renderOverviewPane(sec);
+}
+
+/* Jump from anywhere on the page to the valuation of one company. */
+function goValue(ticker){
+  const sec = curView;
+  if(ticker) targetBySector[sec.id] = ticker;
+  subview = "value";
+  document.querySelectorAll(".sn").forEach(x=>{ const on = x.dataset.view==="value"; x.classList.toggle("on", on); x.setAttribute("aria-selected", on); });
+  renderPane(sec);
+  const pane = $("pane"); if(pane && pane.scrollIntoView) pane.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* ----- Overview ----- */
+
+function sboxHTML(eyebrow, row, value, sub, accent, foot){
+  const tag = row ? "button" : "div";
+  return `<${tag} class="sbox ${row?'click':''}" ${row?`data-ticker="${esc(row.ticker)}" title="Value ${esc(row.ticker)}"`:""} style="--acc:${accent}">
     <div class="eyebrow">${esc(eyebrow)}</div>
     <div class="val">${esc(value)}</div>
     <div class="sub" style="color:${accent}">${esc(sub)}</div>
     ${foot ? `<div class="foot">${esc(foot)}</div>` : ""}
+    ${row ? `<span class="go">Value it →</span>` : ""}
+  </${tag}>`;
+}
+
+function chartCard(title, hint, body){
+  return `<div class="card chart-card">
+    <h3 class="ch-t">${title}</h3>
+    <p class="ch-h">${hint}</p>
+    ${body}
   </div>`;
 }
 
-function industryHTML(sec){
-  const ind = industryOf(sec.id);
-  const chip = (val,label,n)=>`<button class="ind ${val===ind?'on':''}" data-ind="${esc(val)}">${esc(label)}<span>${n}</span></button>`;
-  return `<div class="ind-wrap">
-    <div class="eyebrow" style="margin-bottom:8px">Industry · narrow the peer set for a like-for-like comparison</div>
-    <div class="inds">
-      ${chip("all","All industries",sec.tickers.length)}
-      ${sec.industries.map(i=>chip(i.name,i.name,i.tickers.length)).join("")}
+function renderOverviewPane(sec){
+  const A = currentAnalysis, P = sec.primary;
+  const ind = industryOf(sec.id), peerWord = ind==="all" ? "sector" : "industry";
+  const lbl = METRICS[P].label;
+  const nPrim = A.rows.filter(r=>fin(r[P])).length;
+  const qLabel = P==="pb" ? "return on equity" : "EBITDA margin";
+
+  $("pane").innerHTML = `
+    <div class="boxes">
+      ${sboxHTML("Cheapest", A.cheapest, A.cheapest ? A.cheapest.ticker : "—",
+        A.cheapest ? fmtM(A.cheapest[P],P)+" · "+relPhrase(A.cheapest.rel) : nm, C.s1, A.cheapest ? A.cheapest.name : "")}
+      ${sboxHTML("Most expensive", A.richest, A.richest ? A.richest.ticker : "—",
+        A.richest ? fmtM(A.richest[P],P)+" · "+relPhrase(A.richest.rel) : nm, C.s5, A.richest ? A.richest.name : "")}
+      ${sboxHTML((peerWord==="sector" ? "Sector" : "Industry")+" median "+lbl, null, fmtM(A.med,P),
+        "typical range "+fmtM(A.q1,P)+" – "+fmtM(A.q3,P), C.ink, "Half of peers trade below this "+lbl+"; the typical range covers the middle half.")}
+      ${sboxHTML("Best value overall", A.bestBlend, A.bestBlend ? A.bestBlend.ticker : "—",
+        A.bestBlend ? "score "+Math.round(A.bestBlend.score)+" / 100" : nm, C.s2,
+        "Cheapest across "+A.keys.map(m=>METRICS[m].label).join(", ")+".")}
+      ${sboxHTML("Least value overall", A.worstBlend, A.worstBlend ? A.worstBlend.ticker : "—",
+        A.worstBlend ? "score "+Math.round(A.worstBlend.score)+" / 100" : nm, C.s4,
+        "Priciest once every multiple is counted.")}
     </div>
-  </div>`;
+
+    ${chartCard("Where each company sits on "+lbl,
+      `Shorter bar = cheaper. The dashed line is the ${peerWord} median; green sits below it, red above. <strong>Click a bar to value that company.</strong>`,
+      `<div class="chart-wrap" style="height:${Math.max(260, nPrim*22)}px"><canvas id="chart-primary"></canvas></div>`)}
+
+    ${chartCard("Cheap, or cheap for a reason?",
+      `${lbl} against ${qLabel}. Companies to the <strong>right of the line and high up</strong> are the interesting ones — cheaper than peers with better economics.`,
+      `<div class="chart-wrap" style="height:360px"><canvas id="chart-scatter"></canvas></div>`)}
+
+    ${chartCard("Do the other multiples agree?",
+      `The same companies on ${sec.secondary.map(m=>METRICS[m].label).join(", ")}. A company that looks cheap on every measure is a stronger signal than one that is cheap on just one.`,
+      `<div class="chart-scroll"><div class="chart-wrap" style="height:300px;min-width:${Math.max(0, A.rows.length*22)}px"><canvas id="chart-secondary"></canvas></div></div>
+       <div class="legend">${sec.secondary.map((m,i)=>`<span><i style="background:${[C.ink,C.s2,C.s4][i%3]}"></i>${METRICS[m].label}</span>`).join("")}</div>`)}`;
+
+  document.querySelectorAll(".sbox.click").forEach(b=>b.addEventListener("click", ()=>goValue(b.dataset.ticker)));
+  buildCharts(sec);
 }
 
-function renderResults(sec){
-  const A = currentAnalysis;
-  const P = sec.primary;
-  const TQ = tableQual(P);
+/* ----- Value a company ----- */
+
+function renderValuePane(sec){
+  $("pane").innerHTML = valuationHTML(sec);
+  bindValuation(sec);
+}
+
+/* ----- Full table ----- */
+
+function renderTablePane(sec){
+  const A = currentAnalysis, P = sec.primary, TQ = tableQual(P);
   const ind = industryOf(sec.id);
-  const meta = cacheMeta[sec.id] || {};
-
-  if(!A){
-    $("main").innerHTML = `<div class="headrow"><h2>${esc(sec.label||sec.name)}</h2></div>${industryHTML(sec)}
-      <div class="card"><p class="val-empty">No data came back for the companies in this industry.</p></div>`;
-    bindIndustry(sec);
-    return;
-  }
-
   const cols = [
     ["ticker","Ticker","l"], ["name","Company","l"],
     ...(ind==="all" ? [["industry","Industry","l"]] : []),
     ["marketCap","Mkt cap",""],
-    [P, METRICS[P].label, ""], ["rel","vs med",""],
+    [P, METRICS[P].label, ""], ["rel","vs median",""],
     ...sec.secondary.map(m=>[m, METRICS[m].label, ""]),
-    [TQ.key, TQ.label, ""], ["score","Score",""]
+    [TQ.key, TQ.label, ""], ["score","Value score",""], ["_go","",""]
   ];
-  const nPrim = A.rows.filter(r=>r[P]!==null && r[P]!==undefined).length;
-  const peerWord = ind==="all" ? "sector" : "industry";
-
-  $("main").innerHTML = `
-    <div class="headrow">
-      <h2>${esc(sec.label||sec.name)}${ind!=="all" ? `<small>${esc(ind)}</small>` : ""}</h2>
-      <div class="meta">${A.nValid} of ${A.nTotal} peers priced on ${METRICS[P].label}${A.nValid<A.nTotal ? " · rest shown as n.m." : ""}${
-        meta.ts ? " · "+(meta.fromStore ? "cached "+fage(meta.ts) : "pulled "+fage(meta.ts)) : ""}</div>
+  $("pane").innerHTML = `<div class="card tbl-card">
+    <div class="tbl-head">
+      <div><h3 class="ch-t">All ${A.nTotal} peers</h3>
+      <p class="ch-h">Click a column heading to sort. Value score ranks every multiple together — 100 is the cheapest.</p></div>
     </div>
-
-    ${industryHTML(sec)}
-
-    <div class="boxes">
-      ${sboxHTML("Cheapest · "+METRICS[P].label,
-        A.cheapest ? A.cheapest.ticker : "—",
-        A.cheapest ? fmtM(A.cheapest[P],P)+"  "+fsigned(A.cheapest.rel)+" vs median" : nm,
-        C.s1, A.cheapest ? A.cheapest.name : "")}
-      ${sboxHTML("Most expensive · "+METRICS[P].label,
-        A.richest ? A.richest.ticker : "—",
-        A.richest ? fmtM(A.richest[P],P)+"  "+fsigned(A.richest.rel)+" vs median" : nm,
-        C.s5, A.richest ? A.richest.name : "")}
-      ${sboxHTML("Peer median · "+peerWord, fmtM(A.med,P),
-        "Q1 "+fmtM(A.q1,P)+" — Q3 "+fmtM(A.q3,P),
-        C.ink, "The benchmark every peer in this "+peerWord+" is measured against.")}
-      ${sboxHTML("Best on blended score",
-        A.bestBlend ? A.bestBlend.ticker : "—",
-        A.bestBlend ? "Score "+Math.round(A.bestBlend.score)+" / 100" : nm,
-        C.s2, "Ranks "+A.keys.map(m=>METRICS[m].label).join(" + ")+" together.")}
-      ${sboxHTML("Weakest on blended score",
-        A.worstBlend ? A.worstBlend.ticker : "—",
-        A.worstBlend ? "Score "+Math.round(A.worstBlend.score)+" / 100" : nm,
-        C.s4, "Priciest once secondary multiples are included.")}
+    <div class="tbl-scroll">
+      <table id="comps-table">
+        <thead><tr>
+          ${cols.map(([c,l,al])=>c==="_go" ? `<th></th>` :
+            `<th class="${al} ${sort.col===c?'on':''}" data-col="${c}">${esc(l)}${sort.col===c?(sort.dir==="asc"?" ▲":" ▼"):""}</th>`).join("")}
+        </tr></thead>
+        <tbody id="comps-body"></tbody>
+      </table>
     </div>
-
-    ${valuationHTML(sec)}
-
-    <div class="card chart-card">
-      <div class="eyebrow cap">${METRICS[P].label} by company · dashed line is the ${peerWord} median</div>
-      <div class="chart-wrap" style="height:${Math.max(280, nPrim*22)}px">
-        <canvas id="chart-primary"></canvas>
-      </div>
-    </div>
-
-    <div class="card chart-card">
-      <div class="eyebrow cap">Cheap or just low quality?</div>
-      <p style="font-size:12.5px;color:${C.ink70};margin:-6px 0 12px;max-width:640px;line-height:1.5">
-        ${METRICS[P].label} against ${P==="pb"?"return on equity":"EBITDA margin"}.
-        Bottom-right is the interesting corner: strong economics on a below-median multiple.</p>
-      <div class="chart-wrap" style="height:360px"><canvas id="chart-scatter"></canvas></div>
-    </div>
-
-    <div class="card chart-card">
-      <div class="eyebrow cap">Cross-check · ${sec.secondary.map(m=>METRICS[m].label).join(" and ")}</div>
-      <div class="chart-scroll">
-        <div class="chart-wrap" style="height:300px;min-width:${Math.max(0, A.rows.length*22)}px"><canvas id="chart-secondary"></canvas></div>
-      </div>
-      <div class="legend">${sec.secondary.map((m,i)=>`<span><i style="background:${[C.ink,C.s2,C.s4][i%3]}"></i>${METRICS[m].label}</span>`).join("")}</div>
-    </div>
-
-    <div class="card tbl-card">
-      <div class="eyebrow cap">Full comparables table · ${A.nTotal} companies · click a heading to sort</div>
-      <div class="tbl-scroll">
-        <table id="comps-table">
-          <thead><tr>
-            ${cols.map(([c,l,al])=>`<th class="${al} ${sort.col===c?'on':''}" data-col="${c}">${esc(l)}${sort.col===c?(sort.dir==="asc"?" ▲":" ▼"):""}</th>`).join("")}
-          </tr></thead>
-          <tbody id="comps-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="footer-note">
-      TTM data from Financial Modeling Prep for S&amp;P 500 constituents, cached in this browser for ${CACHE_HOURS} hours.
-      Negative or extreme multiples are shown as n.m. and excluded from medians and scores.
-      ${needKeys(sec).includes("evEbit") ? "EV/EBIT is derived as EV/Sales ÷ operating margin (both TTM) where FMP does not supply it directly." : ""}
-      ${TQ.key==="coe" ? `Cost of equity = ${fpct(RISK_FREE)} risk-free + beta × ${fpct(EQUITY_PREMIUM)} equity risk premium (CAPM); n.m. where beta is unavailable.` : ""}
-      ${meta.missing ? meta.missing+" companies returned no data this pull (often a plan or rate limit) — refresh later to retry." : ""}
-      Screening output only — not investment advice.
-      <div class="linkbtns">
-        <button class="linkbtn" id="diag-toggle">${showDiag?"Hide":"Show"} data source</button>
-        <button class="linkbtn" id="refresh-btn">Refresh sector</button>
-      </div>
-      <div id="diag-slot">${showDiag ? diagHTML() : ""}</div>
-    </div>`;
-
+  </div>`;
   renderTableBody(sec);
-  bindIndustry(sec);
-  bindValuation(sec);
-  document.querySelectorAll("#comps-table th").forEach(th=>{
+  document.querySelectorAll("#comps-table th[data-col]").forEach(th=>{
     th.addEventListener("click", ()=>{
       const col = th.dataset.col;
-      sort = sort.col===col ? {col, dir:sort.dir==="asc"?"desc":"asc"} : {col, dir:"asc"};
-      destroyCharts();
-      renderResults(sec);
-    });
-  });
-  $("diag-toggle").addEventListener("click", ()=>{
-    showDiag = !showDiag;
-    $("diag-toggle").textContent = (showDiag?"Hide":"Show")+" data source";
-    $("diag-slot").innerHTML = showDiag ? diagHTML() : "";
-  });
-  $("refresh-btn").addEventListener("click", ()=>startLoad(true));
-
-  buildCharts(sec);
-}
-
-function bindIndustry(sec){
-  document.querySelectorAll(".ind").forEach(b=>{
-    b.addEventListener("click", ()=>{
-      industryBySector[sec.id] = b.dataset.ind;
-      showSector(sec);
+      sort = sort.col===col ? {col, dir:sort.dir==="asc"?"desc":"asc"} : {col, dir:(col==="score"?"desc":"asc")};
+      renderTablePane(sec);
     });
   });
 }
@@ -1240,8 +1825,10 @@ function renderTableBody(sec){
       ${sec.secondary.map(m=>`<td class="mn">${fmtM(r[m],m)}</td>`).join("")}
       <td class="mn"${qTitle}>${(q===null||q===undefined||!isFinite(q)) ? nm : fpct(q,TQ.dp)}</td>
       <td>${scoreCell}</td>
+      <td><button class="rowgo" data-ticker="${esc(r.ticker)}">Value →</button></td>
     </tr>`;
   }).join("");
+  document.querySelectorAll(".rowgo").forEach(b=>b.addEventListener("click", ()=>goValue(b.dataset.ticker)));
 }
 
 /* ============================ CHARTS ============================ */
@@ -1284,6 +1871,8 @@ function buildCharts(sec){
     },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:false,
+      onClick:(e, els)=>{ if(els && els.length) goValue(prim[els[0].index].ticker); },
+      onHover:(e, els)=>{ if(e.native && e.native.target) e.native.target.style.cursor = els.length ? "pointer" : "default"; },
       plugins:{
         legend:{display:false},
         medianLine:{axis:"x", value:A.med},
@@ -1456,10 +2045,11 @@ function renderMethod(){
       <div class="card">
         <div class="eyebrow" style="margin-bottom:10px">Implied share price</div>
         <ol>
-          <li>Take the peer median multiple (sector or selected industry), leaving the target out of the median.</li>
-          <li>EV/EBITDA and EV/EBIT: multiply by the target's last full-year EBITDA or EBIT to get enterprise value, subtract total debt and add cash to get equity value.</li>
-          <li>P/B: multiply by book value (total assets less total liabilities) to get equity value directly.</li>
-          <li>Divide equity value by shares outstanding and compare with the current price.</li>
+          <li>Find the target's industry and that industry's multiple (table below). Take the industry peer median, leaving the target out. If fewer than ${MIN_PEERS} peers remain, the sector median on the same multiple is used.</li>
+          <li><strong>P/E:</strong> median P/E × the target's TTM diluted EPS = implied share price.</li>
+          <li><strong>P/B:</strong> median P/B × book value (shareholders' equity) = equity value, ÷ shares outstanding.</li>
+          <li><strong>EV/EBIT or EV/EBITDA:</strong> median × the target's TTM EBIT or EBITDA = enterprise value, − total debt + cash = equity value, ÷ shares outstanding.</li>
+          <li>The Q1 and Q3 peer multiples give a low–high range around the median.</li>
         </ol>
       </div>
       <div class="card">
@@ -1474,6 +2064,22 @@ function renderMethod(){
         <p>Not meaningful. A company with negative EBITDA, negative free cash flow or no earnings cannot be
         ranked on that multiple, so it sits out of the median and the score rather than distorting them.
         Loss-makers show up on EV/Sales instead.</p>
+      </div>
+    </div>
+
+    <div class="card tbl-card" style="margin-bottom:26px">
+      <div class="eyebrow cap">Industry multiples · used for implied share prices and when an industry is selected</div>
+      <div class="tbl-scroll">
+        <table class="mtable" style="min-width:760px">
+          <thead><tr><th class="l">Sector</th><th class="l">Industry</th><th class="l">Multiple</th><th class="l">Why</th></tr></thead>
+          <tbody>
+            ${SECTORS.map(s=>s.industries.map((i,ix)=>{ const ic = indCfg(i.name, s); return `<tr>
+              <td>${ix===0 ? `<div class="sec">${esc(s.name)}</div>` : ""}</td>
+              <td style="font-size:13px">${esc(i.name)}<div class="peers">${i.tickers.length} companies</div></td>
+              <td><span class="chip">${METRICS[ic.primary].label}</span></td>
+              <td class="why">${esc(ic.why)}</td></tr>`; }).join("")).join("")}
+          </tbody>
+        </table>
       </div>
     </div>
 
